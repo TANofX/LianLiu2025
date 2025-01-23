@@ -21,7 +21,7 @@ public final class Constants {
   static {
     try {
       // TODO AprilTagFields update
-      apriltagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+      apriltagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2025Reefscape.m_resourceFile);
       apriltagLayout.getFieldLength();
       apriltagLayout.getFieldWidth();
     } catch (IOException e) {
