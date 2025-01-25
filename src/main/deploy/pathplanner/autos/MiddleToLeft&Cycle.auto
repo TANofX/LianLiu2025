@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CloseReefLeftCollect"
+            "pathName": "HToLeftCollect"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftCollectFarLeftReef"
+            "pathName": "LeftCollectToC"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FarLeftReefLeftCollect"
+            "pathName": "CToLeftCollect"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftCollectFarLeftReef"
+            "pathName": "LeftCollectToC"
           }
         }
       ]
