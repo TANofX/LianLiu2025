@@ -9,13 +9,16 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.lib.vision.Camera;
+import frc.lib.vision.WelfordSD;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.util.RobotPoseLookup;
@@ -23,6 +26,13 @@ import frc.robot.util.RobotPoseLookup;
 public class Vision extends AdvancedSubsystem {
     private final ArrayList<Camera> cameras = new ArrayList<Camera>();
     private final Field2d aprilField = new Field2d();
+
+    private final WelfordSD sdX = new WelfordSD();
+    private final WelfordSD sdY = new WelfordSD();
+    private final WelfordSD sdTheta = new WelfordSD();
+
+    private boolean wasStopped = true;
+    private boolean isStopped = true;
 
     public Vision() {
         // example camera
@@ -51,8 +61,27 @@ public class Vision extends AdvancedSubsystem {
                 RobotPoseLookup<Pose3d> AprilTagLookup = new RobotPoseLookup<Pose3d>();
                 AprilTagLookup.addPose(robotPose);
                 aprilField.setRobotPose(robotPose.toPose2d());
+                ChassisSpeeds speeds = RobotContainer.swerve.getCurrentSpeeds();
+                // Very rough estimate
+                isStopped = speeds.omegaRadiansPerSecond / 10 + speeds.vxMetersPerSecond + speeds.vyMetersPerSecond < 1;
+                if(!wasStopped && isStopped) {
+                    // Reset SD once after the robot stops
+                    sdX.reset();
+                    sdY.reset();
+                    sdTheta.reset();
+                } else if (isStopped) {
+                    Pose2d pose2d = robotPose.toPose2d();
+                    sdX.addValue(pose2d.getX());
+                    sdY.addValue(pose2d.getY());
+                    sdTheta.addValue(pose2d.getRotation().getDegrees());
+                }
+                wasStopped = isStopped;
                 if (passedTarget.getPoseAmbiguity() < 0.10) {
-                    RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, 0.5));
+                    RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(
+                        sdX.getStandardDeviation(),
+                        sdY.getStandardDeviation(),
+                        sdTheta.getStandardDeviation()
+                    ));
                     RobotContainer.swerve.odometry.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
                 }
             }
