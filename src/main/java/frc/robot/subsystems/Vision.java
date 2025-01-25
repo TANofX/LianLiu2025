@@ -67,7 +67,7 @@ public class Vision extends AdvancedSubsystem {
                 aprilField.setRobotPose(robotPose.toPose2d());
                 ChassisSpeeds speeds = RobotContainer.swerve.getCurrentSpeeds();
                 // Very rough estimate
-                isStopped = speeds.omegaRadiansPerSecond / 10 + speeds.vxMetersPerSecond + speeds.vyMetersPerSecond < 1;
+                isStopped = speeds.omegaRadiansPerSecond / 10 + speeds.vxMetersPerSecond + speeds.vyMetersPerSecond < 0.3;
                 if(!wasStopped && isStopped) {
                     // Reset SD once after the robot stops
                     sdX.reset();
