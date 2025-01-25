@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
@@ -35,7 +36,7 @@ public class Vision extends AdvancedSubsystem {
     private boolean isStopped = true;
 
     public Vision() {
-        // example camera
+        // TODO Add cameras
         addCamera("photonvision", new Transform3d());
     }
 
@@ -44,6 +45,9 @@ public class Vision extends AdvancedSubsystem {
         for (Camera cam : cameras) {
             processResult(cam.getCamera().getLatestResult(), cam.getPosition());
         }
+        SmartDashboard.putNumber("Vision/SD/X", sdX.getStandardDeviation()+1);
+        SmartDashboard.putNumber("Vision/SD/Y", sdY.getStandardDeviation());
+        SmartDashboard.putNumber("Vision/SD/Theta", sdTheta.getStandardDeviation());
     }
 
     public void processResult(PhotonPipelineResult result, Transform3d cameraToRobot) {
