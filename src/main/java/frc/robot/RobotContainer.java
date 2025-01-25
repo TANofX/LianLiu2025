@@ -18,6 +18,7 @@ public class RobotContainer {
   
 
   // Subsystems
+  public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
   public static final LEDs LEDs = new LEDs();
   // Other Hardware
