@@ -62,6 +62,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
 
+/**
+ * The LEDs subsystem controls an addressable LED strip using various patterns and animations.
+ */
 public class LEDs extends AdvancedSubsystem {
     private AddressableLED strip;
     private AddressableLEDBuffer buffer;
@@ -75,6 +78,9 @@ public class LEDs extends AdvancedSubsystem {
         .mask(LEDPattern.solid(Color.kBlue));
     private LEDPattern activePattern;
 
+    /**
+     * Enum representing the different types of animations available.
+     */
     public enum AnimationTypes {
         GreenBreeze,
         BlueTilt,
@@ -82,6 +88,9 @@ public class LEDs extends AdvancedSubsystem {
         Rainbow
     }
 
+    /**
+     * Constructs an LEDs subsystem and initializes the LED strip and buffer.
+     */
     public LEDs() {
         strip = new AddressableLED(Constants.LEDs.stripPwm);
         buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
@@ -93,11 +102,21 @@ public class LEDs extends AdvancedSubsystem {
         activePattern = rainbow;
     }
 
+    /**
+     * This class does not have to perform any checks, so this method returns a command that does nothing.
+     * 
+     * @return A command that does nothing.
+     */
     @Override
     protected Command systemCheckCommand() {
         return Commands.none();
     }
 
+    /**
+     * Changes the active animation pattern based on the specified animation type.
+     * 
+     * @param anim The type of animation to switch to.
+     */
     public void changeAnimation(AnimationTypes anim) {
         switch(anim) {
             case GreenBreeze:
@@ -116,6 +135,9 @@ public class LEDs extends AdvancedSubsystem {
         }
     }
     
+    /**
+     * Periodically updates the LED strip with the active pattern.
+     */
     @Override
     public void periodic() {
         activePattern.applyTo(buffer);
