@@ -45,7 +45,7 @@ public class Vision extends AdvancedSubsystem {
         for (Camera cam : cameras) {
             processResult(cam.getCamera().getLatestResult(), cam.getPosition());
         }
-        SmartDashboard.putNumber("Vision/SD/X", sdX.getStandardDeviation()+1);
+        SmartDashboard.putNumber("Vision/SD/X", sdX.getStandardDeviation());
         SmartDashboard.putNumber("Vision/SD/Y", sdY.getStandardDeviation());
         SmartDashboard.putNumber("Vision/SD/Theta", sdTheta.getStandardDeviation());
     }
