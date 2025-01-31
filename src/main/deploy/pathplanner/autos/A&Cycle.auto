@@ -11,13 +11,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCollectToE"
+                  "pathName": "RightStarttoA"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorL1"
+                  "name": "ElevatorL4"
                 }
               }
             ]
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EToCollect"
+                  "pathName": "AtoCollect"
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCollectToC"
+                  "pathName": "CollecttoK"
                 }
               },
               {
@@ -86,22 +86,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CToLeftCollect"
+                  "pathName": "KtoCollect"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorIntake"
+                  "name": "Collect"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Collect"
           }
         }
       ]

@@ -5,19 +5,19 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCollectToE"
+                  "pathName": "RightStarttoJ"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorL1"
+                  "name": "ElevatorL4"
                 }
               }
             ]
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EToCollect"
+                  "pathName": "JtoCollect"
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCollectToC"
+                  "pathName": "CollecttoK"
                 }
               },
               {
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CToLeftCollect"
+                  "pathName": "KtoCollect"
                 }
               },
               {

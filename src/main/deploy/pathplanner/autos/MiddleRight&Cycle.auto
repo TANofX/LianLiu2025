@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCollectToE"
+                  "pathName": "MiddleStarttoH"
                 }
               },
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EToCollect"
+                  "pathName": "HToRightCollect"
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCollectToC"
+                  "pathName": "CollecttoL"
                 }
               },
               {
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CToLeftCollect"
+                  "pathName": "LToRightCollect"
                 }
               },
               {
