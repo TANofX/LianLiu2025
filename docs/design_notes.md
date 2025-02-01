@@ -162,5 +162,7 @@
     Turned On & Connected: Rainbow
     Coral Intaked: Green
     Algae Intaked: Orange
+    Right Side Intake Running: Red
+    Left Side Intake Running: Purple
     Robot Balanced?: Blue
 </details>
