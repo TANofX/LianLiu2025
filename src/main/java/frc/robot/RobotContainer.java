@@ -89,10 +89,22 @@ public class RobotContainer {
           shooter.stopMotors();
 
         }))))); */
+
+        //Climber Controls
     driver.B().onTrue(climber.getStowCommand());
     driver.Y().onTrue(climber.getPrepareCommand());
     driver.X().onTrue(climber.getCloseCommand());
     driver.A().onTrue(climber.getClimbCommand());
+
+
+    //Algae Controls
+    driver.LT().onTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
+    driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
+    driver.RT().onTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
+    driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
+
+
+
 
   }
 

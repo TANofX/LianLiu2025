@@ -35,27 +35,44 @@ public class Notifications extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   if (currentState != setState) {
-    switch (setState) {
-      case ALGAE_HOLD:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.OrangeSolid);
-        break;
-      case CLIMB:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.BlueTilt);
-        break;
-      case CORAL_HOLD:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.GreenBreeze);
-        break;
-      default:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.Rainbow);
-        break;
+  checkState();
+     if (currentState != setState) {
+      switch (setState) {
+        case ALGAE_HOLD:
+          RobotContainer.LEDs.changeAnimation(AnimationTypes.OrangeSolid);
+          break;
+        case CLIMB:
+          RobotContainer.LEDs.changeAnimation(AnimationTypes.BlueTilt);
+          break;
+        case CORAL_HOLD:
+          RobotContainer.LEDs.changeAnimation(AnimationTypes.GreenBreeze);
+          break;
+        default:
+          RobotContainer.LEDs.changeAnimation(AnimationTypes.Rainbow);
+          break;
+      }
+     }
+  
+     currentState = setState;
     }
-   }
+  
+    private void checkState() {
+       if (RobotContainer.leftAlgaeHandler.hasAlgae()) {
+         setState = LED_State.ALGAE_HOLD;
 
-   currentState = setState;
-  }
+      if (RobotContainer.rightAlgaeHandler.hasAlgae()) {
+        setState = LED_State.ALGAE_HOLD;
 
-  // Called once the command ends or is interrupted.
+      if (RobotContainer.climber.isClawClosed()) {
+        setState = LED_State.CLIMB;
+      }
+      }
+       }
+      }
+  
+    
+  
+    // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     RobotContainer.LEDs.changeAnimation(AnimationTypes.Rainbow);

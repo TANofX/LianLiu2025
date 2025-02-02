@@ -75,7 +75,7 @@ public class Climber extends AdvancedSubsystem {
     climberMotorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
     climberMotorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
     climberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-    //climberMotorConfig.smartCurrentLimit(100,80);
+    climberMotorConfig.smartCurrentLimit(100,80);
     final ClosedLoopConfig climberMotorPidConfig = climberMotorConfig.closedLoop;
     climberMotorPidConfig.pid(Constants.Climber.MOTOR_KP, Constants.Climber.MOTOR_KI, Constants.Climber.MOTOR_KD);
     climberMotor.configure(climberMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
@@ -84,7 +84,7 @@ public class Climber extends AdvancedSubsystem {
     motorSimulation = new SparkFlexSim(climberMotor, DCMotor.getNeoVortex(1));
   }
 
-  // HEY I ALEADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :) -- Tanx
+  // HEY I ALEADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :) -- Tanx are you sure :0 ??
 
 
   @Override
@@ -105,6 +105,7 @@ public class Climber extends AdvancedSubsystem {
   /** A method that is used to check that the motors are moving at the right speed.*/
   @Override
   protected Command systemCheckCommand() {
+    //Command to check climber in pit. 
     return Commands.sequence(
       Commands.runOnce( 
         () -> {
@@ -141,7 +142,7 @@ public class Climber extends AdvancedSubsystem {
   public void setClimberAngle(Rotation2d angle) {
     climberAbsoluteAngle = angle;
     double armRotation = (angle.getRotations()); 
-    double motorRotation = armRotation / Constants.Climber.GEAR_RATIO;
+    double motorRotation = armRotation * Constants.Climber.GEAR_RATIO;
     climbercontroller.setReference(motorRotation, ControlType.kPosition);
   }
   /**
@@ -162,11 +163,18 @@ public class Climber extends AdvancedSubsystem {
   //methods to close and open claw, and stop
 
 
-  //close claw
+  //closebooleaneanw
   public void toggleClaw(){
     climberPiston.set(DoubleSolenoid.Value.kForward);
   }
 
+public boolean isClawClosed() {
+ climberPiston.set(DoubleSolenoid.Value.kForward);
+  return true;
+ }
+  
+
+  
   //open claw
   public void detoggleClaw(){
     climberPiston.set(DoubleSolenoid.Value.kReverse);
@@ -180,43 +188,46 @@ public class Climber extends AdvancedSubsystem {
   }
 
 
-  //Prepare the jaw Commands 
-  public Command getOpenCommand(){
-    return Commands.runOnce(()->{detoggleClaw();},this);
-  }
-  public Command getPrepareCommand(){
-    return Commands.runOnce(()->{
-      toggleClaw();
-      setClimberAngle(Rotation2d.fromDegrees(0));},
-      this);
-  }
-  public Command getRotateCommand(Rotation2d desiredAngle){
-    return Commands.runOnce(()->{setClimberAngle(desiredAngle);},this);
-  }
 
-  //Clamp jaw
-  public Command getCloseCommand(){
-    return Commands.runOnce(()->{toggleClaw();},this);
-  }
+public Command getOpenCommand(){
+  return Commands.runOnce(()->{detoggleClaw();},this);
+}
+public Command getPrepareCommand(){
+  return Commands.runOnce(()->{
+    toggleClaw();
+    setClimberAngle(Rotation2d.fromDegrees(0));},
+    this);
+}
+public Command getRotateCommand(Rotation2d desiredAngle){
+  return Commands.runOnce(()->{setClimberAngle(desiredAngle);},this);
+}
 
-  //Rotate thy clamped jaw
-  public Command getClimbCommand(){
-    return Commands.runOnce(()->{setClimberAngle(Rotation2d.fromDegrees(130));},this);
-  }
+//Clamp jaw
+public Command getCloseCommand(){
+  return Commands.runOnce(()->{toggleClaw();},this);
+}
 
-  //stow climber
-  public Command getStowCommand(){
-    return Commands.runOnce(()->{toggleClaw();},this);
-  }
-  public Command getPrepareCommandS(){
-    return Commands.runOnce(()->{
-      toggleClaw();
-      setClimberAngle(Rotation2d.fromDegrees(130));},
-      this);
-  }
-  public Command getRotateCommandS(Rotation2d desiredAngle){
-    return Commands.runOnce(()->{setClimberAngle(desiredAngle);},this);
-  }
+//Rotate thy clamped jaw
+public Command getClimbCommand(){
+  return Commands.runOnce(()->{setClimberAngle(Rotation2d.fromDegrees(130));},this);
+}
+
+//stow climber
+public Command getStowCommand(){
+  return Commands.runOnce(()->{toggleClaw();},this);
+}
+public Command getPrepareCommandS(){
+  return Commands.runOnce(()->{
+    toggleClaw();
+    setClimberAngle(Rotation2d.fromDegrees(130));},
+    this);
+}
+public Command getRotateCommandS(Rotation2d desiredAngle){
+  return Commands.runOnce(()->{setClimberAngle(desiredAngle);},this);
+}
 }
 
 //notes or todo, configure 2 limit switches, double solenoid
+
+//notes or todo, configure 2 limit switches, double solenoid
+
