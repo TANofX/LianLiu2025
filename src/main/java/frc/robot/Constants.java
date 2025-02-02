@@ -52,7 +52,7 @@ public final class Constants {
   }
 
   public static final class Swerve {
-    public static final int imuCanID = 3;
+    public static final int imuCanID = 2;
     public static final double maxVelTele = 4.7;
     public static final double maxAccelTele = 6.0;
     public static final double maxAngularVelTele = Units.degreesToRadians(180);
@@ -76,33 +76,33 @@ public final class Constants {
     }
 
     public static final class FrontLeftModule {
-      public static final int driveMotorCanID = 7;
-      public static final int rotationMotorCanID = 8;
-      public static final int rotationEncoderCanID = 13;
+      public static final int driveMotorCanID = 3;
+      public static final int rotationMotorCanID = 4;
+      public static final int rotationEncoderCanID = 5;
       public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
           Units.inchesToMeters(12.25));
     }
 
     public static final class FrontRightModule {
-      public static final int driveMotorCanID = 10;
-      public static final int rotationMotorCanID = 11;
-      public static final int rotationEncoderCanID = 12;
+      public static final int driveMotorCanID = 6;
+      public static final int rotationMotorCanID = 7;
+      public static final int rotationEncoderCanID = 8;
       public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
           -Units.inchesToMeters(12.25));
     }
 
     public static final class BackLeftModule {
-      public static final int driveMotorCanID = 4;
-      public static final int rotationMotorCanID = 5;
-      public static final int rotationEncoderCanID = 14;
+      public static final int driveMotorCanID = 9;
+      public static final int rotationMotorCanID = 10;
+      public static final int rotationEncoderCanID = 11;
       public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
           Units.inchesToMeters(12.25));
     }
 
     public static final class BackRightModule {
-      public static final int driveMotorCanID = 6;
-      public static final int rotationMotorCanID = 9;
-      public static final int rotationEncoderCanID = 15;
+      public static final int driveMotorCanID = 12;
+      public static final int rotationMotorCanID = 13;
+      public static final int rotationEncoderCanID = 14;
       public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
           -Units.inchesToMeters(12.25));
     }
@@ -127,25 +127,25 @@ public final class Constants {
     public static final double LENGTH_METERS = Units.inchesToMeters(16.785);
     public static final double MIN_ANGLE_RADS = 0;
     public static final double MAX_ANGLE_RADS = 3 * Math.PI / 4;
-    public static final int MOTOR_CANID = 0;
-    public static final int PCMID = 0;
-    public static final int SOLONOIDID = 0;
-    public static final int climberEncoderCanID = 0; //TODO
+    public static final int MOTOR_CANID =15;
+    public static final int PCMID = 16;
+    public static final int SOLONOIDID = 1;
+    public static final int climberEncoderCanID = 18 ; //TODO
   }
  
 public static final class AlgaeHandler {
   //Creating constants for LEFT Algae Handler :D
   //CANID's
-  public static final int leftAlgaeMotorCANID = 1;
-  public static final int leftAlgaeSolenoidID = 2;
-  public static final int leftAlgaeHallEffectID = 3;
-  public static final int leftAlgaeLimitID = 4;
+  public static final int leftAlgaeMotorCANID = 19;
+  public static final int leftAlgaeSolenoidID = 20;
+  public static final int leftAlgaeHallEffectID = 21;
+  public static final int leftAlgaeLimitID = 22;
 
     //Creating constants for RIGHT Algae Handler :D
-  public static final int rightAlgaeMotorCANID = 5;
-  public static final int rightAlgaeSolenoidID = 6;
-  public static final int rightAlgaeHallEffectID = 7;
-  public static final int rightAlgaeLimitID = 8;
+  public static final int rightAlgaeMotorCANID = 23;
+  public static final int rightAlgaeSolenoidID = 2;
+  public static final int rightAlgaeHallEffectID = 25;
+  public static final int rightAlgaeLimitID = 26;
   
 
   //all of these ID's are place holders and will need to be edited at a later date
