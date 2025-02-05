@@ -191,13 +191,4 @@ public static final class AlgaeHandler {
 
   
 }
-// Not sure why there wasn't a coral class, so I made one - Jon
-public static final class Coral {
-  public static final int shooterPitchCANID = 40;
-  public static final int SparkPitchControllerCANID = 41;
-  public static final int NEOAngleMotorCANID = 42;
-  public static final int shooterMotorCANID = 43;
-  public static final int NEOPitchControllerCANID = 44;
-  public static final int SparkAngleMotorCANID = 45;
-}
 }
