@@ -28,7 +28,7 @@ public final class Constants {
   }
 
   public static final class Elevator {
-    public static final int motorCanID = 1;
+    public static final int motorCanID = 30;
 
     public static final double P = 0.05;
     public static final double I = 0.00;
@@ -129,21 +129,21 @@ public final class Constants {
     public static final double MAX_ANGLE_RADS = 3 * Math.PI / 4;
     public static final int MOTOR_CANID = 0;
     public static final int PCMID = 0;
-    public static final int SOLONOIDID = 0;
-    public static final int climberEncoderCanID = 0; //TODO
+    public static final int SOLONOIDID = 50;
+    public static final int climberEncoderCanID = 51;
   }
  
 public static final class AlgaeHandler {
   //Creating constants for LEFT Algae Handler :D
   //CANID's
-  public static final int leftAlgaeMotorCANID = 1;
-  public static final int leftAlgaeSolenoidID = 2;
+  public static final int leftAlgaeMotorCANID = 20;
+  public static final int leftAlgaeSolenoidID = 22;
   public static final int leftAlgaeHallEffectID = 3;
   public static final int leftAlgaeLimitID = 4;
 
     //Creating constants for RIGHT Algae Handler :D
-  public static final int rightAlgaeMotorCANID = 5;
-  public static final int rightAlgaeSolenoidID = 6;
+  public static final int rightAlgaeMotorCANID = 21;
+  public static final int rightAlgaeSolenoidID = 23;
   public static final int rightAlgaeHallEffectID = 7;
   public static final int rightAlgaeLimitID = 8;
   
@@ -191,5 +191,13 @@ public static final class AlgaeHandler {
 
   
 }
-  
+// Not sure why there wasn't a coral class, so I made one - Jon
+public static final class Coral {
+  public static final int shooterPitchCANID = 40;
+  public static final int SparkPitchControllerCANID = 41;
+  public static final int NEOAngleMotorCANID = 42;
+  public static final int shooterMotorCANID = 43;
+  public static final int NEOPitchControllerCANID = 44;
+  public static final int SparkAngleMotorCANID = 45;
+}
 }
