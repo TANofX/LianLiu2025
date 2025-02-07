@@ -10,12 +10,13 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose3d;
+
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance; //may not need both?
-import java.util.Optional;
 
 public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
@@ -33,9 +34,16 @@ public class AutoAiming extends SubsystemBase {
     } else {
         coordinates = Constants.CoralPlacement.cordinatesCoralBlue;
     }
-
     return position.nearest(coordinates);
   }
+
+  
+  public static Rotation2d rotationToCoral (Pose2d position){
+    Transform2d changeNeeded = new Transform2d(position, AutoAiming.chooseBranch(Swerve.getPose()));
+        return changeNeeded;
+    
+  }
+
 
   @Override
   public void periodic() {
