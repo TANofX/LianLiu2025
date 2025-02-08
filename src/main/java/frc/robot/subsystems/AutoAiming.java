@@ -42,7 +42,7 @@ public class AutoAiming extends SubsystemBase {
 
   
   public static Rotation2d rotationToCoral (){
-    Transform2d changeNeeded = new Transform2d(RobotContainer.swerve.getPose(), AutoAiming.chooseBranch());
+    Transform2d changeNeeded = new Transform2d(RobotContainer.robotMechanism.getFieldPositionOfCoralHandler().toPose2d(), AutoAiming.chooseBranch());
     return changeNeeded.getRotation();
   }
 
