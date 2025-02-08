@@ -28,7 +28,8 @@ public class ManualCoralHandlerVertical extends Command {
   @Override
   public void execute() {
     double targetAngleInDegrees = Constants.CoralHandler.verticalAngleChangeDegreesPerSecond * .5;
-    RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + targetAngleInDegrees * controller.getAsDouble()));
+  //TODO uncomment line
+    //RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + targetAngleInDegrees * controller.getAsDouble()));
   }
 
   // Called once the command ends or is interrupted.

@@ -11,16 +11,17 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants.Elevator;
-import frc.robot.commands.ManualCoralHandlerVertical;
+//import frc.robot.commands.ManualCoralHandlerVertical;
 import frc.robot.RobotContainer;
-import edu.wpi.first.math.geometry.Pose2d;
+//import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
+//import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.PubSubOption;
+//import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.StructArrayPublisher;
 
 /** Add your docs here. */
@@ -96,9 +97,12 @@ public class RobotMechanism {
 
     //method that finds the position 
     public Pose3d getFieldPositionOfCoralHandler(){
-        Transform3d baseToCoralHandler = new Transform3d(new Pose3d(), poses[3]);
-        //needed to turn Pose2d to Pose3d
-        Pose3d robotPose3d = new Pose3d(frc.robot.RobotContainer.swerve.getPose());
-        return robotPose3d.plus(baseToCoralHandler);
+        //turns Rotation2d into Rotation3d
+        Rotation3d rotation = new Rotation3d(frc.robot.RobotContainer.swerve.getPose().getRotation());
+        Translation3d baseToCoralHandler = poses[3].getTranslation();
+        
+
+        //this should now include any rotation of the drive base. This works because the pose3d constructor that uses both translation and rotation3d should rotate the axis so that it matches the rotation, and then construct the translation onto that new axis. 
+        return new Pose3d(baseToCoralHandler, rotation);
     }
 }

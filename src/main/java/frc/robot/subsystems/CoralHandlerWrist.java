@@ -198,7 +198,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(absoluteEncoder.getPosition().getValueAsDouble()).div(gearRatio);
+        return Rotation2d.fromRotations(relativeEncoder.getPosition()).div(gearRatio);
 
     }
     public void stopMotor() {

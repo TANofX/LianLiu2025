@@ -48,7 +48,7 @@ public final class Constants {
     public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(56.0);
     public static final double STARTING_HEIGHT_METERS = MIN_HEIGHT_METERS + (MIN_HEIGHT_METERS + MAX_HEIGHT_METERS) / 2.0;
 
-    public static final double level1Height = 0;
+    public static final double level1Height = 1.25;
     public static final double level2Height = 0;
     public static final double level3Height = 0;
     public static final double level4Height = 0;
@@ -123,11 +123,11 @@ public final class Constants {
     // TODO figure out all actual constants
     public static final double MeterPerMotorRevolution = 0.0;
 
-    public static final int outtakeMotorID = 1;
-    public static final int horizontalMotorID = 2;
-    public static final int horizontalEncoderID = 3;
-    public static final int verticalMotorID = 4;
-    public static final int verticalEncoderID = 5;
+    public static final int outtakeMotorID = 71;
+    public static final int horizontalMotorID = 72;
+    public static final int horizontalEncoderID = 73;
+    public static final int verticalMotorID = 74;
+    public static final int verticalEncoderID = 75;
 
     // !! `coralEndEffectorLength` is IN METERS
     public static final double coralEndEffectorLength = 0.25;
