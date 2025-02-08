@@ -104,7 +104,7 @@ public class RobotContainer {
     coDriver.START();
     coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
         //Commands.waitSeconds(.5).andThen(new Shoot().andThen(Commands.waitSeconds(0.5).andThen(Commands.runOnce(() -> {
-  private void configureButtonBindings() {    
+ 
 
     
    //ONCE WE ADD ALGAE TO MAIN THESE COMMANDS SHOULD WORK:

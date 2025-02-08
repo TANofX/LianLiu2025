@@ -61,6 +61,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class LEDs extends AdvancedSubsystem {
     private AddressableLED strip;
