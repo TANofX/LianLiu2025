@@ -35,8 +35,8 @@ public class Notifications extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  checkState();
-     if (currentState != setState) {
+    checkState();
+    if (currentState != setState) {
       switch (setState) {
         case ALGAE_HOLD:
           RobotContainer.LEDs.changeAnimation(AnimationTypes.OrangeSolid);
@@ -57,19 +57,14 @@ public class Notifications extends Command {
     }
   
     private void checkState() {
-       if (RobotContainer.leftAlgaeHandler.hasAlgae()) {
-         setState = LED_State.ALGAE_HOLD;
-
-      if (RobotContainer.rightAlgaeHandler.hasAlgae()) {
+      if (RobotContainer.leftAlgaeHandler.hasAlgae())
         setState = LED_State.ALGAE_HOLD;
-
-      if (RobotContainer.climber.isClawClosed()) {
+      else if (RobotContainer.rightAlgaeHandler.hasAlgae()) 
+        setState = LED_State.ALGAE_HOLD;
+      else if (RobotContainer.climber.isClawClosed())
         setState = LED_State.CLIMB;
-      }
-      }
-       }
-      }
-  
+      else setState = LED_State.DEFAULT;
+    }
     
   
     // Called once the command ends or is interrupted.
