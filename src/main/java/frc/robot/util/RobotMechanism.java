@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants.Elevator;
 import frc.robot.commands.ManualCoralHandlerVertical;
 import frc.robot.RobotContainer;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
@@ -90,5 +92,13 @@ public class RobotMechanism {
         poses[7] = poses[6].plus(k_ClimberClam2LeftArm).plus(climberClam2LeftArm);
         poses[8] = poses[6].plus(k_ClimberClam2RightArm).plus(climberClam2RightArm);
         m_poses.set(poses);
+    }
+
+    //method that finds the position 
+    public Pose3d getFieldPositionOfCoralHandler(){
+        Transform3d baseToCoralHandler = new Transform3d(new Pose3d(), poses[3]);
+        //needed to turn Pose2d to Pose3d
+        Pose3d robotPose3d = new Pose3d(frc.robot.RobotContainer.swerve.getPose());
+        return robotPose3d.plus(baseToCoralHandler);
     }
 }
