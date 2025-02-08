@@ -11,10 +11,11 @@ import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Pose3d;
+//import edu.wpi.first.math.geometry.Translation2d;
+//import edu.wpi.first.math.geometry.Pose3d;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance; //may not need both?
 
@@ -25,23 +26,24 @@ public class AutoAiming extends SubsystemBase {
 
 
 //Method to return the position of the branch closest to it.
-  public static Pose2d chooseBranch (Pose2d position){
+  public static Pose2d chooseBranch (){
     Alliance alliance = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue);
 
+    //determines which reef is ours
     List<Pose2d> coordinates;
     if (alliance == Alliance.Red) {
         coordinates = Constants.CoralPlacement.cordinatesCoralRed;
     } else {
         coordinates = Constants.CoralPlacement.cordinatesCoralBlue;
     }
-    return position.nearest(coordinates);
+
+    return RobotContainer.swerve.getPose().nearest(coordinates);
   }
 
   
-  public static Rotation2d rotationToCoral (Pose2d position){
-    Transform2d changeNeeded = new Transform2d(position, AutoAiming.chooseBranch(Swerve.getPose()));
-        return changeNeeded;
-    
+  public static Rotation2d rotationToCoral (){
+    Transform2d changeNeeded = new Transform2d(RobotContainer.swerve.getPose(), AutoAiming.chooseBranch());
+    return changeNeeded.getRotation();
   }
 
 
