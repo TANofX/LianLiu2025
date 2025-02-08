@@ -19,8 +19,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     System.out.println("Robot Init Called");
     new RobotContainer();
-    // TODO Re-enable after camera attachment
-    //CameraServer.startAutomaticCapture();
     //Autos.init();
      
   }

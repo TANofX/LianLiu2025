@@ -63,7 +63,7 @@ public class Elevator extends AdvancedSubsystem {
     newConfig.closedLoop.maxMotion.maxVelocity(Constants.Elevator.MAX_VELOCITY, ClosedLoopSlot.kSlot0);
     newConfig.closedLoop.maxMotion.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot0);
 
-    elevatorMotor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    elevatorMotor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     elevatorEncoder = elevatorMotor.getEncoder();
     elevatorController = elevatorMotor.getClosedLoopController();
 
@@ -71,15 +71,14 @@ public class Elevator extends AdvancedSubsystem {
     elevatorMotorSim = new SparkFlexSim(elevatorMotor, DCMotor.getNeoVortex(1));
     elevatorMotorSim.setPosition(Constants.Elevator.STARTING_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
     
-    // Configure simulation position for limit switches
-    elevatorPhysicsSim.wouldHitLowerLimit(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
-    elevatorPhysicsSim.wouldHitUpperLimit(Constants.Elevator.MAX_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
-
     registerHardware("Elevator/Motor", elevatorMotor);
 }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Elevator Motor Velocity", elevatorEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator Position", getElevation());
+    
     
   }
   
@@ -122,7 +121,7 @@ public class Elevator extends AdvancedSubsystem {
         () -> {
           elevatorMotor.set(0.25);
         }, this),
-      Commands.waitSeconds(0.25),
+      Commands.waitSeconds(5),
       Commands.runOnce(
         () -> {
           if (((elevatorEncoder.getVelocity() / 60.0) * Constants.Elevator.METERS_PER_MOTOR_REVOLUTION) < 0.16) {
