@@ -100,7 +100,7 @@ public class Climber extends AdvancedSubsystem {
     physicsSimulation.setInputVoltage(climberMotor.getAppliedOutput() * RobotController.getBatteryVoltage());
     physicsSimulation.update(0.02);
     // Sets a variable for motor speed and sets the Simulation Motor's Velocity to it.
-    final double motorSpeed = ((physicsSimulation.getVelocityRadPerSec() / Constants.Climber.GEAR_RATIO) * 60) / (2 * Math.PI);
+    final double motorSpeed = Rotation2d.fromRadians(physicsSimulation.getVelocityRadPerSec()).div(Constants.Climber.GEAR_RATIO).times(60).getRotations(); 
     motorSimulation.iterate(motorSpeed, RobotController.getBatteryVoltage(), 0.02);
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(motorSimulation.getMotorCurrent()));
   }
@@ -142,8 +142,8 @@ public class Climber extends AdvancedSubsystem {
    */
   public void setClimberAngle(Rotation2d angle) {
     climberAbsoluteAngle = angle;
-    double armRotation = (angle.getRotations()); 
-    double motorRotation = armRotation / Constants.Climber.GEAR_RATIO;
+    double armRotation = (angle.getRotations()); // gets number of rotations to get to an angle and stores it
+    double motorRotation = armRotation / Constants.Climber.GEAR_RATIO; // Divides rotations of the piece and divides by the gear ratio to get motor rotations
     climbercontroller.setReference(motorRotation, ControlType.kPosition);
   }
   /**
@@ -225,7 +225,7 @@ public class Climber extends AdvancedSubsystem {
     return Commands.runOnce(()->{toggleClaw();},this);
   }
   /**
-   * This command is unclear sowwy - Jon
+   * TODO
    * @return
    */
   public Command getPrepareCommandS(){
