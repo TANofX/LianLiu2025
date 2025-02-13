@@ -161,8 +161,11 @@
   
     Turned On & Connected: Rainbow
     Coral Intaked: Green
-    Algae Intaked: Orange
-    Right Side Intake Running: Red
-    Left Side Intake Running: Purple
-    Robot Balanced?: Blue
+    Algae Intaked: White
+    Intaking anything: LED wave downward
+                        - Coral White, Algae Green
+    Outaking anything: LED wave upward
+                        - Coral White, Algae Green
+    Auto Assist Active: Blinking white
+
 </details>
