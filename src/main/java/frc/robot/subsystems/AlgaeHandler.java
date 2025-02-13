@@ -42,7 +42,7 @@ private SparkFlex algaeMotor;
 private Solenoid algaePiston;
 private DigitalInput algaeLimitSwitch;
 private  SparkClosedLoopController algaeMotorController;
-private DigitalInput algaeHallEffect;
+
 private SparkFlexSim algaeHandlerMotorSim;
 
 private RelativeEncoder algaeEncoder;
@@ -57,14 +57,14 @@ private final FlywheelSim m_algaeHandlerSim =
 
   
   /** Creates a new AlgaeHandler. */
-  public AlgaeHandler(int algaeMotorCANID, int algaeSolenoidID, int algaeHallEffectID, int algaeLimitID) {
+  public AlgaeHandler(int algaeMotorCANID, int algaeSolenoidID, int algaeLimitID) {
     //creating motor/solenoid/switches/controllers
     algaeMotor = new SparkFlex(algaeMotorCANID, MotorType.kBrushed);
     algaePiston = new Solenoid(PneumaticsModuleType.REVPH, algaeSolenoidID);
     algaeLimitSwitch = new DigitalInput(algaeLimitID);
     algaeMotorController = algaeMotor.getClosedLoopController();
     algaeEncoder = algaeMotor.getEncoder(); 
-    algaeHallEffect = new DigitalInput(algaeHallEffectID);
+   
 
 
     SparkFlexConfig algaeMotorConfig = new SparkFlexConfig();
@@ -148,8 +148,10 @@ public boolean hasAlgae() {
 
 public boolean isAlgaeIntakeUp() {
   //returns a boolean to tell the robot whether or not algae intake is up
-  return algaeHallEffect.get();
-}
+  return !algaePiston.get();
+  }
+
+
 
 //This command intakes an algae
 public Command getAlgaeIntakeCommand() {

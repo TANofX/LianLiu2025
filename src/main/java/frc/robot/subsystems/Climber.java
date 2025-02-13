@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import javax.lang.model.util.ElementScanner14;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -28,10 +30,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
 
@@ -53,8 +58,8 @@ public class Climber extends AdvancedSubsystem {
   private Rotation2d climberAbsoluteAngle;
 
   /** Creates a new Climber. */
-  public Climber(final int motor_canid, final int pcmid, final int solonoidid, int encoderCanID) {
-    climberPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1,2);
+  public Climber(final int motor_canid, final int pcmid, final int FORWARDSOLENOID, int REVERSESOLENOID, int encoderCanID) {
+    climberPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, FORWARDSOLENOID, REVERSESOLENOID);
     climberMotor = new SparkFlex(motor_canid, MotorType.kBrushless);
     climbercontroller = climberMotor.getClosedLoopController();
 
@@ -82,6 +87,7 @@ public class Climber extends AdvancedSubsystem {
     
     physicsSimulation = new SingleJointedArmSim(DCMotor.getNeoVortex(1), Constants.Climber.GEAR_RATIO, Constants.Climber.ARM_ANGULAR_MOMENTUM, Constants.Climber.LENGTH_METERS, Constants.Climber.MIN_ANGLE_RADS, Constants.Climber.MAX_ANGLE_RADS, false, 0);
     motorSimulation = new SparkFlexSim(climberMotor, DCMotor.getNeoVortex(1));
+
   }
 
   // HEY I ALEADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :) -- Tanx
@@ -89,7 +95,6 @@ public class Climber extends AdvancedSubsystem {
 
   @Override
   public void periodic() {
-    // TODO This method will be called once per scheduler run
   }
 
   @Override
@@ -102,6 +107,7 @@ public class Climber extends AdvancedSubsystem {
     motorSimulation.iterate(motorSpeed, RobotController.getBatteryVoltage(), 0.02);
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(motorSimulation.getMotorCurrent()));
   }
+ 
   /** A method that is used to check that the motors are moving at the right speed.*/
   @Override
   protected Command systemCheckCommand() {
@@ -166,7 +172,7 @@ public class Climber extends AdvancedSubsystem {
 
   //close claw
   public void toggleClaw(){
-    climberPiston.set(DoubleSolenoid.Value.kForward);
+   climberPiston.set( DoubleSolenoid.Value.kForward);
   }
 
   //open claw
@@ -205,15 +211,21 @@ public class Climber extends AdvancedSubsystem {
   public Command getClimbCommand(){
     return Commands.runOnce(()->{setClimberAngle(Rotation2d.fromDegrees(130));},this);
   }
-
+public Command toggleClimberCommand() {
+  return Commands.runOnce(()-> {toggleClaw(); },this );
+}
   //stow climber
   public Command getStowCommand(){
-    return Commands.runOnce(()->{toggleClaw();},this);
+    return Commands.runOnce(()->{
+      setClimberAngle(Rotation2d.fromDegrees(-135));
+      toggleClaw();},
+      
+      this);
   }
   public Command getPrepareCommandS(){
     return Commands.runOnce(()->{
       toggleClaw();
-      setClimberAngle(Rotation2d.fromDegrees(130));},
+      setClimberAngle(Rotation2d.fromDegrees(0));},
       this);
   }
   public Command getRotateCommandS(Rotation2d desiredAngle){

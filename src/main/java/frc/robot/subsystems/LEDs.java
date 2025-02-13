@@ -70,8 +70,7 @@ public class LEDs extends AdvancedSubsystem {
         .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(1 / 120.0));
     private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen)
         .breathe(Seconds.of(5));
-    private LEDPattern bluePattern = LEDPattern.solid(Color.kBlue);
-    //private LEDPattern orangePattern = LEDPattern.solid(Color.kOrange);
+
     private final LEDPattern orangePattern = LEDPattern.solid(Color.kOrange);
     // TODO Change 0.5 to IMU tilt
     private final LEDPattern imuPattern = LEDPattern.progressMaskLayer(() -> 0.5)
@@ -122,7 +121,7 @@ public class LEDs extends AdvancedSubsystem {
     @Override
     public void periodic() {
         // Has Coral, Green
-        if(RobotContainer.coralHandler.hasCoral()) changeAnimation(AnimationTypes.GreenBreeze);
+        if(RobotContainer.coralHandler.hasCoral()) changeAnimation(AnimationTypes.OrangeSolid);
         activePattern.applyTo(buffer);
         strip.setData(buffer);
     }

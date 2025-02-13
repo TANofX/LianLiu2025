@@ -5,17 +5,21 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualCoralHandlerVertical extends Command {
-  private DoubleSupplier controller;
-  /** Creates a new ManualCoralHandlerVertical. */
-  public ManualCoralHandlerVertical(DoubleSupplier joystickSupplier) {
-    controller = joystickSupplier;
+public class ManualCoralHandler extends Command {
+  private DoubleSupplier vertController;
+  private DoubleSupplier hortController;
+  /** Creates a new ManualCoralHandlerHorizontal. */
+  public ManualCoralHandler(DoubleSupplier vertJoystickSupplier, DoubleSupplier hortJoystickSupplier) {
+    vertController = vertJoystickSupplier;
+    hortController = hortJoystickSupplier;
+
     addRequirements(RobotContainer.coralHandler);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -27,9 +31,11 @@ public class ManualCoralHandlerVertical extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double targetAngleInDegrees = Constants.CoralHandler.verticalAngleChangeDegreesPerSecond * .5;
-  //TODO uncomment line
-    //RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + targetAngleInDegrees * controller.getAsDouble()));
+    double verticalTargetAngleInDegrees = Constants.CoralHandler.horizontalAngleChangeDegreesPerSecond * 1;
+    double horizontalTargetAngleInDegrees = Constants.CoralHandler.verticalAngleChangeDegreesPerSecond * 1;
+
+    RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + (verticalTargetAngleInDegrees * vertController.getAsDouble())));
+    RobotContainer.coralHandler.setHorizontalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getHorizontalAngle().getDegrees() + (horizontalTargetAngleInDegrees * hortController.getAsDouble())));
   }
 
   // Called once the command ends or is interrupted.

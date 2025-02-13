@@ -119,7 +119,7 @@ public class CoralHandler extends AdvancedSubsystem {
   public void simulationPeriodic() {
     // Simulates the input voltage of the motors (battery)
     double outtakeInputVoltage = coralHandlerOuttakeSim.getAppliedOutput() * RobotController.getBatteryVoltage();
-    
+
     // Simulation limit switch is set to false
     coralHandlerOuttakeSim.getForwardLimitSwitchSim().setPressed(false);
 
@@ -132,15 +132,15 @@ public class CoralHandler extends AdvancedSubsystem {
     // Calculating the simulation velocity based on known values
     double outtakeMotorVelocity = coralHandlerOuttakePhysicsSim.getAngularVelocityRPM()
         / Constants.CoralHandler.outtakeMotorGearing;
-    
+
 
     // Creation of the motor simulations
     coralHandlerOuttakeSim.iterate(outtakeMotorVelocity, RobotController.getBatteryVoltage(), 0.02);
-    
+
     // Creation of the absolute encoder simulations
-    
+
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(coralHandlerOuttakeSim.getMotorCurrent(),
-        horizontalWrist.sim.getMotorCurrent(), verticalWrist.sim.getMotorCurrent()));
+        horizontalWrist.motorSim.getMotorCurrent(), verticalWrist.motorSim.getMotorCurrent()));
   }
 
   /**
@@ -235,7 +235,7 @@ public class CoralHandler extends AdvancedSubsystem {
     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel2Angle);
     verticalWrist.setAngle(Constants.CoralHandler.verticallLevel2Angle);
   }
-  
+
   public void setLevelThreeAngle() {
     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel3Angle);
     verticalWrist.setAngle(Constants.CoralHandler.verticallLevel3Angle);
