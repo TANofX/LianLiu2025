@@ -46,7 +46,7 @@ public final class Constants {
   public @interface CanId {}
 
   public static final class Elevator {
-    public static final int motorCanID = 1;
+    public static final int motorCanID = 30;
 
     public static final double P = 0.05;
     public static final double I = 0.00;
@@ -99,33 +99,33 @@ public final class Constants {
     
 
     public static final class FrontLeftModule {
-      @CanId public static final int driveMotorCanID = 7;
-      @CanId public static final int rotationMotorCanID = 8;
-      @CanId public static final int rotationEncoderCanID = 13;
+      @CanId public static final int driveMotorCanID = 14;
+      @CanId public static final int rotationMotorCanID = 10;
+      @CanId public static final int rotationEncoderCanID = 10;
       public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
           Units.inchesToMeters(12.25));
     }
 
     public static final class FrontRightModule {
-      @CanId public static final int driveMotorCanID = 10;
-      @CanId public static final int rotationMotorCanID = 11;
-      @CanId public static final int rotationEncoderCanID = 22;
+      @CanId public static final int driveMotorCanID = 17;
+      @CanId public static final int rotationMotorCanID = 13;
+      @CanId public static final int rotationEncoderCanID = 13;
       public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
           -Units.inchesToMeters(12.25));
     }
 
     public static final class BackLeftModule {
-      @CanId public static final int driveMotorCanID = 4;
-      @CanId public static final int rotationMotorCanID = 5;
-      @CanId public static final int rotationEncoderCanID = 14;
+      @CanId public static final int driveMotorCanID = 15;
+      @CanId public static final int rotationMotorCanID = 11;
+      @CanId public static final int rotationEncoderCanID = 11;
       public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
           Units.inchesToMeters(12.25));
     }
 
     public static final class BackRightModule {
-      @CanId public static final int driveMotorCanID = 6;
-      @CanId public static final int rotationMotorCanID = 9;
-      @CanId public static final int rotationEncoderCanID = 15;
+      @CanId public static final int driveMotorCanID = 16;
+      @CanId public static final int rotationMotorCanID = 12;
+      @CanId public static final int rotationEncoderCanID = 12;
       public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
           -Units.inchesToMeters(12.25));
     }
@@ -278,7 +278,7 @@ public final class Constants {
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final double MIN_ANGLE_RADS = -3 * Math.PI / 4;
     public static final double MAX_ANGLE_RADS =0;
-    @CanId public static final int MOTOR_CANID = 65;
+    @CanId public static final int MOTOR_CANID = 51;
     public static final int PCMID = 5;
     public static final int FORWARDSOLENOID = 3;
     public static final int REVERSESOLENOID = 4;
@@ -289,14 +289,14 @@ public final class Constants {
 public static final class AlgaeHandler {
   //Creating constants for LEFT Algae Handler :D
   //CANID's
-  @CanId  static final int leftAlgaeMotorCANID = 21;
-  public static final int leftAlgaeSolenoidID = 5;
+  @CanId  static final int leftAlgaeMotorCANID = 20;
+  public static final int leftAlgaeSolenoidID = 22;
   public static final int leftAlgaeHallEffectID = 23;
   public static final int leftAlgaeLimitID = 24;
 
     //Creating constants for RIGHT Algae Handler :D
-    @CanId public static final int rightAlgaeMotorCANID = 25;
-  public static final int rightAlgaeSolenoidID = 6;
+    @CanId public static final int rightAlgaeMotorCANID = 21;
+  public static final int rightAlgaeSolenoidID = 23;
   public static final int rightAlgaeHallEffectID = 27;
   public static final int rightAlgaeLimitID = 28;
   
