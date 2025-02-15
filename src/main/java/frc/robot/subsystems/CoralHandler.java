@@ -56,11 +56,16 @@ public class CoralHandler extends AdvancedSubsystem {
             horizontalMotorID,
             horizontalAbsoluteEncoderID,
             Constants.CoralHandler.horizontalGearRatio,
-            Constants.CoralHandler.horizontalMotorP,
-            Constants.CoralHandler.horizontalMotorI,
-            Constants.CoralHandler.horizontalMotorD,
-            Constants.CoralHandler.horizontalMotorFeedForward,
-            Constants.CoralHandler.horizontalMotorIZone,
+            Constants.CoralHandler.horizontalMotorPosP,
+            Constants.CoralHandler.horizontalMotorPosI,
+            Constants.CoralHandler.horizontalMotorPosD,
+            Constants.CoralHandler.horizontalMotorMaxPosP, 
+            Constants.CoralHandler.horizontalMotorMaxPosI, 
+            Constants.CoralHandler.horizontalMotorMaxPosD, 
+            Constants.CoralHandler.horizontalMotorPosFeedForward,
+            Constants.CoralHandler.horizontalMotorMaxPosFeedForward,
+            Constants.CoralHandler.horizontalMotorPosIZone,
+            Constants.CoralHandler.horizontalMotorMaxPosIZone,
             Constants.CoralHandler.horizontalMotorMinVelocity,
             Constants.CoralHandler.horizontalMotorMaxVelocity,
             Constants.CoralHandler.horizontalMotorMaxAccleration,
@@ -78,11 +83,16 @@ public class CoralHandler extends AdvancedSubsystem {
             verticalMotorID,
             verticalAbsoluteEncoderID,
             Constants.CoralHandler.verticalGearRatio,
-            Constants.CoralHandler.verticalMotorP,
-            Constants.CoralHandler.verticalMotorI,
-            Constants.CoralHandler.verticalMotorD,
-            Constants.CoralHandler.verticalMotorFeedForward,
-            Constants.CoralHandler.verticalMotorIZone,
+            Constants.CoralHandler.verticalMotorPosP,
+            Constants.CoralHandler.verticalMotorPosI,
+            Constants.CoralHandler.verticalMotorPosD,
+            Constants.CoralHandler.verticalMotorMaxPosP,
+            Constants.CoralHandler.verticalMotorMaxPosI, 
+            Constants.CoralHandler.verticalMotorMaxPosD, 
+            Constants.CoralHandler.verticalMotorPosFeedForward,
+            Constants.CoralHandler.verticalMotorMaxPosFeedForward, 
+            Constants.CoralHandler.verticalMotorPosIZone,
+            Constants.CoralHandler.verticalMotorMaxPosIZone,
             Constants.CoralHandler.verticalMotorMinVelocity,
             Constants.CoralHandler.verticalMotorMaxVelocity,
             Constants.CoralHandler.verticalMotorMaxAccleration,
@@ -99,8 +109,8 @@ public class CoralHandler extends AdvancedSubsystem {
     verticalWrist.registerSystemCheckWithSmartDashboard();
 
     outtakeEncoder = outtakeMotor.getEncoder();
-    coralLimitSwitch = outtakeMotor.getForwardLimitSwitch(); // TODO forward or reverse limit switch?
-
+    // TODO forward or reverse limit switch?
+    coralLimitSwitch = outtakeMotor.getForwardLimitSwitch(); 
     // Using SparkFlexConfig to create needed parameters for the outtakeMotor
     SparkFlexConfig outtakeConfig = new SparkFlexConfig();
     outtakeConfig.inverted(false);
@@ -113,6 +123,8 @@ public class CoralHandler extends AdvancedSubsystem {
 
     // Register Hardware
     registerHardware("Coral Intake/Outtake Motor", outtakeMotor);
+
+    SmartDashboard.putData("Zero Wrist", zeroWristCommand());
   }
 
   @Override
@@ -143,6 +155,13 @@ public class CoralHandler extends AdvancedSubsystem {
         horizontalWrist.motorSim.getMotorCurrent(), verticalWrist.motorSim.getMotorCurrent()));
   }
 
+  public void runHorizontalMotor() {
+    horizontalWrist.runCoralWrist();
+  }
+
+  public void runVerticalMotor() {
+    verticalWrist.runCoralWrist();
+  }
   /**
    * Stops motor for the coral end effector intake/outtake motor. Sets motor speed
    * to zero.
@@ -229,7 +248,11 @@ public class CoralHandler extends AdvancedSubsystem {
     verticalWrist.setAngle(Constants.CoralHandler.vertialIntakeAngle);
   }
 
-  //TODO add a set 1st level angle method
+   // //TODO Change how this works using autoadjustments
+  // public void setLevelOneAngle() {
+  //   horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel1Angle);
+  //   verticalWrist.setAngle(Constants.CoralHandler.verticallLevel1Angle);
+  // }
 
   public void setLevelTwoAngle() {
     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel2Angle);
@@ -244,16 +267,21 @@ public class CoralHandler extends AdvancedSubsystem {
     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel4Angle);
     verticalWrist.setAngle(Constants.CoralHandler.verticallLevel4Angle);
   }
-  // //TODO Change how this works
-  // public void setLevelOneAngle() {
-  //   horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel1Angle);
-  //   verticalWrist.setAngle(Constants.CoralHandler.verticallLevel1Angle);
-  // }
+ 
 
   @Override
   public void periodic() {
     // Values avalible shown on SmartDashboard
     SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
+  }
+
+  public Command zeroWristCommand() {
+  return Commands.runOnce(
+          () -> {
+              horizontalWrist.updateWristOffset();
+              verticalWrist.updateWristOffset();
+          })
+          .ignoringDisable(true);
   }
 
   public Command runCoralIntakeCommand() {

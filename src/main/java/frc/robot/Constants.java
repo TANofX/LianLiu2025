@@ -6,6 +6,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -32,7 +33,6 @@ public final class Constants {
       apriltagLayout.getFieldLength();
       apriltagLayout.getFieldWidth();
     } catch (IOException e) {
-
       throw new RuntimeException(e);
     }
   }
@@ -42,10 +42,32 @@ public final class Constants {
    */
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.FIELD)
-  public @interface CanId {}
+  public @interface CanId {
+    /**
+     * The type of device that this CAN ID is for.
+     *
+     * You can use the same CAN ID for two different devices of different types
+     * (e.g.: a Spark MAX motor and a Spark FLEX motor, or a Spark MAX motor and an encoder).
+     * (This is because the real CAN ID is much larger, but WPILib gives us 6 bytes for ID and uses the device ID
+     * for the other bytes.)
+     * We could be more specific than these types, but for now we expect to want to use the same CAN ID for a motor
+     * and a corresponding encoder, but not for two motors. This could change.
+     */
+    Type value();
+
+    /**
+     * The device types.
+     */
+    enum Type {
+      MOTOR,
+      ENCODER,
+      PIGEON,
+      PCM_CONTROLLER,
+    }
+  }
 
   public static final class Elevator {
-    @CanId public static final int motorCanID = 1;
+    @CanId(CanId.Type.MOTOR) public static final int motorCanID = 31;
 
     public static final double P = 0.05;
     public static final double I = 0.00;
@@ -73,7 +95,7 @@ public final class Constants {
   }
 
   public static final class Swerve {
-    @CanId public static final int imuCanID = 3;
+    @CanId(CanId.Type.PIGEON) public static final int imuCanID = 3;
     public static final double maxVelTele = 4.7;
     public static final double maxAccelTele = 6.0;
     public static final double maxAngularVelTele = Units.degreesToRadians(180);
@@ -96,34 +118,35 @@ public final class Constants {
       // 0.0, 0.0);
     }
 
+
     public static final class FrontLeftModule {
-      @CanId public static final int driveMotorCanID = 7;
-      @CanId public static final int rotationMotorCanID = 8;
-      @CanId public static final int rotationEncoderCanID = 13;
+      @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 7;
+      @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 8;
+      @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 13;
       public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
           Units.inchesToMeters(12.25));
     }
 
     public static final class FrontRightModule {
-      @CanId public static final int driveMotorCanID = 10;
-      @CanId public static final int rotationMotorCanID = 11;
-      @CanId public static final int rotationEncoderCanID = 22;
+      @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 10;
+      @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 11;
+      @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 22;
       public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
           -Units.inchesToMeters(12.25));
     }
 
     public static final class BackLeftModule {
-      @CanId public static final int driveMotorCanID = 4;
-      @CanId public static final int rotationMotorCanID = 5;
-      @CanId public static final int rotationEncoderCanID = 14;
+      @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 4;
+      @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 5;
+      @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 14;
       public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
           Units.inchesToMeters(12.25));
     }
 
     public static final class BackRightModule {
-      @CanId public static final int driveMotorCanID = 6;
-      @CanId public static final int rotationMotorCanID = 9;
-      @CanId public static final int rotationEncoderCanID = 15;
+      @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 6;
+      @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 9;
+      @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 15;
       public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
           -Units.inchesToMeters(12.25));
     }
@@ -180,11 +203,12 @@ public final class Constants {
     // TODO figure out all actual constants
     public static final double MeterPerMotorRevolution = 0.0;
 
-    @CanId public static final int outtakeMotorID = 71;
-    @CanId public static final int horizontalMotorID = 72;
-    @CanId public static final int horizontalEncoderID = 73;
-    @CanId public static final int verticalMotorID = 74;
-    @CanId public static final int verticalEncoderID = 75;
+    //TODO Get actual CANIDS :0
+    @CanId(CanId.Type.MOTOR) public static final int outtakeMotorID = 40;
+    @CanId(CanId.Type.MOTOR) public static final int horizontalMotorID = 41;
+    @CanId(CanId.Type.ENCODER) public static final int horizontalEncoderID = 41;
+    @CanId(CanId.Type.MOTOR) public static final int verticalMotorID = 42;
+    @CanId(CanId.Type.ENCODER) public static final int verticalEncoderID = 42;
 
     // !! `coralEndEffectorLength` is IN METERS
     public static final double coralEndEffectorLength = 0.25;
@@ -204,20 +228,30 @@ public final class Constants {
     public static final double outtakeMotorMinVelocity = 0.0;
     // public static final int outtakeEncoderID = 0.0;
     
-    public static final double horizontalMotorP = 0.03;
-    public static final double horizontalMotorI = 0.0;
-    public static final double horizontalMotorD = 0.0;
-    public static final double horizontalMotorFeedForward = 1.0 / (565.0*12.0);
-    public static final double horizontalMotorIZone = 0.0;
+    public static final double horizontalMotorPosP = 0.03;
+    public static final double horizontalMotorPosI = 0.0;
+    public static final double horizontalMotorMaxPosD = 0.0;
+    public static final double horizontalMotorMaxPosP = 0.00;
+    public static final double horizontalMotorMaxPosI = 0.0;
+    public static final double horizontalMotorPosD = 0.0;
+    public static final double horizontalMotorPosFeedForward = 1.0 / (565.0*12.0);
+    public static final double horizontalMotorMaxPosFeedForward = 1.0 / (565.0*12.0);
+    public static final double horizontalMotorPosIZone = 0.0;
+    public static final double horizontalMotorMaxPosIZone = 0.0;
     public static final double horizontalMotorMaxAccleration = 25000.0; //RPM per Sec
     public static final double horizontalMotorMaxVelocity = 3500.0; //RPM
     public static final double horizontalMotorClosedLoopError = 1.0;
 
-    public static final double verticalMotorP = 0.03;
-    public static final double verticalMotorI = 0.0;
-    public static final double verticalMotorD = 0.0;
-    public static final double verticalMotorFeedForward = 1.0 / (565.0*12.0);
-    public static final double verticalMotorIZone = 0.0;
+    public static final double verticalMotorPosP = 0.03;
+    public static final double verticalMotorPosI = 0.0;
+    public static final double verticalMotorPosD = 0.0;
+    public static final double verticalMotorMaxPosP = 0.03;
+    public static final double verticalMotorMaxPosI = 0.0;
+    public static final double verticalMotorMaxPosD = 0.0;
+    public static final double verticalMotorPosFeedForward = 1.0 / (565.0*12.0);
+    public static final double verticalMotorMaxPosFeedForward = 1.0 / (565.0*12.0);
+    public static final double verticalMotorPosIZone = 0.0;
+    public static final double verticalMotorMaxPosIZone = 0.0;
     public static final double verticalMotorMaxAccleration = 25000.0; //RPM per Sec
     public static final double verticalMotorMaxVelocity = 3500.0; //RPM
     public static final double verticalMotorClosedLoopError = 1.0;
@@ -274,32 +308,35 @@ public final class Constants {
   public static final class Climber {
     public static final double firstStageGearRatio = 90 / 60;
     public static final double secondStageGearRatio = 18 / 58;
-    
+    public static final int climberlimitIDLower = 10;
+    public static final int climberlimitIDUpper = 11;
+
     public static final double MOTOR_KI = 0; // TODO
-    public static final double MOTOR_KP = 0.25;
+    public static final double MOTOR_KP = 1;
     public static final double MOTOR_KD = 0;
     public static final double GEAR_RATIO = 0.01;
     public static final double ARM_ANGULAR_MOMENTUM = Units.lbsToKilograms(9.963);
-    public static final double LENGTH_METERS = Units.inchesToMeters(16.785);
+    public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final double MIN_ANGLE_RADS = -3 * Math.PI / 4;
     public static final double MAX_ANGLE_RADS =0;
-    @CanId public static final int MOTOR_CANID = 51;
-    public static final int PCMID = 5;
+    @CanId(CanId.Type.MOTOR) public static final int MOTOR_CANID = 65;
+    @CanId(CanId.Type.PCM_CONTROLLER) public static final int PCMID = 5;
     public static final int FORWARDSOLENOID = 3;
     public static final int REVERSESOLENOID = 4;
-    @CanId public static final int climberEncoderCanID = 12; //TODO
+    @CanId(CanId.Type.ENCODER) public static final int climberEncoderCanID = 12; //TODO
+    public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
   }
  
 public static final class AlgaeHandler {
   //Creating constants for LEFT Algae Handler :D
   //CANID's
-  @CanId  static final int leftAlgaeMotorCANID = 21;
+  @CanId(CanId.Type.MOTOR) static final int leftAlgaeMotorCANID = 21;
   public static final int leftAlgaeSolenoidID = 5;
   public static final int leftAlgaeHallEffectID = 23;
   public static final int leftAlgaeLimitID = 24;
 
-    //Creating constants for RIGHT Algae Handler :D
-    @CanId public static final int rightAlgaeMotorCANID = 25;
+  //Creating constants for RIGHT Algae Handler :D
+  @CanId(CanId.Type.MOTOR) public static final int rightAlgaeMotorCANID = 25;
   public static final int rightAlgaeSolenoidID = 6;
   public static final int rightAlgaeHallEffectID = 27;
   public static final int rightAlgaeLimitID = 28;
@@ -326,26 +363,10 @@ public static final class AlgaeHandler {
   public static final double radiusOfTopIntakeWheel = 1;
   public static final double momentOfInertiaOfTheTopIntakeWheel = massOfTopIntakeWheel * (radiusOfTopIntakeWheel*radiusOfTopIntakeWheel);
 
-
-
-    //all of these ID's are place holders and will need to be edited at a later date
-
-    public static final double metersPerMotorRevolution = 0;
-    public static final int amassOfAlgaeHandler = 6;
-    public static final double algaeGearRatio = 1.0/9.0;
-  }  
-
-
-
-
-//Motor logistics
-
-  
-
-
-
-
-
+  //all of these ID's are place holders and will need to be edited at a later date
+  public static final double metersPerMotorRevolution = 0;
+  public static final int amassOfAlgaeHandler = 6;
+  public static final double algaeGearRatio = 1.0/9.0;
+}
   
 }
-
