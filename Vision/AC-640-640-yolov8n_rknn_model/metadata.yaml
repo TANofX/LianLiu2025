@@ -1,7 +1,7 @@
 description: Ultralytics AC-640-640-YOLOv8n model trained on E:/reefscape-collation-part-i.v1i.yolov8/data.yaml
 author: Ultralytics
-date: '2025-02-12T00:26:52.431147'
-version: 8.3.74
+date: '2025-02-15T14:31:56.551452'
+version: 8.3.75
 license: AGPL-3.0 License (https://ultralytics.com/license)
 docs: https://docs.ultralytics.com
 stride: 32
