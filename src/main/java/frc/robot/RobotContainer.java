@@ -51,7 +51,7 @@ public class RobotContainer {
     SmartDashboard.putData("Raise and then lower claw", climber.runClawMotorOneWayThenOther());
     SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand());
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
-
+  
 
 
     // Register Named Commands for pathplanner

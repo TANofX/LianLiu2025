@@ -146,7 +146,7 @@ public class Climber extends AdvancedSubsystem {
 
   /**
    * This method will move the climber to the required angle
-   *
+   * 
    * @returns void
    * @param angle
    */
@@ -160,7 +160,7 @@ public class Climber extends AdvancedSubsystem {
   /**
    * This method is intended to give the user the current target loctation of the
    * climber
-   *
+   * 
    * @returns target angle for the climber
    */
   public Rotation2d getCurrentTarget() {
@@ -169,9 +169,9 @@ public class Climber extends AdvancedSubsystem {
 
   /**
    * This method will get the current angle of the Climbing mechanism
-   *
+   * 
    * @returns the current angle of the climber
-   *
+   * 
    */
   public void runClimberMotor() {
     climberController.setReference(-500.0, ControlType.kVelocity);
@@ -319,7 +319,7 @@ public class Climber extends AdvancedSubsystem {
         stopClimberMotor();
     }, this);
   }
-
+  
   public Command runClawMotorUpCommand() {
     return Commands.sequence(
         Commands.runOnce(
