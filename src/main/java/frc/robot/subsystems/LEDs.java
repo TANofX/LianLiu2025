@@ -67,41 +67,36 @@ import frc.robot.RobotContainer;
  * The LEDs subsystem controls an addressable LED strip using various patterns and animations.
  */
 public class LEDs extends AdvancedSubsystem {
+    private AlgaeHandler algaeHandler;
+    private CoralHandler coralHandler;
     private AddressableLED strip;
     private AddressableLEDBuffer buffer;
+
     private final LEDPattern rainbow = LEDPattern.rainbow(255, 255)
         .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(1 / 120.0));
+
     private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen)
         .breathe(Seconds.of(5));
 
-    private final LEDPattern orangePattern = LEDPattern.solid(Color.kOrange);
+    private final LEDPattern whitePattern = LEDPattern.solid(Color.kWhite);
     // TODO Change 0.5 to IMU tilt
-    private final LEDPattern imuPattern = LEDPattern.progressMaskLayer(() -> 0.5)
-        .mask(LEDPattern.solid(Color.kBlue));
-    private LEDPattern activePattern;
 
-    /**
-     * Enum representing the different types of animations available.
-     */
-    public enum AnimationTypes {
-        GreenBreeze,
-        BlueTilt,
-        OrangeSolid,
-        Rainbow
-    }
+    private final LEDPattern intake = LEDPattern.rainbow(0, 0)
+
+    private final LEDPattern standby = LEDPattern.solid(Color.kRed);
 
     /**
      * Constructs an LEDs subsystem and initializes the LED strip and buffer.
      */
-    public LEDs() {
+    public LEDs(AlgaeHandler algaeHandler, CoralHandler coralHandler) {
+        this.algaeHandler = algaeHandler;
+        this.coralHandler = coralHandler;
         strip = new AddressableLED(Constants.LEDs.stripPwm);
         buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
 
         strip.setLength(buffer.getLength());
         strip.setData(buffer);
         strip.start();
-
-        activePattern = rainbow;
     }
 
     /**
@@ -114,37 +109,27 @@ public class LEDs extends AdvancedSubsystem {
         return Commands.none();
     }
 
-    /**
-     * Changes the active animation pattern based on the specified animation type.
-     * 
-     * @param anim The type of animation to switch to.
-     */
-    public void changeAnimation(AnimationTypes anim) {
-        switch(anim) {
-            case GreenBreeze:
-                activePattern = greenPattern;
-                break;
-            case BlueTilt:
-                activePattern = imuPattern;
-                break;
-            case OrangeSolid:
-                activePattern = orangePattern;
-                break;
-            default:
-            case Rainbow:
-                activePattern = rainbow;
-                break;
-        }
-    }
     
     /**
      * Periodically updates the LED strip with the active pattern.
      */
     @Override
     public void periodic() {
-        // Has Coral, Green
-        if(RobotContainer.coralHandler.hasCoral()) changeAnimation(AnimationTypes.OrangeSolid);
-        activePattern.applyTo(buffer);
+
+
+        
+        if(coralHandler.hasCoral()) {
+            greenPattern.applyTo(buffer.createView(0, 25));
+        } else{
+            standby.applyTo(buffer.createView(0, 25));
+
+        }
+        if(algaeHandler.hasAlgae()){
+            setPattern()
+        }
+
+        if(algaeHandler.runAlgaeMotor())
+
         strip.setData(buffer);
     }
 }

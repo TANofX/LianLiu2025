@@ -9,7 +9,6 @@ import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.ManualCoralHandler;
 import frc.robot.commands.CoralHandlerAngleEstimator;
 import frc.robot.commands.ElevatorJoystickControl;
-import frc.robot.commands.Notifications;
 import frc.robot.subsystems.*;
 import frc.robot.util.RobotMechanism;
 
@@ -25,13 +24,13 @@ public class RobotContainer {
   // Subsystems
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
-  public static final LEDs LEDs = new LEDs();
   public static final Elevator elevator = new Elevator(Constants.Elevator.motorCanID);
   public static final RobotMechanism robotMechanism = new RobotMechanism(() -> {return swerve.getPose();});
   public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.outtakeMotorID, Constants.CoralHandler.horizontalMotorID, Constants.CoralHandler.verticalMotorID, Constants.CoralHandler.horizontalEncoderID, Constants.CoralHandler.verticalEncoderID);
    public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.leftAlgaeMotorCANID, Constants.AlgaeHandler.leftAlgaeSolenoidID,Constants.AlgaeHandler.leftAlgaeLimitID);
    public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.rightAlgaeMotorCANID, Constants.AlgaeHandler.rightAlgaeSolenoidID, Constants.AlgaeHandler.rightAlgaeLimitID);
-
+   public static final LEDs LEDs = new LEDs(leftAlgaeHandler, coralHandler);
+   
   public static final Climber climber = new Climber(Constants.Climber.MOTOR_CANID, Constants.Climber.PCMID, Constants.Climber.FORWARDSOLENOID, Constants.Climber.REVERSESOLENOID,Constants.Climber.climberEncoderCanID);
 
   // Vision clients
@@ -43,7 +42,6 @@ public class RobotContainer {
 
     SmartDashboard.putData(swerve.zeroModulesCommand());
     configureButtonBindings();
-    LEDs.setDefaultCommand(new Notifications());
     elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
     SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
     SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
