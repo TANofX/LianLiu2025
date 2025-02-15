@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
 
 import java.io.IOException;
 import java.lang.annotation.ElementType;
@@ -206,6 +207,10 @@ public final class Constants {
     @CanId((CanId.Type.MOTOR)) public static final int verticalMotorID = 42;
     @CanId((CanId.Type.ENCODER)) public static final int verticalEncoderID = 42;
 
+    public static final double coralHandlerPositionX = 0;
+    public static final double coralHandlerPositionY = 0;
+    public static final double coralHandlerPositionZ = 0;
+    
     // !! `coralEndEffectorLength` is IN METERS
     public static final double coralEndEffectorLength = 0.25;
     public static final double coralEndEffectorMass = 0.5;
@@ -290,7 +295,6 @@ public final class Constants {
     public static final Rotation2d verticallLevel4Angle = Rotation2d.fromDegrees(0);
     // TODO ???? what do you do for offset for position (use gear ratio to figure out)
     // public static final double RotationDegreesPerRotation = 0;
-
   }
   public static final class Climber {
     public static final double firstStageGearRatio = 90 / 60;

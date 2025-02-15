@@ -12,7 +12,7 @@ import frc.robot.Constants;
 public class CoralHandlerAngleEstimator extends Command {
   /** Creates a new CoralHandlerEstimator. */
   public CoralHandlerAngleEstimator() {
-    addRequirements(RobotContainer.coralHandler, RobotContainer.elevator);
+    addRequirements(RobotContainer.coralHandler, RobotContainer.elevator, RobotContainer.autoAim);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,11 +24,9 @@ public class CoralHandlerAngleEstimator extends Command {
   @Override
   public void execute() {
     //TODO uncomment line below after merge with AutoAiming and fix with needed method
-    if (((RobotContainer.elevator.getElevation() - Constants.Elevator.level1Height) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-    }
-    else if (((RobotContainer.elevator.getElevation() - Constants.Elevator.level1Height) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    if (((RobotContainer.elevator.getElevation() - Constants.Elevator.level1Height) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+      RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.autoAim.horizontalRotationToCoral());
+      RobotContainer.coralHandler.setVerticalAngle(RobotContainer.autoAim.verticalRotationToCoral());
     }
     else {
       RobotContainer.coralHandler.setIntakeAngle();

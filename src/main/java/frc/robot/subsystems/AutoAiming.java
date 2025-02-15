@@ -7,18 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.List;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-//import edu.wpi.first.math.geometry.Translation2d;
-//import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance; //may not need both?
 
@@ -29,7 +24,6 @@ public class AutoAiming extends SubsystemBase {
   public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
   }
-
 
 //Method to return the position of the branch closest to it.
   public Pose2d chooseBranch (Pose2d robotPose){
