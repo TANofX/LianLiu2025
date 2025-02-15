@@ -12,18 +12,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants.Elevator;
 import frc.robot.RobotContainer;
+
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-//import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-//import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
-//import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.StructArrayPublisher;
 
 /** Add your docs here. */
@@ -33,6 +31,7 @@ public class RobotMechanism {
     MechanismLigament2d m_elevatorExtension;
     StructArrayPublisher<Pose3d> m_poses = NetworkTableInstance.getDefault().getStructArrayTopic("Robot/Component/Poses", Pose3d.struct).publish();
     Pose3d[] poses = new Pose3d[9];
+    Supplier<Pose2d> robotPoseSupplier;
 
     private static final Pose3d k_RobotBaseOffset = new Pose3d(0, 0, 0.0661163, new Rotation3d());
     private static final Transform3d k_RobotToElevatorStage2 = new Transform3d(0.1909, 0.0, 0.06075, new Rotation3d());
@@ -48,7 +47,7 @@ public class RobotMechanism {
     // TODO Investigate Mechanism2d
     // Does this gets drawn correctly in SmartDashboard? AdvantageScope did not seem to draw the mechanism in a manner
     // to understand the robot's configuration.
-    public RobotMechanism() {
+    public RobotMechanism(Supplier<Pose2d> poseSupplier) {
         m_mechanism = new Mechanism2d(Units.inchesToMeters(15.0), Units.inchesToMeters(5) + Elevator.MAX_HEIGHT_METERS);
         m_root = m_mechanism.getRoot("Elevator", Units.inchesToMeters(15.0 - 7.5), Units.inchesToMeters(4.0));
         MechanismLigament2d m_elevatorBase = new MechanismLigament2d("Elavator Extension", Units.inchesToMeters(5), 90.0, 10, new Color8Bit(200, 200, 200));
@@ -59,6 +58,8 @@ public class RobotMechanism {
         for (int i = 0; i < poses.length; i++) {
             poses[i] = new Pose3d();
         }
+
+        robotPoseSupplier = poseSupplier;
     }
 
     public void update() {
@@ -100,8 +101,8 @@ public class RobotMechanism {
     //method that finds the position 
     public Pose3d getFieldPositionOfCoralHandler(){
         //turns Rotation2d into Rotation3d
-        Rotation3d rotation = new Rotation3d(frc.robot.RobotContainer.swerve.getPose().getRotation());
-        Translation3d baseToCoralHandler = poses[3].getTranslation();
+        Rotation3d rotation = new Rotation3d(robotPoseSupplier.get().getRotation());
+        Translation3d baseToCoralHandler = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).getTranslation();
         
 
         //this should now include any rotation of the drive base. This works because the pose3d constructor that uses both translation and rotation3d should rotate the axis so that it matches the rotation, and then construct the translation onto that new axis. 

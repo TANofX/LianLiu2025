@@ -6,6 +6,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -31,7 +32,6 @@ public final class Constants {
       apriltagLayout.getFieldWidth();
       apriltagLayout.getFieldLength();
       apriltagLayout.getFieldWidth();
-
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -188,8 +188,17 @@ public final class Constants {
     cordinatesCoralBlue.add(new Pose2d(166.65, 188.32, Rotation2d.fromDegrees(300)));
     cordinatesCoralBlue.add(new Pose2d(155.43, 181.89, Rotation2d.fromDegrees(300)));
     }
-    }
 
+    public static ArrayList<Double> heightsCoral = new ArrayList<Double>();
+    static {
+    //ordered in line from A-L
+    //rotation degree part of Pos2D is the direction the robot has to face to be flush against the reef for that branch
+//I STILL NEED L1
+    heightsCoral.add(71.87);
+    heightsCoral.add(47.59);
+    heightsCoral.add(31.72);
+    }
+  }
   public static final class CoralHandler {
     // TODO figure out all actual constants
     public static final double MeterPerMotorRevolution = 0.0;
