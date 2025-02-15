@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftStartCloseLeftReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CloseLeftReefLeftCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftCollectFarLeftReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarLeftReefLeftCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
