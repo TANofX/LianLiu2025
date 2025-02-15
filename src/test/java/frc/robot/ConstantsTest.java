@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static frc.robot.Constants.CanId;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,10 +10,13 @@ import java.util.*;
 
 public class ConstantsTest {
 
-    record CanTypeId(Constants.CanType type, int id) {}
+    /**
+     * A CAN type and a CAN ID. This is what needs to be unique.
+     */
+    record CanTypeId(CanId.CanType type, int id) {}
 
     /**
-     * Test that no two CAN ID fields have the same CAN ID.
+     * Test that no two CAN ID fields for devices of the same type have the same CAN ID.
      */
     @Test
     public void testDuplicateCanIds() throws Exception {
@@ -42,11 +47,11 @@ public class ConstantsTest {
         throws IllegalAccessException {
         // Find CAN ID fields
         for (Field field : cls.getDeclaredFields()) {
-            Constants.CanId annotation = field.getAnnotation(Constants.CanId.class);
+            CanId annotation = field.getAnnotation(CanId.class);
             if (annotation != null) {
                 String fieldName = cls.getSimpleName() + "." + field.getName();
                 int canId = field.getInt(null);
-                Constants.CanType canType = annotation.value();
+                CanId.CanType canType = annotation.value();
                 CanTypeId canTypeId = new CanTypeId(canType, canId);
                 canIdToFields.computeIfAbsent(canTypeId, _canTypeId -> new HashSet<>())
                         .add(fieldName);
