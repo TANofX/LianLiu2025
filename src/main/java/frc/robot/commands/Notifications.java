@@ -61,7 +61,7 @@ public class Notifications extends Command {
         setState = LED_State.ALGAE_HOLD;
       else if (RobotContainer.rightAlgaeHandler.hasAlgae()) 
         setState = LED_State.ALGAE_HOLD;
-      else if (RobotContainer.climber.isClawClosed())
+      else if (!RobotContainer.climber.isClawOpen())
         setState = LED_State.CLIMB;
       else setState = LED_State.DEFAULT;
     }

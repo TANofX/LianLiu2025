@@ -92,7 +92,7 @@
     - Coral Limit Switch: not hit
   - LR Motor: Base off of Odom
   - Vertical Motor: Outtake Level 3 Position
-  - Elevator Position: Level 2
+  - Elevator Position: Level 3
 
 ### Reef Level 4 Position
   - Outtake Motor: Spin

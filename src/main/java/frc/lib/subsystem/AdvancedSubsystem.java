@@ -6,7 +6,6 @@ import java.util.List;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkBase;
-//import com.ctre.phoenix6.motorcontrol.can.BaseMotorController;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -35,28 +34,22 @@ public abstract class AdvancedSubsystem extends SubsystemBase {
   private final Timer statusTimer = new Timer();
   
   public AdvancedSubsystem() {
-    this.statusTable = "SystemStatus/" + this.getName();
-    Command systemCheck = getSystemCheckCommand();
-    systemCheck.setName(getName() + "Check");
-    SmartDashboard.putData(statusTable + "/SystemCheck", systemCheck);
-    SmartDashboard.putBoolean(statusTable + "/CheckRan", false);
-    checkErrors = RobotBase.isReal();
-
-    initializeTimers();
-    // setupCallbacks();
+    this("");
   }
 
   public AdvancedSubsystem(String name) {
+    checkErrors = RobotBase.isReal();
+    initializeTimers();
+    // setupCallbacks();
     this.setName(name);
-    this.statusTable = "SystemStatus/" + name;
+    this.statusTable = "SystemStatus/" + this.getName();
+  }
+
+  public void registerSystemCheckWithSmartDashboard() {
     Command systemCheck = getSystemCheckCommand();
     systemCheck.setName(getName() + "Check");
     SmartDashboard.putData(statusTable + "/SystemCheck", systemCheck);
     SmartDashboard.putBoolean(statusTable + "/CheckRan", false);
-    checkErrors = RobotBase.isReal();
-
-    initializeTimers();
-    // setupCallbacks();
   }
 
   private void initializeTimers() {

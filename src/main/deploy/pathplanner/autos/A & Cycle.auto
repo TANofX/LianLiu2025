@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightStarttoA"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "place L1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AtoCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CollecttoK"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "place L1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "KtoCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CollecttoL"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
