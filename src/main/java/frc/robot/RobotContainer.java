@@ -85,10 +85,10 @@ public class RobotContainer {
 
     coralHandler.setDefaultCommand(new ManualCoralHandler(() -> {
       if (coDriver.DUp().getAsBoolean()) {
-        return 0.5;
+        return -0.5;
       }
       if (coDriver.DDown().getAsBoolean()){
-        return -0.5;
+        return 0.5;
       }
       return 0.0;
     }, () -> {

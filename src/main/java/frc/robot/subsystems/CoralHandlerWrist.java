@@ -212,7 +212,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
         
         //TODO check if this PID changing method works and change comment after + change angle for when PID controltype changes
-        if ((targetMotorAngle.getDegrees() - getAngle().getDegrees()) > Rotation2d.fromDegrees(5).getDegrees())
+        if ((Math.abs(targetMotorAngle.getDegrees() - getAngle().getDegrees())) > Rotation2d.fromDegrees(5).getDegrees())
             controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         
         else {
