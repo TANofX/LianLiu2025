@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants.Elevator;
 import frc.robot.RobotContainer;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 //import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,49 +49,49 @@ public class RobotMechanism {
     // Does this gets drawn correctly in SmartDashboard? AdvantageScope did not seem to draw the mechanism in a manner
     // to understand the robot's configuration.
     public RobotMechanism() {
-        m_mechanism = new Mechanism2d(Units.inchesToMeters(15.0), Units.inchesToMeters(5) + Elevator.MAX_HEIGHT_METERS);
-        m_root = m_mechanism.getRoot("Elevator", Units.inchesToMeters(15.0 - 7.5), Units.inchesToMeters(4.0));
-        MechanismLigament2d m_elevatorBase = new MechanismLigament2d("Elavator Extension", Units.inchesToMeters(5), 90.0, 10, new Color8Bit(200, 200, 200));
-        m_elevatorExtension = new MechanismLigament2d("Elavator Base", Units.inchesToMeters(4), 90.0, 5, new Color8Bit(128, 128, 128));
-        m_root.append(m_elevatorExtension);
-        m_root.append(m_elevatorBase);
+        // m_mechanism = new Mechanism2d(Units.inchesToMeters(15.0), Units.inchesToMeters(5) + Elevator.MAX_HEIGHT_METERS);
+        // m_root = m_mechanism.getRoot("Elevator", Units.inchesToMeters(15.0 - 7.5), Units.inchesToMeters(4.0));
+        // MechanismLigament2d m_elevatorBase = new MechanismLigament2d("Elavator Extension", Units.inchesToMeters(5), 90.0, 10, new Color8Bit(200, 200, 200));
+        // m_elevatorExtension = new MechanismLigament2d("Elavator Base", Units.inchesToMeters(4), 90.0, 5, new Color8Bit(128, 128, 128));
+        // m_root.append(m_elevatorExtension);
+        // m_root.append(m_elevatorBase);
 
-        for (int i = 0; i < poses.length; i++) {
-            poses[i] = new Pose3d();
-        }
+        // for (int i = 0; i < poses.length; i++) {
+        //     poses[i] = new Pose3d();
+        // }
     }
 
     public void update() {
-        double elevation = RobotContainer.elevator.getElevation();
-        m_elevatorExtension.setLength(elevation);
+       // double elevation = RobotContainer.elevator.getElevation();
+       // m_elevatorExtension.setLength(elevation);
 
-        Rotation2d coralHandlerAngle = RobotContainer.coralHandler.getHorizontalAngle();
-        Rotation2d coralHandlerVerticalAngle = RobotContainer.coralHandler.getVerticalAngle();
-        Rotation2d clamShellAngle = RobotContainer.climber.getCurrentAngle();
+        // Rotation2d coralHandlerAngle = RobotContainer.coralHandler.getHorizontalAngle();
+        // Rotation2d coralHandlerVerticalAngle = RobotContainer.coralHandler.getVerticalAngle();
+        // Rotation2d clamShellAngle = RobotContainer.climber.getCurrentAngle();
 
         double leftAlgaeHandlerAngle = RobotContainer.leftAlgaeHandler.isAlgaeIntakeUp() ? 0.0 : Math.PI / 180.0 * 55.0;
-        double rightAlgaeHandlerAngle = RobotContainer.rightAlgaeHandler.isAlgaeIntakeUp() ? 0.0 : Math.PI / 180.0 * 55.0;
+        //double rightAlgaeHandlerAngle = RobotContainer.rightAlgaeHandler.isAlgaeIntakeUp() ? 0.0 : Math.PI / 180.0 * 55.0;
 
         double climberArmAngle = RobotContainer.climber.isClawOpen() ? Math.PI / 4.0 : 0.0;
 
         SmartDashboard.putData("Robot Mechanism", m_mechanism);
         
-        Transform3d elevatorTransform = new Transform3d(0.0, 0.0, elevation / 2.0, new Rotation3d());
-        Transform3d coralHandlerStage1 = new Transform3d(0,0,0,new Rotation3d(0.0, 0.0, coralHandlerAngle.getRadians()));
-        Transform3d coralHandlerStage2 = new Transform3d(0,0,0, new Rotation3d(0, coralHandlerVerticalAngle.getRadians(), 0));
+       // Transform3d elevatorTransform = new Transform3d(0.0, 0.0, elevation / 2.0, new Rotation3d());
+        // Transform3d coralHandlerStage1 = new Transform3d(0,0,0,new Rotation3d(0.0, 0.0, coralHandlerAngle.getRadians()));
+        // Transform3d coralHandlerStage2 = new Transform3d(0,0,0, new Rotation3d(0, coralHandlerVerticalAngle.getRadians(), 0));
         Transform3d leftAlgaeHandler = new Transform3d(0,0,0, new Rotation3d(0, leftAlgaeHandlerAngle, 0));
-        Transform3d rightAlgaeHandler = new Transform3d(0,0,0, new Rotation3d(0, rightAlgaeHandlerAngle, 0));
-        Transform3d climberClamShell = new Transform3d(0,0,0, new Rotation3d(0, clamShellAngle.getRadians(), 0));
+        //Transform3d rightAlgaeHandler = new Transform3d(0,0,0, new Rotation3d(0, rightAlgaeHandlerAngle, 0));
+        // Transform3d climberClamShell = new Transform3d(0,0,0, new Rotation3d(0, clamShellAngle.getRadians(), 0));
         Transform3d climberClam2LeftArm = new Transform3d(0,0,0, new Rotation3d(0, 0.0, climberArmAngle));
         Transform3d climberClam2RightArm = new Transform3d(0,0,0, new Rotation3d(0, 0.0, -climberArmAngle));
 
-        poses[0] = k_RobotBaseOffset.plus(k_RobotToElevatorStage2).plus(elevatorTransform);
-        poses[1] = poses[0].plus(k_ElevatorStage2ToStage3).plus(elevatorTransform);
-        poses[2] = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).plus(coralHandlerStage1);
-        poses[3] = poses[2].plus(k_CoralHandlerStage1ToStage2).plus(coralHandlerStage2);
+        // poses[0] = k_RobotBaseOffset.plus(k_RobotToElevatorStage2).plus(elevatorTransform);
+        // poses[1] = poses[0].plus(k_ElevatorStage2ToStage3).plus(elevatorTransform);
+        // poses[2] = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).plus(coralHandlerStage1);
+        // poses[3] = poses[2].plus(k_CoralHandlerStage1ToStage2).plus(coralHandlerStage2);
         poses[4] = k_RobotBaseOffset.plus(k_LeftAlgaeHandler).plus(leftAlgaeHandler);
-        poses[5] = k_RobotBaseOffset.plus(k_RightAlgaeHandler).plus(rightAlgaeHandler);
-        poses[6] = k_RobotBaseOffset.plus(k_ClimberClamShell).plus(climberClamShell);
+       // poses[5] = k_RobotBaseOffset.plus(k_RightAlgaeHandler).plus(rightAlgaeHandler);
+        // poses[6] = k_RobotBaseOffset.plus(k_ClimberClamShell).plus(climberClamShell);
         poses[7] = poses[6].plus(k_ClimberClam2LeftArm).plus(climberClam2LeftArm);
         poses[8] = poses[6].plus(k_ClimberClam2RightArm).plus(climberClam2RightArm);
         m_poses.set(poses);

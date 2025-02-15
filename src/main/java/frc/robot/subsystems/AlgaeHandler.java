@@ -10,8 +10,9 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
@@ -22,7 +23,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
-import com.revrobotics.sim.SparkFlexSim;
+import com.revrobotics.sim.SparkMaxSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
@@ -38,12 +39,12 @@ import frc.robot.Constants;
 
 
 public class AlgaeHandler extends AdvancedSubsystem {
-private SparkFlex algaeMotor;
+private SparkMax algaeMotor;
 private Solenoid algaePiston;
 private DigitalInput algaeLimitSwitch;
 private  SparkClosedLoopController algaeMotorController;
 
-private SparkFlexSim algaeHandlerMotorSim;
+private SparkMaxSim algaeHandlerMotorSim;
 
 private RelativeEncoder algaeEncoder;
 
@@ -59,7 +60,7 @@ private final FlywheelSim m_algaeHandlerSim =
   /** Creates a new AlgaeHandler. */
   public AlgaeHandler(int algaeMotorCANID, int algaeSolenoidID, int algaeLimitID) {
     //creating motor/solenoid/switches/controllers
-    algaeMotor = new SparkFlex(algaeMotorCANID, MotorType.kBrushed);
+    algaeMotor = new SparkMax(algaeMotorCANID, MotorType.kBrushed);
     algaePiston = new Solenoid(PneumaticsModuleType.REVPH, algaeSolenoidID);
     algaeLimitSwitch = new DigitalInput(algaeLimitID);
     algaeMotorController = algaeMotor.getClosedLoopController();
@@ -67,7 +68,7 @@ private final FlywheelSim m_algaeHandlerSim =
    
 
 
-    SparkFlexConfig algaeMotorConfig = new SparkFlexConfig();
+    SparkMaxConfig algaeMotorConfig = new SparkMaxConfig();
     ClosedLoopConfig algaeMotorPIDConfig = algaeMotorConfig.closedLoop;
     algaeMotorConfig.idleMode(IdleMode.kBrake);
     algaeMotorConfig.smartCurrentLimit(80);
@@ -81,7 +82,7 @@ private final FlywheelSim m_algaeHandlerSim =
     registerHardware("Algae Motor", algaeMotor);
   
    //Configure the motor simulation
-   algaeHandlerMotorSim = new SparkFlexSim(algaeMotor, DCMotor.getNeoVortex(1));
+   algaeHandlerMotorSim = new SparkMaxSim(algaeMotor, DCMotor.getNeoVortex(1));
 
 
    
@@ -130,25 +131,25 @@ public void stopAlgaeMotor() {
 
 public void runAlgaeMotor() {
   //velocity value is a place holder because I didnt know what I was doing :D do we need math for spins per motor revolution??
-  algaeMotorController.setReference(577.26, ControlType.kVelocity);
-  //algaeMotor.set(.5);
+  //algaeMotorController.setReference(577.26, ControlType.kVelocity);
+  algaeMotor.set(.45);
 }
 
 public void reverseAlgaeMotor() {
   //velocity value is a place holder :D
-  algaeMotorController.setReference(-577.26, ControlType.kVelocity);
-  //algaeMotor.set(-.5);
+  //algaeMotorController.setReference(-577.26, ControlType.kVelocity);
+  algaeMotor.set(-.45);
 }
 
 
 public boolean hasAlgae() {
   //Will be true when algae handler has algae
-  return algaeLimitSwitch.get();
+  return !algaeLimitSwitch.get();
 }
 
 public boolean isAlgaeIntakeUp() {
   //returns a boolean to tell the robot whether or not algae intake is up
-  return !algaePiston.get();
+  return !algaePiston.get(); //TODO change to hall effect sensor
   }
 
 
@@ -171,7 +172,7 @@ public Command getAlgaeIntakeCommand() {
       return isAlgaeIntakeUp();
     }),
     Commands.run(()-> {
-      if((hasAlgae() ) || (!isAlgaeIntakeUp())) 
+      if((hasAlgae() ) && (!isAlgaeIntakeUp())) 
       runAlgaeMotor();
       else
       stopAlgaeMotor();    
@@ -252,7 +253,6 @@ public Command lowerAlgaeIntakeManually() {
 
   @Override
   protected Command systemCheckCommand() {
-    // TODO Auto-generated method stub
     return Commands.sequence(
       Commands.runOnce(
         () -> {

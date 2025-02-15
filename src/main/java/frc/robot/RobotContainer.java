@@ -8,9 +8,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.input.controllers.XboxControllerWrapper;
-import frc.robot.commands.ElevatorJoystickControl;
-import frc.robot.commands.ManualCoralHandler;
-import frc.robot.commands.CoralHandlerAngleEstimator;
+// import frc.robot.commands.ElevatorJoystickControl;
+// import frc.robot.commands.ManualCoralHandler;
+// import frc.robot.commands.CoralHandlerAngleEstimator;
 import frc.robot.commands.Notifications;
 import frc.robot.commands.SwerveDriveWithGamepad;
 import frc.robot.subsystems.*;
@@ -33,28 +33,28 @@ public class RobotContainer {
   // Subsystems
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
-  public static final LEDs LEDs = new LEDs();
-  public static final Elevator elevator = new Elevator(Constants.Elevator.motorCanID);
-  public static final RobotMechanism robotMechanism = new RobotMechanism();
-  public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.outtakeMotorID, Constants.CoralHandler.horizontalMotorID, Constants.CoralHandler.verticalMotorID, Constants.CoralHandler.horizontalEncoderID, Constants.CoralHandler.verticalEncoderID);
+  // public static final LEDs LEDs = new LEDs();
+  // public static final Elevator elevator = new Elevator(Constants.Elevator.motorCanID);
+ // public static final RobotMechanism robotMechanism = new RobotMechanism();
+  // public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.outtakeMotorID, Constants.CoralHandler.horizontalMotorID, Constants.CoralHandler.verticalMotorID, Constants.CoralHandler.horizontalEncoderID, Constants.CoralHandler.verticalEncoderID);
    public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.leftAlgaeMotorCANID, Constants.AlgaeHandler.leftAlgaeSolenoidID,Constants.AlgaeHandler.leftAlgaeLimitID);
-   public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.rightAlgaeMotorCANID, Constants.AlgaeHandler.rightAlgaeSolenoidID, Constants.AlgaeHandler.rightAlgaeLimitID);
+  //  public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.rightAlgaeMotorCANID, Constants.AlgaeHandler.rightAlgaeSolenoidID, Constants.AlgaeHandler.rightAlgaeLimitID);
  
-  public static final Climber climber = new Climber(Constants.Climber.MOTOR_CANID, Constants.Climber.PCMID, Constants.Climber.FORWARDSOLENOID, Constants.Climber.REVERSESOLENOID,Constants.Climber.climberEncoderCanID);
+  public static final Climber climber = new Climber(Constants.Climber.MOTOR_CANID, Constants.Climber.PCMID, Constants.Climber.FORWARDSOLENOID, Constants.Climber.REVERSESOLENOID);
 
   // Vision clients
   // public static final JetsonClient jetson = new JetsonClient();
 
   public RobotContainer() {
-    coralHandler.registerSystemCheckWithSmartDashboard();
-    SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
+    // coralHandler.registerSystemCheckWithSmartDashboard();
+    // SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
 
     SmartDashboard.putData(swerve.zeroModulesCommand());
     configureButtonBindings();
-    LEDs.setDefaultCommand(new Notifications());
+    // LEDs.setDefaultCommand(new Notifications());
     //elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
     SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
-    SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
+    // SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
     SmartDashboard.putData("Raise claw", climber.runClawMotorUpCommand());
     SmartDashboard.putData("Raise and then lower claw", climber.runClawMotorOneWayThenOther());
     SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand());
@@ -64,15 +64,15 @@ public class RobotContainer {
   
     // Register Named Commands for pathplanner
     //ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
-    NamedCommands.registerCommand("ElevatorL4", elevator.getElevatorHeightCommand(0));
-    NamedCommands.registerCommand("ElevatorL1", elevator.getElevatorHeightCommand(0.00000001));
-    NamedCommands.registerCommand("ElevatorIntake", elevator.getElevatorHeightCommand(0.00001));
+    // NamedCommands.registerCommand("ElevatorL4", elevator.getElevatorHeightCommand(0));
+    // NamedCommands.registerCommand("ElevatorL1", elevator.getElevatorHeightCommand(0.00000001));
+    // NamedCommands.registerCommand("ElevatorIntake", elevator.getElevatorHeightCommand(0.00001));
     //NamedCommands.registerCommand("Collect", new ______());
   
     
-    //Do I need this?
-    elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
-    coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
+    // //Do I need this?
+    // elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
+    // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
     // SmartDashboard.putData(intake.getIntakePivotTuner());
     // SmartDashboard.putData(intake.getIntakeTuner());
     //SmartDashboard.putData("Tune Elevation", shooterWrist.getElevationTunerCommand());
@@ -101,18 +101,19 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
    
-    driver.LT().onTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
+    driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
-    driver.RT().onTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
-    driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
-    coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
-    driver.Y().onTrue(climber.getPrepareCommand());
-    driver.A().onTrue(climber.getCalibrateCommand());
+    // driver.RT().onTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
+    // driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
+    // coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
+    // coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    // coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
+    // coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
+    coDriver.A().onTrue(climber.runClawMotorOneWayThenOther());
+    coDriver.B().onTrue(climber.getOpenCommand());
+    coDriver.X().onTrue(climber.getStowCommand());
     coDriver.START();
-    coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
+    // coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
  
 //
     
@@ -181,10 +182,10 @@ public class RobotContainer {
    
     //coDriver.X().onTrue(new ElevatorToMin());
     coDriver.START();
-    SmartDashboard.putData("Calibrate Elevator", elevator.getCalibrationCommand());
-    SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
-    SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
-    SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
+    // SmartDashboard.putData("Calibrate Elevator", elevator.getCalibrationCommand());
+    // SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
+    // SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
+    // SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
   /*   
         }, shooter))).andThen(new Shoot().andThen(Commands.waitSeconds(0.5).andThen(Commands.runOnce(() -> {
           shooter.stopMotors();
@@ -200,6 +201,6 @@ public class RobotContainer {
 
 
   public static void periodic() {
-    robotMechanism.update();
+    //robotMechanism.update();
   }
 }

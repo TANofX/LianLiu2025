@@ -18,7 +18,6 @@ public class RobotMechanicalConfiguration {
     MechanismRoot2d m_root;
     MechanismLigament2d m_elevatorExtension;
 
-    // TODO Investigate Mechanism2d
     // Does this gets drawn correctly in SmartDashboard? AdvantageScope did not seem to draw the mechanism in a manner
     // to understand the robot's configuration.
     public RobotMechanicalConfiguration() {
@@ -29,7 +28,7 @@ public class RobotMechanicalConfiguration {
     }
 
     public void updateMechanism() {
-        m_elevatorExtension.setLength(RobotContainer.elevator.getElevation());
+        // m_elevatorExtension.setLength(RobotContainer.elevator.getElevation());
 
         SmartDashboard.putData("Robot Mechanism", m_mechanism);
     }
