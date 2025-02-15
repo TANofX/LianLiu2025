@@ -165,8 +165,17 @@ public final class Constants {
     cordinatesCoralBlue.add(new Pose2d(166.65, 188.32, Rotation2d.fromDegrees(300)));
     cordinatesCoralBlue.add(new Pose2d(155.43, 181.89, Rotation2d.fromDegrees(300)));
     }
-    }
 
+    public static ArrayList<Double> heightsCoral = new ArrayList<Double>();
+    static {
+    //ordered in line from A-L
+    //rotation degree part of Pos2D is the direction the robot has to face to be flush against the reef for that branch
+//I STILL NEED L1
+    heightsCoral.add(71.87);
+    heightsCoral.add(47.59);
+    heightsCoral.add(31.72);
+    }
+  }
   public static final class CoralHandler {
     // TODO figure out all actual constants
     public static final double MeterPerMotorRevolution = 0.0;
@@ -324,7 +333,7 @@ public static final class AlgaeHandler {
     public static final double metersPerMotorRevolution = 0;
     public static final int amassOfAlgaeHandler = 6;
     public static final double algaeGearRatio = 1.0/9.0;
-    
+  }  
 
 
 
@@ -339,4 +348,4 @@ public static final class AlgaeHandler {
 
   
 }
-}
+
