@@ -11,7 +11,6 @@ import frc.robot.commands.Notifications;
 import frc.robot.subsystems.*;
 import frc.robot.util.RobotMechanism;
 
-
 import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
@@ -19,18 +18,18 @@ public class RobotContainer {
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
   public static final XboxControllerWrapper coDriver = new XboxControllerWrapper(1, 0.1);
 
-  
+
 
   // Subsystems
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
   public static final LEDs LEDs = new LEDs();
   public static final Elevator elevator = new Elevator(Constants.Elevator.motorCanID);
-  public static final RobotMechanism robotMechanism = new RobotMechanism();
+  public static final RobotMechanism robotMechanism = new RobotMechanism(() -> {return swerve.getPose();});
   public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.outtakeMotorID, Constants.CoralHandler.horizontalMotorID, Constants.CoralHandler.verticalMotorID, Constants.CoralHandler.horizontalEncoderID, Constants.CoralHandler.verticalEncoderID);
    public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.leftAlgaeMotorCANID, Constants.AlgaeHandler.leftAlgaeSolenoidID,Constants.AlgaeHandler.leftAlgaeLimitID);
    public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.rightAlgaeMotorCANID, Constants.AlgaeHandler.rightAlgaeSolenoidID, Constants.AlgaeHandler.rightAlgaeLimitID);
- 
+
   public static final Climber climber = new Climber(Constants.Climber.MOTOR_CANID, Constants.Climber.PCMID, Constants.Climber.FORWARDSOLENOID, Constants.Climber.REVERSESOLENOID,Constants.Climber.climberEncoderCanID);
 
   // Vision clients
@@ -59,8 +58,8 @@ public class RobotContainer {
     SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
     SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
   
-  
-  
+
+
     // Register Named Commands for pathplanner
     //ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
     NamedCommands.registerCommand("ElevatorL4", elevator.getElevatorHeightCommand(0));
@@ -68,12 +67,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorIntake", elevator.getElevatorHeightCommand(0.00001));
     //NamedCommands.registerCommand("Collect", new ______());
   
-    
     //Do I need this? -gloria "no" -shirley
     // elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
     // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
   }
   
+
   private void configureButtonBindings() {
     driver.LT().onTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
