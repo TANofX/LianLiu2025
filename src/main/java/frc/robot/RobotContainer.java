@@ -4,24 +4,15 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.ManualCoralHandler;
-import frc.robot.commands.CoralHandlerAngleEstimator;
-import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.Notifications;
-import frc.robot.commands.SwerveDriveWithGamepad;
 import frc.robot.subsystems.*;
 import frc.robot.util.RobotMechanism;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-
-
 
 public class RobotContainer {
   // Controllers
@@ -46,19 +37,27 @@ public class RobotContainer {
   // public static final JetsonClient jetson = new JetsonClient();
 
   public RobotContainer() {
-    coralHandler.registerSystemCheckWithSmartDashboard();
-    SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
-
-    SmartDashboard.putData(swerve.zeroModulesCommand());
     configureButtonBindings();
     LEDs.setDefaultCommand(new Notifications());
-    //elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
+    coralHandler.registerSystemCheckWithSmartDashboard();
+
+    SmartDashboard.putData(swerve.zeroModulesCommand());
+
     SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
     SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
+
     SmartDashboard.putData("Raise claw", climber.runClawMotorUpCommand());
     SmartDashboard.putData("Raise and then lower claw", climber.runClawMotorOneWayThenOther());
     SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand());
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
+
+    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
+
+    SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
+    SmartDashboard.putData("Calibrate Elevator", elevator.getCalibrationCommand());
+    SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
+    SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
+    SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
   
   
   
@@ -70,38 +69,21 @@ public class RobotContainer {
     //NamedCommands.registerCommand("Collect", new ______());
   
     
-    //Do I need this?
-    elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
-    coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
-    // SmartDashboard.putData(intake.getIntakePivotTuner());
-    // SmartDashboard.putData(intake.getIntakeTuner());
-    //SmartDashboard.putData("Tune Elevation", shooterWrist.getElevationTunerCommand());
-    //SmartDashboard.putData("Tune Shooter", shooter.getShooterTunerCommand());
-    //SmartDashboard.putData("Tune Shooter Intake", shooter.getIntakeTunerCommand());
-    //SmartDashboard.putData("Tune Intake", intake.getIntakeTuner());
-    // SmartDashboard.putData(Commands.runOnce(() -> {
-    // intake.updateRotationOffset();}, intake));
-
-    //SmartDashboard.putData("Tune Elevator Motor", elevator.getHeightTunerCommand());
-    //SmartDashboard.putData("Elevator Extents", new FindMotorExtents())
-    // SmartDashboard.putData("Robot At Center Blue Ring", Commands.runOnce(() -> {
-    //   swerve.resetOdometry(new Pose2d(new Translation2d(2.9, 5.55), Rotation2d.fromDegrees(0)));
-    // }, swerve));
-    // SmartDashboard.putData("Robot At Red Speaker", new AtRedSubWoofer());
-
-    // Register Named Commands for pathplanner
-    //NamedCommands.registerCommand("ReadyToShootInSpeaker", new ShootInSpeaker());
-    //NamedCommands.registerCommand("SpeakerShot", new Shoot(false));
-    //NamedCommands.registerCommand("New AutoSpeakerShot", newAutoShootInSpeaker());
-    // NamedCommands.registerCommand("", );
-    
-    //PPHolonomicDriveController.setRotationTargetOverride(this::overrideAngle);
+    //Do I need this? -gloria "no" -shirley
+    // elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
+    // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
   }
   
   private void configureButtonBindings() {
-    coDriver.START();
-    coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
-    // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
+    driver.LT().onTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
+    driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
+    driver.RT().onTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
+    driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
+
+    driver.B().onTrue(climber.getPrepareCommand());
+    driver.A().onTrue(climber.getCalibrateCommand()); //TODO dont use get calibrate command, create a different command.
+    driver.X().onTrue(climber.getOpenCommand());
+
     coralHandler.setDefaultCommand(new ManualCoralHandler(() -> {
       if (coDriver.DUp().getAsBoolean()) {
         return 0.5;
@@ -120,43 +102,13 @@ public class RobotContainer {
       return 0.0;
     }));
 
-    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
-   
-    driver.LT().onTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
-    driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
-    driver.RT().onTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
-    driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
+    // Need to change to actual reef levels on elevator
     coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
     coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
     coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
     coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
-    driver.Y().onTrue(climber.getPrepareCommand());
-    driver.A().onTrue(climber.getCalibrateCommand());
-    coDriver.START();
-    coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
- 
-//
-    
-   //ONCE WE ADD ALGAE TO MAIN THESE COMMANDS SHOULD WORK:
-   //driver.LT().onTrue(new getAlgaeIntakeCommand());
-   //driver.RT().onTrue(new shootAlgaeCommand());
-   //driver.START().onTrue(new ); //callibrate elevator
-    coDriver.START();
-    SmartDashboard.putData("Calibrate Elevator", elevator.getCalibrationCommand());
-    SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
-    SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
-    SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
-  /*   
-        }, shooter))).andThen(new Shoot().andThen(Commands.waitSeconds(0.5).andThen(Commands.runOnce(() -> {
-          shooter.stopMotors();
-
-        }))))); */
-    //driver.B().onTrue(climber.getStowCommand());
-    //driver.Y().onTrue(climber.getPrepareCommand());
-    //driver.X().onTrue(climber.getCloseCommand());
-    //driver.A().onTrue(climber.getClimbCommand());
-   
-
+    coDriver.RT().onTrue(coralHandler.runCoralIntakeCommand());
+    coDriver.LT().onTrue(coralHandler.runCoralOuttakeCommand());
   }
 
 

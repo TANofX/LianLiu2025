@@ -141,7 +141,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
                 coralEndEffectorLength,
                 armMinRotation.getRadians(),
                 armMaxRotation.getRadians(),
-                true, // Gravity Boolean
+                false, // Gravity Boolean
                 startingAngle.getRadians());
             // ,Constants.CoralHandler.horizontalMotorStdDev);
 

@@ -6,7 +6,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -170,15 +169,12 @@ public final class Constants {
     }
 
   public static final class CoralHandler {
-    // TODO figure out all actual constants
-    public static final double MeterPerMotorRevolution = 0.0;
-
-    //TODO Get actual CANIDS :0
+    // TODO figure out all actual constants :)
     @CanId public static final int outtakeMotorID = 40;
     @CanId public static final int horizontalMotorID = 41;
-           public static final int horizontalEncoderID = 41;
+    @CanId public static final int horizontalEncoderID = 41;
     @CanId public static final int verticalMotorID = 42;
-           public static final int verticalEncoderID = 42;
+    @CanId public static final int verticalEncoderID = 42;
 
     // !! `coralEndEffectorLength` is IN METERS
     public static final double coralEndEffectorLength = 0.25;
@@ -247,7 +243,7 @@ public final class Constants {
     public static final double verticalRotationDegreesPerRotation = 360 / verticalGearRatio;
     public static final double horizontalRotationDegreesPerRotation = 360 / horizontalGearRatio;
     
-    //Need different name, for manual coral joystick control
+    //TODO Need different name, for manual coral joystick control
     public static final double verticalAngleChangeDegreesPerSecond = (verticalMotorMaxVelocity * verticalGearRatio) / 60;
     public static final double horizontalAngleChangeDegreesPerSecond = (horizontalMotorMaxVelocity * horizontalGearRatio) / 60;
     
@@ -262,19 +258,10 @@ public final class Constants {
     public static final Rotation2d verticallLevel2Angle = Rotation2d.fromDegrees(0);
     public static final Rotation2d verticallLevel3Angle = Rotation2d.fromDegrees(0);
     public static final Rotation2d verticallLevel4Angle = Rotation2d.fromDegrees(0);
-    // ???? what do you do for offset for position (use gear ratio to figure out)
+    // TODO ???? what do you do for offset for position (use gear ratio to figure out)
     // public static final double RotationDegreesPerRotation = 0;
 
-    public static double horizontalMotorallowederror;
   }
-
-  public static final class AutoBalance {
-    // public static final PIDConstants BALANCE_CONSTANTS = new PIDConstants(0.3,
-    // 0.0, 0.1);
-    public static final double maxVelAuto = 0.4;
-    public static final double maxVelTele = 0.3;
-  }
-
   public static final class Climber {
     public static final double firstStageGearRatio = 90 / 60;
     public static final double secondStageGearRatio = 18 / 58;
