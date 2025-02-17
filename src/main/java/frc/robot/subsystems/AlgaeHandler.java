@@ -42,6 +42,7 @@ private SparkFlex algaeMotor;
 private Solenoid algaePiston;
 private DigitalInput algaeLimitSwitch;
 private  SparkClosedLoopController algaeMotorController;
+private int isIntaking = 0;
 
 private SparkFlexSim algaeHandlerMotorSim;
 
@@ -82,10 +83,9 @@ private final FlywheelSim m_algaeHandlerSim =
   
    //Configure the motor simulation
    algaeHandlerMotorSim = new SparkFlexSim(algaeMotor, DCMotor.getNeoVortex(1));
-
-
    
   }
+
 
 @Override
 public void simulationPeriodic() {
@@ -111,6 +111,11 @@ algaeHandlerMotorSim.iterate(m_algaeHandlerSim.getAngularVelocityRPM() * Constan
 
 //Methods 
 
+public int getIntaking() {
+  return isIntaking;
+}
+
+
 public void lowerAlgaeIntake() {
   //solenoid will lower the intake
   algaePiston.set(true);
@@ -126,18 +131,21 @@ public void raiseAlgaeIntake() {
 public void stopAlgaeMotor() {
   //Algae motor is stopped
   algaeMotor.stopMotor();
+  isIntaking = 0;
 }
 
 public void runAlgaeMotor() {
   //velocity value is a place holder because I didnt know what I was doing :D do we need math for spins per motor revolution??
   algaeMotorController.setReference(577.26, ControlType.kVelocity);
   //algaeMotor.set(.5);
+  isIntaking = 1;
 }
 
 public void reverseAlgaeMotor() {
   //velocity value is a place holder :D
   algaeMotorController.setReference(-577.26, ControlType.kVelocity);
   //algaeMotor.set(-.5);
+  isIntaking = -1;
 }
 
 
