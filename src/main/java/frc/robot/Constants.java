@@ -96,8 +96,8 @@ public final class Constants {
 
   public static final class Swerve {
     @CanId(CanId.Type.PIGEON) public static final int imuCanID = 3;
-    public static final double maxVelTele = 4.7;
-    public static final double maxAccelTele = 6.0;
+    public static final double maxVelTele = 5.36;
+    public static final double maxAccelTele = 6.0; //todo
     public static final double maxAngularVelTele = Units.degreesToRadians(180);
     public static final double maxAngularAccelTele = Units.degreesToRadians(540);
     public static final double teleAngleHoldFactor = 3.0;
@@ -123,32 +123,32 @@ public final class Constants {
       @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 14;
       @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 10;
       @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 10;
-      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
-          Units.inchesToMeters(12.25));
+      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(10.125),
+          Units.inchesToMeters(12.375));
     }
 
     public static final class FrontRightModule {
       @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 17;
       @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 13;
       @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 13;
-      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(11.25),
-          -Units.inchesToMeters(12.25));
+      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(10.125),
+          -Units.inchesToMeters(12.375));
     }
 
     public static final class BackLeftModule {
       @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 15;
       @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 11;
       @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 11;
-      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
-          Units.inchesToMeters(12.25));
+      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(10.125),
+          Units.inchesToMeters(12.375));
     }
 
     public static final class BackRightModule {
       @CanId(CanId.Type.MOTOR) public static final int driveMotorCanID = 16;
       @CanId(CanId.Type.MOTOR) public static final int rotationMotorCanID = 12;
       @CanId(CanId.Type.ENCODER) public static final int rotationEncoderCanID = 12;
-      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(11.25),
-          -Units.inchesToMeters(12.25));
+      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(10.125),
+          -Units.inchesToMeters(12.375));
     }
   }
 
@@ -297,23 +297,23 @@ public final class Constants {
   }
 
   public static final class Climber {
-    public static final double firstStageGearRatio = 90 / 60;
+    public static final double firstStageGearRatio = 8 / 60;
     public static final double secondStageGearRatio = 18 / 58;
     public static final int climberlimitIDLower = 10;
     public static final int climberlimitIDUpper = 11;
 
     public static final double MOTOR_KI = 0; // TODO
-    public static final double MOTOR_KP = 1;
+    public static final double MOTOR_KP = .1;
     public static final double MOTOR_KD = 0;
-    public static final double GEAR_RATIO = 0.01;
+    public static final double GEAR_RATIO = .0045977011494;
     public static final double ARM_ANGULAR_MOMENTUM = Units.lbsToKilograms(9.963);
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final double MIN_ANGLE_RADS = -3 * Math.PI / 4;
     public static final double MAX_ANGLE_RADS =0;
     @CanId(CanId.Type.MOTOR) public static final int MOTOR_CANID = 41;
     @CanId(CanId.Type.PCM_CONTROLLER) public static final int PCMID = 5;
-    public static final int FORWARDSOLENOID = 3;
-    public static final int REVERSESOLENOID = 4;
+    public static final int FORWARDSOLENOID = 14;
+    public static final int REVERSESOLENOID = 7;
    
     public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
   }
@@ -328,7 +328,7 @@ public static final class AlgaeHandler {
 
   //Creating constants for RIGHT Algae Handler :D
   @CanId(CanId.Type.MOTOR) public static final int rightAlgaeMotorCANID = 21;
-  public static final int rightAlgaeSolenoidID = 14;
+  public static final int rightAlgaeSolenoidID = 13;
   public static final int rightAlgaeHallEffectID = 27;
   public static final int rightAlgaeLimitID = 28;
   

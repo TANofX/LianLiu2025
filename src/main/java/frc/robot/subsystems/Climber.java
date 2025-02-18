@@ -69,8 +69,8 @@ public class Climber extends AdvancedSubsystem {
     climberMotorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
     climberMotorConfig.limitSwitch.forwardLimitSwitchEnabled(true);
     climberMotorConfig.limitSwitch.reverseLimitSwitchEnabled(true);
-    climberLimitSwitchLower = climberMotor.getForwardLimitSwitch();
-    climberLimitSwitchUpper = climberMotor.getReverseLimitSwitch();
+    climberLimitSwitchLower = climberMotor.getReverseLimitSwitch();
+    climberLimitSwitchUpper = climberMotor.getForwardLimitSwitch();
     climberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
     // climberMotorConfig.smartCurrentLimit(100,80);
     final ClosedLoopConfig climberMotorPidConfig = climberMotorConfig.closedLoop;
@@ -84,6 +84,9 @@ public class Climber extends AdvancedSubsystem {
     motorSimulation = new SparkFlexSim(climberMotor, DCMotor.getNeoVortex(1));
     physicsSimulation.wouldHitLowerLimit(-3 * Math.PI / 4);
     physicsSimulation.wouldHitUpperLimit(0.0);
+    SmartDashboard.putData("Open Claw", getOpenCommand());
+    SmartDashboard.putData("Close Claw", getCloseCommand());
+    SmartDashboard.putData("Set Climber to -90", setClimberNeg90(climberAbsoluteAngle));
   }
 
   // HEY I ALEADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :)
@@ -91,6 +94,8 @@ public class Climber extends AdvancedSubsystem {
 
   @Override
   public void periodic() {
+  SmartDashboard.putNumber("Climber/angle", getCurrentAngle().getDegrees());
+
 
   }
 
@@ -118,9 +123,9 @@ public class Climber extends AdvancedSubsystem {
     return Commands.sequence(
         Commands.runOnce(
             () -> {
-              climberMotor.set(.25);
+              climberMotor.set(.2);
             }, this),
-        Commands.waitSeconds(0.25),
+        Commands.waitSeconds(0.5),
         Commands.runOnce(
             () -> {
               if (((climberEncoder.getVelocity() / 60.0) * Constants.Climber.ARM_ANGULAR_MOMENTUM) < 0.16) {
@@ -128,12 +133,12 @@ public class Climber extends AdvancedSubsystem {
               }
               climberMotor.stopMotor();
             }, this),
-        Commands.waitSeconds(0.25),
+        Commands.waitSeconds(0.5),
         Commands.runOnce(
             () -> {
-              climberMotor.set(-0.25);
+              climberMotor.set(-0.2);
             }, this),
-        Commands.waitSeconds(0.25),
+        Commands.waitSeconds(0.5),
         Commands.runOnce(
             () -> {
               if (((climberEncoder.getVelocity() / 60.0) * Constants.Climber.ARM_ANGULAR_MOMENTUM) > -0.16) {
@@ -173,11 +178,13 @@ public class Climber extends AdvancedSubsystem {
    * 
    */
   public void runClimberMotor() {
-    climberController.setReference(-500.0, ControlType.kVelocity);
+    climberMotor.set(.2);
+    //climberController.setReference(-500.0, ControlType.kVelocity);
   }
 
   public void reverseClimberMotor() {
-    climberController.setReference(500.0, ControlType.kVelocity);
+    climberMotor.set(-.2);
+    //climberController.setReference(500.0, ControlType.kVelocity);
   }
 
   public boolean hitLowerLimit() {
@@ -203,14 +210,14 @@ public class Climber extends AdvancedSubsystem {
   }
 
   /**
-   * This method will open the claw
+   * This method will close the claw
    */
   public void toggleClaw(){
     climberPiston.set(DoubleSolenoid.Value.kForward);
   }
 
   /**
-   * This method will close the claw
+   * This method will open the claw
    */
   public void detoggleClaw(){
     climberPiston.set(DoubleSolenoid.Value.kReverse);
@@ -228,6 +235,51 @@ public class Climber extends AdvancedSubsystem {
   public Command getCalibrateCommand() {
     return Commands.sequence(
         Commands.runOnce(() -> {
+          climberMotor.set(.2);
+        }, this),
+        Commands.waitUntil(() -> hitUpperLimit()),
+        Commands.runOnce(() -> {
+          climberMotor.stopMotor();
+          climberMotor.getEncoder().setPosition(0);
+        }, this));
+  }
+  //Rotation2d.fromRadians(3 * Math.PI / 4).getRotations() / Constants.Climber.GEAR_RATIO
+
+  // Prepare the jaw Commands
+  public Command getOpenCommand() {
+    return Commands.runOnce(() -> {
+      if (getCurrentAngle().getDegrees() < -80) 
+      detoggleClaw();
+    }, this);
+  }
+  public Command getClimberAngle(Rotation2d angle) {
+    return Commands.runOnce(() -> {
+      getCurrentTarget();
+    },this);
+  }
+public Command setClimberNeg90(Rotation2d angle) {
+  return Commands.runOnce(() -> {
+    setClimberAngle(Rotation2d.fromDegrees(-90));
+  },this);
+}
+  public Command getPrepareCommand() {
+    return Commands.sequence(Commands.runOnce(() -> {
+      toggleClaw();
+      setClimberAngle(Rotation2d.fromDegrees(0));
+    },
+        this),
+        Commands.waitUntil(() -> {
+          return ((getCurrentAngle().getDegrees() + 70) > 0);
+        }),
+        Commands.runOnce(() -> {
+          detoggleClaw();
+        }));
+  }
+
+
+ public Command climberGoUp() {
+  return Commands.sequence(
+        Commands.runOnce(() -> {
           toggleClaw();
           climberMotor.set(-1.0);
         }, this),
@@ -237,35 +289,7 @@ public class Climber extends AdvancedSubsystem {
           climberMotor.getEncoder()
               .setPosition(Rotation2d.fromRadians(3 * Math.PI / 4).getRotations() / Constants.Climber.GEAR_RATIO);
         }, this));
-  }
-
-  // Prepare the jaw Commands
-  public Command getOpenCommand() {
-    return Commands.runOnce(() -> {
-      detoggleClaw();
-    }, this);
-  }
-
-  public Command getPrepareCommand() {
-    return Commands.sequence(Commands.runOnce(() -> {
-      toggleClaw();
-      setClimberAngle(Rotation2d.fromDegrees(0));
-    },
-        this),
-        Commands.waitUntil(() -> {
-          return ((getCurrentAngle().getDegrees() + 90) > 0);
-        }),
-        Commands.runOnce(() -> {
-          detoggleClaw();
-        }));
-  }
-
-  public Command getRotateCommand(Rotation2d desiredAngle) {
-    return Commands.runOnce(() -> {
-      setClimberAngle(desiredAngle);
-    }, this);
-  }
-
+      }
   // Clamp jaw
   public Command getCloseCommand() {
     return Commands.runOnce(() -> {
@@ -295,7 +319,30 @@ public class Climber extends AdvancedSubsystem {
 
         this);
   }
-
+  public Command runClimberMotorCommand() {
+    return Commands.sequence(
+    Commands.runOnce(() -> {
+      runClimberMotor();
+    }, this),
+      Commands.waitSeconds(.5),
+      Commands.runOnce(()-> {
+        stopClimberMotor();
+      }, this)
+    );
+    
+  }
+  public Command runClimberMotorCommandOpposite() {
+    return Commands.sequence(
+    Commands.runOnce(() -> {
+      reverseClimberMotor();
+    }, this),
+      Commands.waitSeconds(.5),
+      Commands.runOnce(()-> {
+        stopClimberMotor();
+      }, this)
+    );
+    
+  }
   public Command getPrepareCommandS() {
     return Commands.runOnce(() -> {
       toggleClaw();
@@ -319,43 +366,7 @@ public class Climber extends AdvancedSubsystem {
     }, this);
   }
   
-  public Command runClawMotorUpCommand() {
-    return Commands.sequence(
-        Commands.runOnce(
-            () -> {
-              runClimberMotor();
-            }, this),
-        Commands.waitSeconds(5),
 
-        Commands.runOnce(
-            () -> {
-              stopClimberMotor();
-            }, this));
-  }
-
-  public Command runClawMotorOneWayThenOther() {
-    return Commands.sequence(
-        Commands.runOnce(
-            () -> {
-              runClimberMotor();
-            }, this),
-        Commands.waitSeconds(5),
-
-        Commands.runOnce(
-            () -> {
-              stopClimberMotor();
-            }, this),
-        Commands.runOnce(
-            () -> {
-              reverseClimberMotor();
-            }, this),
-        Commands.waitSeconds(5),
-
-        Commands.runOnce(
-            () -> {
-              stopClimberMotor();
-            }, this));
-          }
 
 }
 

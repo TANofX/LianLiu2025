@@ -33,7 +33,7 @@ public class RobotContainer {
   // Subsystems
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
-  // public static final LEDs LEDs = new LEDs();
+   public static final LEDs LEDs = new LEDs();
   // public static final Elevator elevator = new Elevator(Constants.Elevator.motorCanID);
  // public static final RobotMechanism robotMechanism = new RobotMechanism();
   // public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.outtakeMotorID, Constants.CoralHandler.horizontalMotorID, Constants.CoralHandler.verticalMotorID, Constants.CoralHandler.horizontalEncoderID, Constants.CoralHandler.verticalEncoderID);
@@ -51,16 +51,17 @@ public class RobotContainer {
 
     SmartDashboard.putData(swerve.zeroModulesCommand());
     configureButtonBindings();
-    // LEDs.setDefaultCommand(new Notifications());
+     LEDs.setDefaultCommand(new Notifications());
     //elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
     SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
     // SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
-    SmartDashboard.putData("Raise claw", climber.runClawMotorUpCommand());
-    SmartDashboard.putData("Raise and then lower claw", climber.runClawMotorOneWayThenOther());
-    SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand());
+   
+   
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
-  
-  
+    SmartDashboard.putData("Run Claw Motor", climber.runClimberMotorCommand());
+    SmartDashboard.putData("Reverse Claw Motor", climber.runClimberMotorCommandOpposite());
+    SmartDashboard.putData("Climber System Check", climber.getSystemCheckCommand());
+    SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand());
   
     // Register Named Commands for pathplanner
     //ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
@@ -109,7 +110,7 @@ public class RobotContainer {
     // coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
     // coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
     // coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
-    coDriver.A().onTrue(climber.runClawMotorOneWayThenOther());
+    coDriver.A().whileTrue(climber.runClimberMotorCommand());
     coDriver.B().onTrue(climber.getOpenCommand());
     coDriver.X().onTrue(climber.getStowCommand());
     coDriver.START();

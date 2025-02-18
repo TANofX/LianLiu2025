@@ -60,7 +60,7 @@ private final FlywheelSim m_algaeHandlerSim =
   /** Creates a new AlgaeHandler. */
   public AlgaeHandler(int algaeMotorCANID, int algaeSolenoidID, int algaeLimitID) {
     //creating motor/solenoid/switches/controllers
-    algaeMotor = new SparkMax(algaeMotorCANID, MotorType.kBrushed);
+    algaeMotor = new SparkMax(algaeMotorCANID, MotorType.kBrushless);
     algaePiston = new Solenoid(PneumaticsModuleType.REVPH, algaeSolenoidID);
     algaeLimitSwitch = new DigitalInput(algaeLimitID);
     algaeMotorController = algaeMotor.getClosedLoopController();
@@ -132,13 +132,13 @@ public void stopAlgaeMotor() {
 public void runAlgaeMotor() {
   //velocity value is a place holder because I didnt know what I was doing :D do we need math for spins per motor revolution??
   //algaeMotorController.setReference(577.26, ControlType.kVelocity);
-  algaeMotor.set(.45);
+  algaeMotor.set(-.5);
 }
 
 public void reverseAlgaeMotor() {
   //velocity value is a place holder :D
   //algaeMotorController.setReference(-577.26, ControlType.kVelocity);
-  algaeMotor.set(-.45);
+  algaeMotor.set(1);
 }
 
 
@@ -153,7 +153,14 @@ public boolean isAlgaeIntakeUp() {
   }
 
 
-
+public Command AlgaeRunMotor() {
+  return Commands.sequence(
+    Commands.runOnce(() -> 
+    runAlgaeMotor()
+    ,this)
+  );
+  
+}
 //This command intakes an algae
 public Command getAlgaeIntakeCommand() {
   return Commands.sequence (
@@ -164,15 +171,15 @@ public Command getAlgaeIntakeCommand() {
     Commands.waitUntil(() -> {
     return hasAlgae();
     }),
-
     Commands.runOnce(() -> {
+      stopAlgaeMotor();
       raiseAlgaeIntake();
     }, this),
     Commands.waitUntil(()-> {
       return isAlgaeIntakeUp();
     }),
     Commands.run(()-> {
-      if((hasAlgae() ) && (!isAlgaeIntakeUp())) 
+      if((!hasAlgae())) 
       runAlgaeMotor();
       else
       stopAlgaeMotor();    
@@ -202,8 +209,9 @@ public Command shootAlgaeCommand() {
        return !hasAlgae();
     }),
     Commands.runOnce(()-> {
-      reverseAlgaeMotor();
+     stopAlgaeMotor();
     })
+    .finallyDo(() -> stopAlgaeMotor())
 );
 }
 public Command runAlgaeIntakeManuallyCommand() {

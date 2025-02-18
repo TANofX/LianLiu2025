@@ -154,6 +154,7 @@ public class Swerve extends AdvancedSubsystem {
     //         },
     //         (Subsystem) this // Reference to this subsystem to set requirements
     // );
+    SmartDashboard.putData("Check Swerve", systemCheckCommand());
   }
 
   @Override
