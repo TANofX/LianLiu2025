@@ -149,7 +149,7 @@ public boolean hasAlgae() {
 
 public boolean isAlgaeIntakeUp() {
   //returns a boolean to tell the robot whether or not algae intake is up
-  return !algaePiston.get(); //TODO change to hall effect sensor
+  return !algaePiston.get(); //TODO change to hall effect sensorv
   }
 
 

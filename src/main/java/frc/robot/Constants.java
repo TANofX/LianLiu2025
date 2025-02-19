@@ -96,7 +96,7 @@ public final class Constants {
 
   public static final class Swerve {
     @CanId(CanId.Type.PIGEON) public static final int imuCanID = 3;
-    public static final double maxVelTele = 5.36;
+    public static final double maxVelTele = 5.31;
     public static final double maxAccelTele = 6.0; //todo
     public static final double maxAngularVelTele = Units.degreesToRadians(180);
     public static final double maxAngularAccelTele = Units.degreesToRadians(540);

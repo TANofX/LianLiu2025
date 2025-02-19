@@ -57,10 +57,10 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
 
   // M/s - Tune (Apply full output and measure max vel. Adjust KV/KA for sim if
   // needed)
-  public static final double DRIVE_MAX_VEL = 5.36;
+  public static final double DRIVE_MAX_VEL = 5.31;
 
   private static final double DRIVE_KP = 0.0000002;
-  private static final double DRIVE_KI = 0.000001;
+  private static final double DRIVE_KI = 0.0;
   private static final double DRIVE_KD = 0.0;
   private static final double DRIVE_I_ZONE = 1000;
   private static final double DRIVE_FEED_FORWARD = 1.0 / 565.0;
@@ -139,9 +139,8 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
     driveMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
     driveMotorConfig.smartCurrentLimit(100,80);
     ClosedLoopConfig driveMotorPidConfig = driveMotorConfig.closedLoop;
-    driveMotorPidConfig.pid(DRIVE_KP, DRIVE_KI, DRIVE_KD);
+    driveMotorPidConfig.pidf(DRIVE_KP, DRIVE_KI, DRIVE_KD, DRIVE_FEED_FORWARD);
     driveMotorPidConfig.iZone(DRIVE_I_ZONE);
-    driveMotorPidConfig.velocityFF(DRIVE_FEED_FORWARD); // ?
     driveMotorConfig.smartCurrentLimit(100, 80);
     // driveSimState.addSparkMax(driveMotor, 8.0f, 5500.0f);
     driveMotor.configure(driveMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
@@ -247,8 +246,8 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
 
-    driveMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-    driveMotor.configure(driveMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    // driveMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+    // driveMotor.configure(driveMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
     desiredState.optimize(getState().angle);
     this.targetState = desiredState;
 
