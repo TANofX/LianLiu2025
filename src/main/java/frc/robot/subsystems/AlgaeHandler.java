@@ -111,9 +111,7 @@ algaeHandlerMotorSim.iterate(m_algaeHandlerSim.getAngularVelocityRPM() * Constan
 
 //Methods 
 
-public int getIntaking() {
-  return isIntaking;
-}
+
 
 
 public void lowerAlgaeIntake() {
@@ -297,5 +295,8 @@ public Command lowerAlgaeIntakeManually() {
           })
            
       );
+  }
+  public int getIntaking() {
+    return isIntaking;
   }
 }

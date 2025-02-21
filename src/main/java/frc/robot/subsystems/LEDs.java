@@ -49,11 +49,15 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -65,7 +69,8 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /**
- * The LEDs subsystem controls an addressable LED strip using various patterns and animations.
+ * The LEDs subsystem controls an addressable LED strip using various patterns
+ * and animations.
  */
 public class LEDs extends AdvancedSubsystem {
     private Boolean timeForLED = true;
@@ -73,24 +78,29 @@ public class LEDs extends AdvancedSubsystem {
     private CoralHandler coralHandler;
     private AddressableLED strip;
     private AddressableLEDBuffer buffer;
-
-
-    //Set patterns for use
+    private static final Distance LED_SPACING = Meters.of(1.0/60);
+    private static final LinearVelocity LED_VELOCITY = InchesPerSecond.of(2);
+    // Set patterns for use
     private final LEDPattern rainbow = LEDPattern.rainbow(255, 255)
-        .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(1 / 120.0));
+            .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(1 / 120.0));
 
     private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen);
 
     private final LEDPattern whitePattern = LEDPattern.solid(Color.kWhite);
 
-    //Intake wave
-    private final LEDPattern greenWave = LEDPattern.solid(Color.kGreen).scrollAtAbsoluteSpeed(null, null);
+    // Intake wave
+    private final LEDPattern greenWave = LEDPattern.solid(Color.kGreen).scrollAtAbsoluteSpeed(LED_VELOCITY, LED_SPACING);
 
-    private final LEDPattern whiteWave = LEDPattern.solid(Color.kWhite).scrollAtAbsoluteSpeed(null, null);
+    private final LEDPattern whiteWave = LEDPattern.solid(Color.kWhite).scrollAtAbsoluteSpeed(LED_VELOCITY, LED_SPACING);
 
     private final LEDPattern standby = LEDPattern.solid(Color.kRed);
 
     private final LEDPattern assisted = LEDPattern.solid(Color.kWhite);
+
+    // Outake wave
+    private final LEDPattern greenOWave = LEDPattern.solid(Color.kGreen).scrollAtAbsoluteSpeed(LED_VELOCITY.times(-1), LED_SPACING);
+
+    private final LEDPattern whiteOWave = LEDPattern.solid(Color.kWhite).scrollAtAbsoluteSpeed(LED_VELOCITY.times(-1), LED_SPACING);
     /**
      * Constructs an LEDs subsystem and initializes the LED strip and buffer.5
      */
@@ -106,7 +116,8 @@ public class LEDs extends AdvancedSubsystem {
     }
 
     /**
-     * This class does not have to perform any checks, so this method returns a command that does nothing.
+     * This class does not have to perform any checks, so this method returns a
+     * command that does nothing.
      * 
      * @return A command that does nothing.
      */
@@ -115,7 +126,6 @@ public class LEDs extends AdvancedSubsystem {
         return Commands.none();
     }
 
-    
     /**
      * Periodically updates the LED strip with the active pattern.
      */
@@ -125,17 +135,24 @@ public class LEDs extends AdvancedSubsystem {
         // strobe :D
         timeForLED = !timeForLED;
 
-        //Signal for aquired game piece
-        if(coralHandler.hasCoral()) {
-            greenPattern.applyTo(buffer.createView(50, 75));
-        } else{
+        // Signals for coral
+        if (coralHandler.hasCoral()) {
+            whitePattern.applyTo(buffer.createView(50, 75));
+        } else if (coralHandler.getIntaking() == 1) {
+            whiteWave.applyTo(buffer.createView(50, 75));
+        } else if (coralHandler.getIntaking() == -1) {
+            whiteOWave.applyTo(buffer.createView(50, 75));
+        } else {
             standby.applyTo(buffer.createView(50, 75));
-
         }
 
-        if(algaeHandler.hasAlgae()) {
-            whitePattern.applyTo(buffer.createView(25, 50));
-        } else{
+        if (algaeHandler.hasAlgae()) {
+            greenPattern.applyTo(buffer.createView(25, 50));
+        }else if (algaeHandler.getIntaking()==1){
+            greenWave.applyTo(buffer.createView(25, 50));
+        } else if (algaeHandler.getIntaking()==-1){
+                greenOWave.applyTo(buffer.createView(25, 50));
+        } else {
             standby.applyTo(buffer.createView(25, 50));
 
         }
@@ -144,12 +161,11 @@ public class LEDs extends AdvancedSubsystem {
 
         standby.applyTo(buffer.createView(73, 75));
         greenPattern.applyTo(buffer.createView(75, 77));
-/*
-        if(timeForLED & usingAuto){
-            turn on leds
-        }
-*/
-
+        /*
+         * if(timeForLED & usingAuto){
+         * turn on leds
+         * }
+         */
 
         strip.setData(buffer);
     }
