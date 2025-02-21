@@ -301,7 +301,7 @@ public class Swerve extends AdvancedSubsystem {
   public void driveRobotRelative(ChassisSpeeds speeds) {
     SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(speeds);
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Mk4SwerveModulePro.DRIVE_MAX_VEL);
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Mk4SwerveModuleProSparkFlex.DRIVE_MAX_VEL);
 
     setModuleStates(targetStates);
   }

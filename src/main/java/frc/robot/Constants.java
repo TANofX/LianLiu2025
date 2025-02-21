@@ -96,7 +96,7 @@ public final class Constants {
 
   public static final class Swerve {
     @CanId(CanId.Type.PIGEON) public static final int imuCanID = 3;
-    public static final double maxVelTele = 5.31;
+    public static final double maxVelTele = 4.6;
     public static final double maxAccelTele = 6.0; //todo
     public static final double maxAngularVelTele = Units.degreesToRadians(180);
     public static final double maxAngularAccelTele = Units.degreesToRadians(540);
@@ -302,35 +302,37 @@ public final class Constants {
     public static final int climberlimitIDLower = 10;
     public static final int climberlimitIDUpper = 11;
 
+    public static final double MOTOR_KP = .05;
     public static final double MOTOR_KI = 0; // TODO
-    public static final double MOTOR_KP = .1;
-    public static final double MOTOR_KD = 0;
+    public static final double MOTOR_KD = 0.00025;
+    public static final double MOTOR_FF = 1.0 / 6000.0;
+    public static final double MOTOR_MAX_VELOCITY = 1000.0;
+    public static final double MOTOR_MAX_ACCEL = 500.0;
     public static final double GEAR_RATIO = .0045977011494;
     public static final double ARM_ANGULAR_MOMENTUM = Units.lbsToKilograms(9.963);
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
-    public static final double MIN_ANGLE_RADS = -3 * Math.PI / 4;
-    public static final double MAX_ANGLE_RADS =0;
+    public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
+    public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(0);
     @CanId(CanId.Type.MOTOR) public static final int MOTOR_CANID = 41;
     @CanId(CanId.Type.PCM_CONTROLLER) public static final int PCMID = 5;
     public static final int FORWARDSOLENOID = 14;
     public static final int REVERSESOLENOID = 7;
    
     public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
+    public static final int ENCODERID = 0;
   }
  
 public static final class AlgaeHandler {
   //Creating constants for LEFT Algae Handler :D
   //CANID's
   @CanId(CanId.Type.MOTOR) static final int leftAlgaeMotorCANID = 20;
-  public static final int leftAlgaeSolenoidID = 15;                                 
-  public static final int leftAlgaeHallEffectID = 1;
+  public static final int leftAlgaeSolenoidID = 15; 
   public static final int leftAlgaeLimitID = 0;
 
   //Creating constants for RIGHT Algae Handler :D
   @CanId(CanId.Type.MOTOR) public static final int rightAlgaeMotorCANID = 21;
   public static final int rightAlgaeSolenoidID = 13;
-  public static final int rightAlgaeHallEffectID = 27;
-  public static final int rightAlgaeLimitID = 28;
+  public static final int rightAlgaeLimitID = 1;
   
 
   //all of these ID's are place holders and will need to be edited at a later date

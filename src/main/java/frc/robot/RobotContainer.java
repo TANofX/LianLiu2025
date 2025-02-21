@@ -16,6 +16,8 @@ import frc.robot.commands.SwerveDriveWithGamepad;
 import frc.robot.subsystems.*;
 import frc.robot.util.RobotMechanism;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -37,10 +39,10 @@ public class RobotContainer {
   // public static final Elevator elevator = new Elevator(Constants.Elevator.motorCanID);
  // public static final RobotMechanism robotMechanism = new RobotMechanism();
   // public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.outtakeMotorID, Constants.CoralHandler.horizontalMotorID, Constants.CoralHandler.verticalMotorID, Constants.CoralHandler.horizontalEncoderID, Constants.CoralHandler.verticalEncoderID);
-   public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.leftAlgaeMotorCANID, Constants.AlgaeHandler.leftAlgaeSolenoidID,Constants.AlgaeHandler.leftAlgaeLimitID);
-  //  public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.rightAlgaeMotorCANID, Constants.AlgaeHandler.rightAlgaeSolenoidID, Constants.AlgaeHandler.rightAlgaeLimitID);
+  public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.leftAlgaeMotorCANID, Constants.AlgaeHandler.leftAlgaeSolenoidID, Constants.AlgaeHandler.leftAlgaeLimitID);
+  public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.rightAlgaeMotorCANID, Constants.AlgaeHandler.rightAlgaeSolenoidID, Constants.AlgaeHandler.rightAlgaeLimitID);
  
-  public static final Climber climber = new Climber(Constants.Climber.MOTOR_CANID, Constants.Climber.PCMID, Constants.Climber.FORWARDSOLENOID, Constants.Climber.REVERSESOLENOID);
+  public static final Climber climber = new Climber(Constants.Climber.MOTOR_CANID, Constants.Climber.PCMID, Constants.Climber.FORWARDSOLENOID, Constants.Climber.REVERSESOLENOID, Constants.Climber.ENCODERID);
 
   // Vision clients
   // public static final JetsonClient jetson = new JetsonClient();
@@ -53,16 +55,18 @@ public class RobotContainer {
     configureButtonBindings();
      LEDs.setDefaultCommand(new Notifications());
     //elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
-    SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
+    // SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
     // SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
    
    
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
+    SmartDashboard.putData("Climb Climber", climber.climbCommand());
     SmartDashboard.putData("Run Claw Motor", climber.runClimberMotorCommand());
     SmartDashboard.putData("Reverse Claw Motor", climber.runClimberMotorCommandOpposite());
     SmartDashboard.putData("Climber System Check", climber.getSystemCheckCommand());
-    SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand());
-  
+    SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand(false));
+    SmartDashboard.putData("Reverse Calibrate Command", climber.getCalibrateCommand(true));
+    SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90(Rotation2d.fromDegrees(-90)));
     // Register Named Commands for pathplanner
     //ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
     // NamedCommands.registerCommand("ElevatorL4", elevator.getElevatorHeightCommand(0));
@@ -104,8 +108,8 @@ public class RobotContainer {
    
     driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
-    // driver.RT().onTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
-    // driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
+    driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
+    driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     // coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
     // coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
     // coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));

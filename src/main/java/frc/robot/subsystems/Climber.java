@@ -4,12 +4,9 @@
 
 package frc.robot.subsystems;
 
-import javax.lang.model.util.ElementScanner14;
-
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.sim.CANcoderSimState;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.spark.SparkBase;
@@ -24,20 +21,16 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
 
@@ -45,6 +38,7 @@ public class Climber extends AdvancedSubsystem {
   private final SparkFlex climberMotor;
   private final SparkFlexConfig climberMotorConfig = new SparkFlexConfig();
   private final DoubleSolenoid climberPiston;
+  private final CANcoder climberAbsoluteEncoder;
   private final SparkClosedLoopController climberController;
   private final SingleJointedArmSim physicsSimulation;
   private final SparkFlexSim motorSimulation;
@@ -53,17 +47,26 @@ public class Climber extends AdvancedSubsystem {
   private final SparkLimitSwitch climberLimitSwitchLower;
   private final SparkLimitSwitch climberLimitSwitchUpper;
 
-  private Rotation2d climberAbsoluteAngle;
+  private Rotation2d climberAbsoluteAngle = new Rotation2d();
 
   /** Creates a new Climber. */
-  public Climber(final int motor_canid, final int pcmid, final int FORWARDSOLENOID, int REVERSESOLENOID) {
+  public Climber(final int motor_canid, final int pcmid, final int FORWARDSOLENOID, int REVERSESOLENOID, int encoderID) {
     climberPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, FORWARDSOLENOID, REVERSESOLENOID);
     climberMotor = new SparkFlex(motor_canid, MotorType.kBrushless);
+    climberAbsoluteEncoder = new CANcoder(encoderID);
     climberController = climberMotor.getClosedLoopController();
 
     // Encoder Config
     climberEncoder = climberMotor.getEncoder();
-
+    final CANcoderConfiguration climberEncoderConfig = new CANcoderConfiguration();
+    climberEncoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; //TODO
+    climberEncoderConfig.MagnetSensor.MagnetOffset = Preferences.getDouble("ClimberRotationalOffset", 0);
+    climberEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive; //TODO
+    climberAbsoluteEncoder.getConfigurator().apply(climberEncoderConfig);
+    climberAbsoluteEncoder.getConfigurator().setPosition(0); //TODO
+    climberAbsoluteEncoder.getAbsolutePosition().refresh();
+    syncEncoders(); //TODO need to sync Encoders
+    
     climberMotorConfig.inverted(false); // just incase :D
     climberMotorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
     climberMotorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
@@ -74,13 +77,16 @@ public class Climber extends AdvancedSubsystem {
     climberMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
     // climberMotorConfig.smartCurrentLimit(100,80);
     final ClosedLoopConfig climberMotorPidConfig = climberMotorConfig.closedLoop;
-    climberMotorPidConfig.pid(Constants.Climber.MOTOR_KP, Constants.Climber.MOTOR_KI, Constants.Climber.MOTOR_KD);
+    climberMotorPidConfig.pidf(Constants.Climber.MOTOR_KP, Constants.Climber.MOTOR_KI, Constants.Climber.MOTOR_KD, Constants.Climber.MOTOR_FF);
+    climberMotorPidConfig.maxMotion.maxVelocity(Constants.Climber.MOTOR_MAX_VELOCITY);
+    climberMotorPidConfig.maxMotion.maxAcceleration(Constants.Climber.MOTOR_MAX_ACCEL);
+    climberMotorPidConfig.maxMotion.allowedClosedLoopError(2.0);
     climberMotor.configure(climberMotorConfig, SparkBase.ResetMode.kResetSafeParameters,
         SparkBase.PersistMode.kPersistParameters);
 
     physicsSimulation = new SingleJointedArmSim(DCMotor.getNeoVortex(1), Constants.Climber.GEAR_RATIO,
-        Constants.Climber.ARM_ANGULAR_MOMENTUM, Constants.Climber.LENGTH_METERS, Constants.Climber.MIN_ANGLE_RADS,
-        Constants.Climber.MAX_ANGLE_RADS, false, 0);
+        Constants.Climber.ARM_ANGULAR_MOMENTUM, Constants.Climber.LENGTH_METERS, Constants.Climber.MIN_ANGLE.getRadians(),
+        Constants.Climber.MAX_ANGLE.getRadians(), false, 0);
     motorSimulation = new SparkFlexSim(climberMotor, DCMotor.getNeoVortex(1));
     physicsSimulation.wouldHitLowerLimit(-3 * Math.PI / 4);
     physicsSimulation.wouldHitUpperLimit(0.0);
@@ -95,6 +101,7 @@ public class Climber extends AdvancedSubsystem {
   @Override
   public void periodic() {
   SmartDashboard.putNumber("Climber/angle", getCurrentAngle().getDegrees());
+  SmartDashboard.putNumber("Climber/TargetAngle", getCurrentTarget().getDegrees());
 
 
   }
@@ -158,6 +165,7 @@ public class Climber extends AdvancedSubsystem {
     climberAbsoluteAngle = angle;
     double armRotation = (angle.getRotations());
     double motorRotation = armRotation / Constants.Climber.GEAR_RATIO;
+    //climberController.setReference(motorRotation, ControlType.kPosition);
     climberController.setReference(motorRotation, ControlType.kPosition);
   }
 
@@ -220,8 +228,14 @@ public class Climber extends AdvancedSubsystem {
    * This method will open the claw
    */
   public void detoggleClaw(){
-    climberPiston.set(DoubleSolenoid.Value.kReverse);
+    if (getCurrentAngle().getDegrees() > -80.0) {
+      climberPiston.set(DoubleSolenoid.Value.kReverse);
+    }
   }
+
+  public void syncEncoders() {
+    climberMotor.getEncoder().setPosition(climberAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() * Constants.Climber.GEAR_RATIO);
+}
 
   /**
    * This method will set the Climber back to the default position
@@ -232,17 +246,26 @@ public class Climber extends AdvancedSubsystem {
     setClimberAngle(Rotation2d.fromRadians(0));
   }
 
-  public Command getCalibrateCommand() {
+  public Command getCalibrateCommand(boolean isReverse) {
     return Commands.sequence(
         Commands.runOnce(() -> {
-          climberMotor.set(.2);
+          double speed = 0.2;
+          if (isReverse) speed *= -1.0;
+          climberMotor.set(speed);
         }, this),
-        Commands.waitUntil(() -> hitUpperLimit()),
+        Commands.waitUntil(() -> {if (isReverse) return hitLowerLimit(); else return hitUpperLimit();}),
         Commands.runOnce(() -> {
           climberMotor.stopMotor();
-          climberMotor.getEncoder().setPosition(0);
+          if (isReverse) {
+            climberMotor.getEncoder().setPosition(Constants.Climber.MIN_ANGLE.getRotations() / Constants.Climber.GEAR_RATIO);
+            climberAbsoluteEncoder.setPosition(Constants.Climber.MIN_ANGLE.getRotations()); // TODO Sync Motors instead?
+          } else {
+            climberMotor.getEncoder().setPosition(Constants.Climber.MAX_ANGLE.getRotations() / Constants.Climber.GEAR_RATIO);
+            climberMotor.getEncoder().setPosition(Constants.Climber.MAX_ANGLE.getRotations()); //TODO Sync Motors instead?
+          }
         }, this));
   }
+
   //Rotation2d.fromRadians(3 * Math.PI / 4).getRotations() / Constants.Climber.GEAR_RATIO
 
   // Prepare the jaw Commands
@@ -365,7 +388,24 @@ public Command setClimberNeg90(Rotation2d angle) {
         stopClimberMotor();
     }, this);
   }
-  
+
+public Command climbCommand() {
+  return Commands.sequence(
+    Commands.runOnce(
+      () -> {
+      toggleClaw();
+      setClimberAngle(Rotation2d.fromDegrees(-150.0));
+    }, this),
+    Commands.runOnce(
+      () -> { //TODO 2/20/25 is this how we want to run it?
+        Rotation2d targetDifference = Rotation2d.fromDegrees(-150.0).minus(Rotation2d.fromDegrees(getCurrentAngle().getDegrees()));
+        if (targetDifference.getDegrees() > 1) {
+          setClimberAngle(targetDifference);
+        }
+      }, this)
+      
+  );
+}
 
 
 }

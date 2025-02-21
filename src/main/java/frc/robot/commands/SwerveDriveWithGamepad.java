@@ -71,6 +71,10 @@ public class SwerveDriveWithGamepad extends Command {
     double yVel = this.yVelLimiter.calculate(y * Constants.Swerve.maxVelTele);
     double angularVel = this.angularVelLimiter.calculate(targetAngularVel);
 
+    SmartDashboard.putNumber("Joystick/X", xVel);
+    SmartDashboard.putNumber("Joystick/Y", yVel);
+    SmartDashboard.putNumber("Joystick/Ang", angularVel);
+
     if (stop)
       RobotContainer.swerve.driveFieldRelative(new ChassisSpeeds(xVel, yVel, angularVel));
 
