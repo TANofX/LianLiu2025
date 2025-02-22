@@ -73,7 +73,6 @@ import frc.robot.RobotContainer;
  * and animations.
  */
 public class LEDs extends AdvancedSubsystem {
-    private Boolean timeForLED = true;
     private AlgaeHandler algaeHandler;
     private CoralHandler coralHandler;
     private AddressableLED strip;
@@ -132,28 +131,37 @@ public class LEDs extends AdvancedSubsystem {
     @Override
     public void periodic() {
 
-        // strobe :D
-        timeForLED = !timeForLED;
+    
 
         // Signals for coral
         if (coralHandler.hasCoral()) {
-            whitePattern.applyTo(buffer.createView(50, 75));
+            whitePattern.applyTo(buffer.createView(50, 100));
+            System.out.println("LED acknowledge collected Coral");
         } else if (coralHandler.getIntaking() == 1) {
-            whiteWave.applyTo(buffer.createView(50, 75));
+            whiteWave.applyTo(buffer.createView(50, 100));
+            System.out.println("LED acknowledge intaking Coral");
         } else if (coralHandler.getIntaking() == -1) {
-            whiteOWave.applyTo(buffer.createView(50, 75));
+            whiteOWave.applyTo(buffer.createView(50, 100));
+            System.out.println("LED acknowledge outaking Coral");
         } else {
-            standby.applyTo(buffer.createView(50, 75));
+            standby.applyTo(buffer.createView(50, 100));
         }
 
         if (algaeHandler.hasAlgae()) {
             greenPattern.applyTo(buffer.createView(25, 50));
+            greenPattern.applyTo(buffer.createView(100, 125));
+            System.out.println("LED acknowledge collected Algae");
         }else if (algaeHandler.getIntaking()==1){
             greenWave.applyTo(buffer.createView(25, 50));
+            greenWave.applyTo(buffer.createView(100, 125));
+            System.out.println("LED acknowledge intaking Algae");
         } else if (algaeHandler.getIntaking()==-1){
                 greenOWave.applyTo(buffer.createView(25, 50));
+                greenOWave.applyTo(buffer.createView(100, 125));
+                System.out.println("LED acknowledge outaking Algae");
         } else {
             standby.applyTo(buffer.createView(25, 50));
+            standby.applyTo(buffer.createView(100, 125));
 
         }
 
