@@ -96,14 +96,14 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         // softLimitConfig.reverseSoftLimit(clampMin / rotationDegreesPerRotation);
         // softLimitConfig.forwardSoftLimit(clampMax / rotationDegreesPerRotation);
 
-        //TODO should motorConfig configure the motor inverted?
+        //TODO Should motorConfig configure the motor inverted?
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.inverted(false);
         motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         // Configure the PID controls of motor
         ClosedLoopConfig pidConfig = motorConfig.closedLoop;
-        // pidConfig.pidf(posP, posI, posD, 0, ClosedLoopSlot.kSlot0, maxPosP, maxPosI, maxPosD, maxPosff, ClosedLoopSlot.kSlot1);
+        // pidConfig.pidf(posP, posI, posD, 0, ClosedLoopSlot.kSlot0, maxPosP, maxPosI, maxPosD, maxPosFF, ClosedLoopSlot.kSlot1);
         pidConfig
             .p(posP, ClosedLoopSlot.kSlot0)
             .d(posI, ClosedLoopSlot.kSlot0)
@@ -211,7 +211,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
 
         System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
         
-        //TODO check if this PID changing method works and change comment after + change angle for when PID controltype changes
+        //TODO Check if this PID changing method works and change comment after + change angle for when PID controlType changes
         if ((targetMotorAngle.getDegrees() - getAngle().getDegrees()) > Rotation2d.fromDegrees(5).getDegrees())
             controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         
@@ -251,7 +251,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         double offset = (currentOffset - absoluteEncoder.getAbsolutePosition().getValueAsDouble()) % 1.0; //needed offset for absolute encoder
         Preferences.setDouble(getName() + "RotationOffset", offset * 360.0); 
         encoderConfig.MagnetSensor.MagnetOffset = offset; //makes it the new offset
-        absoluteEncoder.getConfigurator().apply(encoderConfig); //applys offset
+        absoluteEncoder.getConfigurator().apply(encoderConfig); //applies offset
         syncWristEncoder(); //syncs absolute offset with relative
     }
 

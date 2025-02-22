@@ -4,31 +4,6 @@
 
 // package frc.robot.subsystems;
 
-// import com.revrobotics.spark.ClosedLoopSlot;
-// import com.revrobotics.spark.SparkClosedLoopController;
-// import com.revrobotics.spark.SparkFlex;
-// import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.sim.SparkFlexSim;
-// import com.revrobotics.spark.SparkBase.ControlType;
-// import com.revrobotics.spark.SparkBase.PersistMode;
-// import com.revrobotics.spark.SparkBase.ResetMode;
-// import com.revrobotics.spark.SparkLowLevel.MotorType;
-// import com.revrobotics.spark.config.SparkFlexConfig;
-// import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
-// import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-// import edu.wpi.first.math.system.plant.DCMotor;
-// import edu.wpi.first.math.system.plant.LinearSystemId;
-// import edu.wpi.first.wpilibj.RobotController;
-// import edu.wpi.first.wpilibj.simulation.BatterySim;
-// import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-// import edu.wpi.first.wpilibj.simulation.RoboRioSim;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.Commands;
-// import frc.lib.subsystem.AdvancedSubsystem;
-// import frc.robot.Constants;
-
 // public class Elevator extends AdvancedSubsystem {
 //   private SparkFlex elevatorMotor;
 //   private SparkFlexSim elevatorMotorSim;
@@ -56,7 +31,7 @@
 //     SparkFlexConfig newConfig = new SparkFlexConfig();
 //     newConfig.idleMode(IdleMode.kBrake);
 
-//     // Configure the closed loop controller. This includes the  PIDF gains and the max motion settings.
+//     // Configure the closed loop controller. This includes the  PIDFF gains and the max motion settings.
 //     newConfig.closedLoop.pidf(Constants.Elevator.P, Constants.Elevator.I, Constants.Elevator.D, Constants.Elevator.FF, ClosedLoopSlot.kSlot0);
 //     newConfig.closedLoop.maxMotion.allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0);
 //     newConfig.closedLoop.maxMotion.maxAcceleration(Constants.Elevator.MAX_ACCELERATION, ClosedLoopSlot.kSlot0);

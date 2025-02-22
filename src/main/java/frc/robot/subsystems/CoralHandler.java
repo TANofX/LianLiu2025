@@ -4,29 +4,6 @@
 
 // package frc.robot.subsystems;
 
-// import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.sim.SparkFlexSim;
-// import com.revrobotics.spark.SparkBase;
-// import com.revrobotics.spark.SparkFlex;
-// import com.revrobotics.spark.SparkLimitSwitch;
-// import com.revrobotics.spark.SparkLowLevel.MotorType;
-// import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-// import com.revrobotics.spark.config.SparkFlexConfig;
-// import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-
-// import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.system.plant.DCMotor;
-// import edu.wpi.first.math.system.plant.LinearSystemId;
-// import edu.wpi.first.wpilibj.RobotController;
-// import edu.wpi.first.wpilibj.simulation.BatterySim;
-// import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-// import edu.wpi.first.wpilibj.simulation.RoboRioSim;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.Commands;
-// import frc.lib.subsystem.AdvancedSubsystem;
-// import frc.robot.Constants;
-
 // /** Creates a new CoralHandler. */
 // public class CoralHandler extends AdvancedSubsystem {
 //   private final SparkFlex outtakeMotor;
@@ -68,7 +45,7 @@
 //             Constants.CoralHandler.horizontalMotorMaxPosIZone,
 //             Constants.CoralHandler.horizontalMotorMinVelocity,
 //             Constants.CoralHandler.horizontalMotorMaxVelocity,
-//             Constants.CoralHandler.horizontalMotorMaxAccleration,
+//             Constants.CoralHandler.horizontalMotorMaxAcceleration,
 //             Constants.CoralHandler.horizontalMotorClosedLoopError,
 //             Type.kNormallyOpen,
 //             Constants.CoralHandler.horizontalMinAngle,
@@ -95,7 +72,7 @@
 //             Constants.CoralHandler.verticalMotorMaxPosIZone,
 //             Constants.CoralHandler.verticalMotorMinVelocity,
 //             Constants.CoralHandler.verticalMotorMaxVelocity,
-//             Constants.CoralHandler.verticalMotorMaxAccleration,
+//             Constants.CoralHandler.verticalMotorMaxAcceleration,
 //             Constants.CoralHandler.verticalMotorClosedLoopError,
 //             Type.kNormallyOpen,
 //             Constants.CoralHandler.verticalMinAngle,
@@ -109,7 +86,7 @@
 //     verticalWrist.registerSystemCheckWithSmartDashboard();
 
 //     outtakeEncoder = outtakeMotor.getEncoder();
-//     // TODO forward or reverse limit switch?
+//     // TODO Forward or reverse limit switch?
 //     coralLimitSwitch = outtakeMotor.getForwardLimitSwitch(); 
 //     // Using SparkFlexConfig to create needed parameters for the outtakeMotor
 //     SparkFlexConfig outtakeConfig = new SparkFlexConfig();
@@ -227,7 +204,7 @@
 //   }
 
 //   /**
-//    * Sets the verical positioning of the coral end effector to a specified angle.
+//    * Sets the vertical positioning of the coral end effector to a specified angle.
 //    * 
 //    * @param targetAngle The desired vertical angle (degrees) for the coral end
 //    *                    effector.
@@ -245,33 +222,33 @@
 //   }
 //   public void setIntakeAngle() {
 //     horizontalWrist.setAngle(Constants.CoralHandler.horizontalIntakeAngle);
-//     verticalWrist.setAngle(Constants.CoralHandler.vertialIntakeAngle);
+//     verticalWrist.setAngle(Constants.CoralHandler.verticalIntakeAngle);
 //   }
 
-//    // //TODO Change how this works using autoadjustments
+//    // //TODO Change how this works using auto adjustments
 //   // public void setLevelOneAngle() {
 //   //   horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel1Angle);
-//   //   verticalWrist.setAngle(Constants.CoralHandler.verticallLevel1Angle);
+//   //   verticalWrist.setAngle(Constants.CoralHandler.verticalLevel1Angle);
 //   // }
 
 //   public void setLevelTwoAngle() {
 //     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel2Angle);
-//     verticalWrist.setAngle(Constants.CoralHandler.verticallLevel2Angle);
+//     verticalWrist.setAngle(Constants.CoralHandler.verticalLevel2Angle);
 //   }
   
 //   public void setLevelThreeAngle() {
 //     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel3Angle);
-//     verticalWrist.setAngle(Constants.CoralHandler.verticallLevel3Angle);
+//     verticalWrist.setAngle(Constants.CoralHandler.verticalLevel3Angle);
 //   }
 //   public void setLevelFourAngle() {
 //     horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel4Angle);
-//     verticalWrist.setAngle(Constants.CoralHandler.verticallLevel4Angle);
+//     verticalWrist.setAngle(Constants.CoralHandler.verticalLevel4Angle);
 //   }
  
 
 //   @Override
 //   public void periodic() {
-//     // Values avalible shown on SmartDashboard
+//     // Values available shown on SmartDashboard
 //     SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
 //   }
 

@@ -10,25 +10,19 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.numbers.N1;
-//import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearAcceleration;
-//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.lib.subsystem.AdvancedSubsystem;
-//import frc.lib.subsystem.SubsystemFault;
-import frc.lib.swerve.Mk4SwerveModulePro;
 import frc.lib.swerve.Mk4SwerveModuleProSparkFlex;
 import frc.lib.util.Vector3;
-//import frc.lib.vision.limelight.LimelightHelpers;
 import frc.robot.Constants;
 import frc.robot.util.RobotPoseLookup;
 
@@ -461,213 +455,6 @@ public class Swerve extends AdvancedSubsystem {
     return kinematics.toChassisSpeeds(getStates());
   }
 
-  /*
-   * public Command autoBalance(double maxVel) {
-   * PIDController controller =
-   * new PIDController(
-   * Constants.AutoBalance.BALANCE_CONSTANTS.kP,
-   * Constants.AutoBalance.BALANCE_CONSTANTS.kI,
-   * Constants.AutoBalance.BALANCE_CONSTANTS.kD);
-   * controller.setTolerance(3);
-   * 
-   * Timer lockTimer = new Timer();
-   * 
-   * return Commands.sequence(
-   * Commands.runOnce(
-   * () -> {
-   * controller.reset();
-   * lockTimer.stop();
-   * lockTimer.reset();
-   * },
-   * this),
-   * Commands.run(
-   * () -> {
-   * Pose3d robotOrientation =
-   * new Pose3d(
-   * new Translation3d(),
-   * new Rotation3d(
-   * Units.degreesToRadians(getRoll()),
-   * Units.degreesToRadians(getPitch()),
-   * getPose().getRotation().getRadians()));
-   * 
-   * Pose3d chargeStationOrientation =
-   * robotOrientation.transformBy(
-   * new Transform3d(
-   * new Translation3d(),
-   * new Rotation3d(0, 0, -getPose().getRotation().getRadians())));
-   * 
-   * double chargeStationPitch =
-   * Units.radiansToDegrees(chargeStationOrientation.getRotation().getY());
-   * 
-   * double rollVel = imu.getAngularVelocityXDevice().getValue();
-   * double pitchVel = imu.getAngularVelocityYDevice().getValue();
-   * double angularVel = Math.sqrt(Math.pow(rollVel, 2) + Math.pow(pitchVel, 2));
-   * 
-   * if (Math.abs(chargeStationPitch) < 3 || angularVel > 10) {
-   * lockModules();
-   * lockTimer.start();
-   * } else {
-   * lockTimer.stop();
-   * lockTimer.reset();
-   * double x = controller.calculate(chargeStationPitch, 0);
-   * if (Math.abs(x) > maxVel) {
-   * x = Math.copySign(maxVel, x);
-   * }
-   * driveFieldRelative(new ChassisSpeeds(x, 0, 0));
-   * }
-   * },
-   * this)
-   * .until(() -> lockTimer.hasElapsed(0.25)),
-   * Commands.run(this::lockModules, this));
-   * }
-   * 
-   * public void correctOdom(boolean force, boolean correctYaw) {
-   * double time = Timer.getFPGATimestamp();
-   * 
-   * Pose2d leftBotPose = null;
-   * double leftPoseTimestamp =
-   * time
-   * - ((LimelightHelpers.getLatency_Capture("limelight-left")
-   * + LimelightHelpers.getLatency_Pipeline("limelight-left"))
-   * / 1000.0);
-   * Pose2d rightBotPose = null;
-   * double rightPoseTimestamp =
-   * time
-   * - ((LimelightHelpers.getLatency_Capture("limelight-right")
-   * + LimelightHelpers.getLatency_Pipeline("limelight-right"))
-   * / 1000.0);
-   * 
-   * Pose2d robotAtLeftCapture = poseLookup.lookup(leftPoseTimestamp);
-   * Pose2d robotAtRightCapture = poseLookup.lookup(rightPoseTimestamp);
-   * 
-   * if (LimelightHelpers.getTV("limelight-left")) {
-   * Pose2d botpose =
-   * (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
-   * ? LimelightHelpers.getBotPose2d_wpiBlue("limelight-left")
-   * : LimelightHelpers.getBotPose2d_wpiRed("limelight-left"));
-   * 
-   * if (botpose.getX() > 0.1
-   * && botpose.getX() < Constants.fieldSize.getX() - 0.1
-   * && botpose.getY() > 0.1
-   * && botpose.getY() < Constants.fieldSize.getY() - 1) {
-   * leftBotPose = botpose;
-   * }
-   * }
-   * 
-   * if (LimelightHelpers.getTV("limelight-right")) {
-   * Pose2d botpose =
-   * (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
-   * ? LimelightHelpers.getBotPose2d_wpiBlue("limelight-right")
-   * : LimelightHelpers.getBotPose2d_wpiRed("limelight-right"));
-   * 
-   * if (botpose.getX() > 0.1
-   * && botpose.getX() < Constants.fieldSize.getX() - 0.1
-   * && botpose.getY() > 0.1
-   * && botpose.getY() < Constants.fieldSize.getY() - 1) {
-   * rightBotPose = botpose;
-   * }
-   * }
-   * 
-   * Pose2d correctionPose = null;
-   * Pose2d robotAtCorrectionPose = null;
-   * double correctionTimestamp = 0;
-   * Matrix<N3, N1> correctionDevs = null;
-   * 
-   * if (leftBotPose != null && rightBotPose != null) {
-   * // Left and right have poses
-   * Pose2d leftToRightDiff = leftBotPose.relativeTo(rightBotPose);
-   * if (leftToRightDiff.getTranslation().getNorm() < 0.3
-   * && (!correctYaw || Math.abs(leftToRightDiff.getRotation().getDegrees()) <
-   * 15)) {
-   * // They agree
-   * correctionPose = leftBotPose.interpolate(rightBotPose, 0.5);
-   * robotAtCorrectionPose = robotAtLeftCapture.interpolate(robotAtRightCapture,
-   * 0.5);
-   * correctionTimestamp = (leftPoseTimestamp + rightPoseTimestamp) / 2.0;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevsTrust;
-   * } else {
-   * // They don't agree
-   * Pose2d leftDiff = leftBotPose.relativeTo(robotAtLeftCapture);
-   * Pose2d rightDiff = rightBotPose.relativeTo(robotAtRightCapture);
-   * double leftDist = leftDiff.getTranslation().getNorm();
-   * double rightDist = rightDiff.getTranslation().getNorm();
-   * 
-   * if ((leftDist < 2.0 || force) && leftDist <= rightDist) {
-   * // Left closest
-   * if (!correctYaw || force || Math.abs(leftDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = leftBotPose;
-   * robotAtCorrectionPose = robotAtLeftCapture;
-   * correctionTimestamp = leftPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * } else if ((rightDist < 2.0 || force) && rightDist <= leftDist) {
-   * // Right closest
-   * if (!correctYaw || force || Math.abs(rightDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = rightBotPose;
-   * robotAtCorrectionPose = robotAtRightCapture;
-   * correctionTimestamp = rightPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * }
-   * }
-   * } else if (leftBotPose != null) {
-   * Pose2d leftDiff = leftBotPose.relativeTo(robotAtLeftCapture);
-   * double leftDist = leftDiff.getTranslation().getNorm();
-   * 
-   * if (leftDist < 2.0 || force) {
-   * if (!correctYaw || force || Math.abs(leftDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = leftBotPose;
-   * robotAtCorrectionPose = robotAtLeftCapture;
-   * correctionTimestamp = leftPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * }
-   * } else if (rightBotPose != null) {
-   * Pose2d rightDiff = rightBotPose.relativeTo(robotAtRightCapture);
-   * double rightDist = rightDiff.getTranslation().getNorm();
-   * 
-   * if (rightDist < 2.0 || force) {
-   * if (!correctYaw || force || Math.abs(rightDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = rightBotPose;
-   * robotAtCorrectionPose = robotAtRightCapture;
-   * correctionTimestamp = rightPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * }
-   * }
-   * 
-   * if (correctionPose != null) {
-   * odometry.addVisionMeasurement(
-   * (correctYaw)
-   * ? correctionPose
-   * : new Pose2d(correctionPose.getTranslation(),
-   * robotAtCorrectionPose.getRotation()),
-   * correctionTimestamp,
-   * correctionDevs);
-   * }
-   * 
-   * if (leftBotPose != null) {
-   * SmartDashboard.putNumberArray(
-   * "Swerve/LLPoseLeft",
-   * new double[] {
-   * leftBotPose.getX(), leftBotPose.getY(),
-   * leftBotPose.getRotation().getDegrees()
-   * });
-   * }
-   * if (rightBotPose != null) {
-   * SmartDashboard.putNumberArray(
-   * "Swerve/LLPoseRight",
-   * new double[] {
-   * rightBotPose.getX(), rightBotPose.getY(),
-   * rightBotPose.getRotation().getDegrees()
-   * });
-   * }
-   * }
-   */
   @SuppressWarnings("removal")
   @Override
   protected Command systemCheckCommand() {

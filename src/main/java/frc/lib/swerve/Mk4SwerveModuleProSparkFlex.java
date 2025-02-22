@@ -1,7 +1,5 @@
 package frc.lib.swerve;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -13,7 +11,6 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -135,7 +132,7 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
     // rotationEncoderSimState = rotationEncoder.getSimState();
 
     driveMotor = new SparkFlex(driveMotorCanID, SparkLowLevel.MotorType.kBrushless);
-    driveMotorConfig.inverted(true); //TODO maybe?
+    driveMotorConfig.inverted(true);
     driveMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
     driveMotorConfig.smartCurrentLimit(100,40);
     ClosedLoopConfig driveMotorPidConfig = driveMotorConfig.closedLoop;

@@ -5,11 +5,8 @@
 package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -42,7 +39,6 @@ public class AlgaeHandler extends AdvancedSubsystem {
 private SparkMax algaeMotor;
 private Solenoid algaePiston;
 private DigitalInput algaeLimitSwitch;
-private  SparkClosedLoopController algaeMotorController;
 
 private SparkMaxSim algaeHandlerMotorSim;
 
@@ -63,7 +59,6 @@ private final FlywheelSim m_algaeHandlerSim =
     algaeMotor = new SparkMax(algaeMotorCANID, MotorType.kBrushless);
     algaePiston = new Solenoid(PneumaticsModuleType.REVPH, algaeSolenoidID);
     algaeLimitSwitch = new DigitalInput(algaeLimitID);
-    algaeMotorController = algaeMotor.getClosedLoopController();
     algaeEncoder = algaeMotor.getEncoder(); 
    
 
@@ -130,7 +125,7 @@ public void stopAlgaeMotor() {
 }
 
 public void runAlgaeMotor() {
-  //velocity value is a place holder because I didnt know what I was doing :D do we need math for spins per motor revolution??
+  //velocity value is a place holder because I didn't know what I was doing :D do we need math for spins per motor revolution??
   //algaeMotorController.setReference(577.26, ControlType.kVelocity);
   algaeMotor.set(-.5);
 }
@@ -149,7 +144,7 @@ public boolean hasAlgae() {
 
 public boolean isAlgaeIntakeUp() {
   //returns a boolean to tell the robot whether or not algae intake is up
-  return !algaePiston.get(); //TODO change to hall effect sensorv
+  return !algaePiston.get();
   }
 
 
@@ -190,12 +185,12 @@ public Command getAlgaeIntakeCommand() {
     });
 
 
-    //hello traveller, viewing my code I see 
+    //hello traveler, viewing my code I see 
     
 }
 
 public Command shootAlgaeCommand() {
-  //This command makes sure intake is up, and reverses algae motors until limit switch isnt triggered
+  //This command makes sure intake is up, and reverses algae motors until limit switch isn't triggered
    return Commands.sequence (
     Commands.waitUntil (() -> {
       return isAlgaeIntakeUp();
@@ -270,7 +265,7 @@ public Command lowerAlgaeIntakeManually() {
 
         Commands.runOnce(
           () -> {
-            //Checks to make sure that motor is going at minimum speed needeed to intake algae (WAAYY slower than our maximum potential ;)
+            //Checks to make sure that motor is going at minimum speed needed to intake algae (way slower than our maximum potential ;)
             if ((algaeEncoder.getVelocity())< 500) {
               addFault("[System Check] Algae Handler velocity too slow", false, true);
           }

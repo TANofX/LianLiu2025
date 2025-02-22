@@ -154,39 +154,39 @@ public final class Constants {
 
   //Class to access the coordinates of the coral on the field.
   public static final class CoralPlacement {
-    public static ArrayList<Pose2d> cordinatesCoralRed = new ArrayList<Pose2d>();
+    public static ArrayList<Pose2d> coordinatesCoralRed = new ArrayList<Pose2d>();
     static {
     //ordered in line from A-L
     //rotation degree part of Pos2D is the direction the robot has to face to be flush against the reef for that branch
-    cordinatesCoralRed.add(new Pose2d(544.87, 152.03, Rotation2d.fromDegrees(180)));
-    cordinatesCoralRed.add(new Pose2d(544.87, 164.97,  Rotation2d.fromDegrees(180)));
-    cordinatesCoralRed.add(new Pose2d(535.08, 181.89,  Rotation2d.fromDegrees(240)));
-    cordinatesCoralRed.add(new Pose2d(523.90, 188.32,  Rotation2d.fromDegrees(240)));
-    cordinatesCoralRed.add(new Pose2d(504.39, 188.32,  Rotation2d.fromDegrees(300)));
-    cordinatesCoralRed.add(new Pose2d(493.16, 181.89,  Rotation2d.fromDegrees(300)));
-    cordinatesCoralRed.add(new Pose2d(483.44, 164.97,  Rotation2d.fromDegrees(0.0)));
-    cordinatesCoralRed.add(new Pose2d(483.44, 152.03,  Rotation2d.fromDegrees(0.0)));
-    cordinatesCoralRed.add(new Pose2d(493.16, 135.15,  Rotation2d.fromDegrees(60)));
-    cordinatesCoralRed.add(new Pose2d(504.39, 128.65,  Rotation2d.fromDegrees(60)));
-    cordinatesCoralRed.add(new Pose2d(523.90, 128.65,  Rotation2d.fromDegrees(120)));
-    cordinatesCoralRed.add(new Pose2d(535.08, 135.15,  Rotation2d.fromDegrees(120)));
+    coordinatesCoralRed.add(new Pose2d(544.87, 152.03, Rotation2d.fromDegrees(180)));
+    coordinatesCoralRed.add(new Pose2d(544.87, 164.97,  Rotation2d.fromDegrees(180)));
+    coordinatesCoralRed.add(new Pose2d(535.08, 181.89,  Rotation2d.fromDegrees(240)));
+    coordinatesCoralRed.add(new Pose2d(523.90, 188.32,  Rotation2d.fromDegrees(240)));
+    coordinatesCoralRed.add(new Pose2d(504.39, 188.32,  Rotation2d.fromDegrees(300)));
+    coordinatesCoralRed.add(new Pose2d(493.16, 181.89,  Rotation2d.fromDegrees(300)));
+    coordinatesCoralRed.add(new Pose2d(483.44, 164.97,  Rotation2d.fromDegrees(0.0)));
+    coordinatesCoralRed.add(new Pose2d(483.44, 152.03,  Rotation2d.fromDegrees(0.0)));
+    coordinatesCoralRed.add(new Pose2d(493.16, 135.15,  Rotation2d.fromDegrees(60)));
+    coordinatesCoralRed.add(new Pose2d(504.39, 128.65,  Rotation2d.fromDegrees(60)));
+    coordinatesCoralRed.add(new Pose2d(523.90, 128.65,  Rotation2d.fromDegrees(120)));
+    coordinatesCoralRed.add(new Pose2d(535.08, 135.15,  Rotation2d.fromDegrees(120)));
     }
 
-    public static ArrayList<Pose2d> cordinatesCoralBlue = new ArrayList<Pose2d>();
+    public static ArrayList<Pose2d> coordinatesCoralBlue = new ArrayList<Pose2d>();
     static {
     //ordered in line from A-L, even though this is "opposite" of blue
-    cordinatesCoralBlue.add(new Pose2d(146.052, 164.97, Rotation2d.fromDegrees(0.0)));
-    cordinatesCoralBlue.add(new Pose2d(146.052, 152.03,  Rotation2d.fromDegrees(0.0)));
-    cordinatesCoralBlue.add(new Pose2d(155.43, 135.15, Rotation2d.fromDegrees(60)));
-    cordinatesCoralBlue.add(new Pose2d(166.65, 128.65, Rotation2d.fromDegrees(60)));
-    cordinatesCoralBlue.add(new Pose2d(136.51, 128.65, Rotation2d.fromDegrees(120)));
-    cordinatesCoralBlue.add(new Pose2d(197.69, 135.15, Rotation2d.fromDegrees(120)));
-    cordinatesCoralBlue.add(new Pose2d(207.48, 152.03, Rotation2d.fromDegrees(180)));
-    cordinatesCoralBlue.add(new Pose2d(207.48, 164.97, Rotation2d.fromDegrees(180)));
-    cordinatesCoralBlue.add(new Pose2d(197.69, 181.89, Rotation2d.fromDegrees(240)));
-    cordinatesCoralBlue.add(new Pose2d(186.51, 188.32, Rotation2d.fromDegrees(240)));
-    cordinatesCoralBlue.add(new Pose2d(166.65, 188.32, Rotation2d.fromDegrees(300)));
-    cordinatesCoralBlue.add(new Pose2d(155.43, 181.89, Rotation2d.fromDegrees(300)));
+    coordinatesCoralBlue.add(new Pose2d(146.052, 164.97, Rotation2d.fromDegrees(0.0)));
+    coordinatesCoralBlue.add(new Pose2d(146.052, 152.03,  Rotation2d.fromDegrees(0.0)));
+    coordinatesCoralBlue.add(new Pose2d(155.43, 135.15, Rotation2d.fromDegrees(60)));
+    coordinatesCoralBlue.add(new Pose2d(166.65, 128.65, Rotation2d.fromDegrees(60)));
+    coordinatesCoralBlue.add(new Pose2d(136.51, 128.65, Rotation2d.fromDegrees(120)));
+    coordinatesCoralBlue.add(new Pose2d(197.69, 135.15, Rotation2d.fromDegrees(120)));
+    coordinatesCoralBlue.add(new Pose2d(207.48, 152.03, Rotation2d.fromDegrees(180)));
+    coordinatesCoralBlue.add(new Pose2d(207.48, 164.97, Rotation2d.fromDegrees(180)));
+    coordinatesCoralBlue.add(new Pose2d(197.69, 181.89, Rotation2d.fromDegrees(240)));
+    coordinatesCoralBlue.add(new Pose2d(186.51, 188.32, Rotation2d.fromDegrees(240)));
+    coordinatesCoralBlue.add(new Pose2d(166.65, 188.32, Rotation2d.fromDegrees(300)));
+    coordinatesCoralBlue.add(new Pose2d(155.43, 181.89, Rotation2d.fromDegrees(300)));
     }
     }
 
@@ -194,7 +194,7 @@ public final class Constants {
     // TODO figure out all actual constants
     public static final double MeterPerMotorRevolution = 0.0;
 
-    //TODO Get actual CANIDS :0
+    //TODO Get actual CAN IDs
     @CanId(CanId.Type.MOTOR) public static final int outtakeMotorID = 40;
     @CanId(CanId.Type.MOTOR) public static final int horizontalMotorID = 41;
     @CanId(CanId.Type.ENCODER) public static final int horizontalEncoderID = 41;
@@ -229,7 +229,7 @@ public final class Constants {
     public static final double horizontalMotorMaxPosFeedForward = 1.0 / (565.0*12.0);
     public static final double horizontalMotorPosIZone = 0.0;
     public static final double horizontalMotorMaxPosIZone = 0.0;
-    public static final double horizontalMotorMaxAccleration = 25000.0; //RPM per Sec
+    public static final double horizontalMotorMaxAcceleration = 25000.0; //RPM per Sec
     public static final double horizontalMotorMaxVelocity = 3500.0; //RPM
     public static final double horizontalMotorClosedLoopError = 1.0;
 
@@ -243,7 +243,7 @@ public final class Constants {
     public static final double verticalMotorMaxPosFeedForward = 1.0 / (565.0*12.0);
     public static final double verticalMotorPosIZone = 0.0;
     public static final double verticalMotorMaxPosIZone = 0.0;
-    public static final double verticalMotorMaxAccleration = 25000.0; //RPM per Sec
+    public static final double verticalMotorMaxAcceleration = 25000.0; //RPM per Sec
     public static final double verticalMotorMaxVelocity = 3500.0; //RPM
     public static final double verticalMotorClosedLoopError = 1.0;
     
@@ -278,15 +278,15 @@ public final class Constants {
     public static final Rotation2d horizontalLevel2Angle = Rotation2d.fromDegrees(0);
     public static final Rotation2d horizontalLevel3Angle = Rotation2d.fromDegrees(0);
     public static final Rotation2d horizontalLevel4Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d vertialIntakeAngle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d vertialLevel1Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticallLevel2Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticallLevel3Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticallLevel4Angle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d verticalIntakeAngle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d verticalLevel1Angle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d verticalLevel2Angle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d verticalLevel3Angle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d verticalLevel4Angle = Rotation2d.fromDegrees(0);
     // ???? what do you do for offset for position (use gear ratio to figure out)
     // public static final double RotationDegreesPerRotation = 0;
 
-    public static double horizontalMotorallowederror;
+    public static double horizontalMotorAllowedError;
   }
 
   public static final class AutoBalance {
@@ -299,11 +299,11 @@ public final class Constants {
   public static final class Climber {
     public static final double firstStageGearRatio = 8 / 60;
     public static final double secondStageGearRatio = 18 / 58;
-    public static final int climberlimitIDLower = 10;
-    public static final int climberlimitIDUpper = 11;
+    public static final int climberLimitIDLower = 10;
+    public static final int climberLimitIDUpper = 11;
 
     public static final double MOTOR_KP = .05;
-    public static final double MOTOR_KI = 0; // TODO
+    public static final double MOTOR_KI = 0; // TODO Configure Climber PID
     public static final double MOTOR_KD = 0.00025;
     public static final double MOTOR_FF = 1.0 / 6000.0;
     public static final double MOTOR_MAX_VELOCITY = 1000.0;

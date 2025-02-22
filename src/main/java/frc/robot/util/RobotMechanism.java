@@ -15,18 +15,16 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-//import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-//import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
-//import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.StructArrayPublisher;
 
 /** Add your docs here. */
+@SuppressWarnings("unused") // TODO Temporary suppress
 public class RobotMechanism {
     Mechanism2d m_mechanism;
     MechanismRoot2d m_root;
@@ -45,14 +43,13 @@ public class RobotMechanism {
     private static final Transform3d k_ClimberClam2LeftArm = new Transform3d(0.15222, 0.1125, 0.01433, new Rotation3d());
     private static final Transform3d k_ClimberClam2RightArm = new Transform3d(0.15222, -0.1125, 0.01433, new Rotation3d());
 
-    // TODO Investigate Mechanism2d
     // Does this gets drawn correctly in SmartDashboard? AdvantageScope did not seem to draw the mechanism in a manner
     // to understand the robot's configuration.
     public RobotMechanism() {
         // m_mechanism = new Mechanism2d(Units.inchesToMeters(15.0), Units.inchesToMeters(5) + Elevator.MAX_HEIGHT_METERS);
         // m_root = m_mechanism.getRoot("Elevator", Units.inchesToMeters(15.0 - 7.5), Units.inchesToMeters(4.0));
-        // MechanismLigament2d m_elevatorBase = new MechanismLigament2d("Elavator Extension", Units.inchesToMeters(5), 90.0, 10, new Color8Bit(200, 200, 200));
-        // m_elevatorExtension = new MechanismLigament2d("Elavator Base", Units.inchesToMeters(4), 90.0, 5, new Color8Bit(128, 128, 128));
+        // MechanismLigament2d m_elevatorBase = new MechanismLigament2d("Elevator Extension", Units.inchesToMeters(5), 90.0, 10, new Color8Bit(200, 200, 200));
+        // m_elevatorExtension = new MechanismLigament2d("Elevator Base", Units.inchesToMeters(4), 90.0, 5, new Color8Bit(128, 128, 128));
         // m_root.append(m_elevatorExtension);
         // m_root.append(m_elevatorBase);
 

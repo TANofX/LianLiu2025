@@ -28,7 +28,7 @@
  * This example has the robot using a Command Based template to control the CANdle.
  * 
  * This example uses:
- * - A CANdle wired on the CAN Bus, with a 5m led strip attached for the extra animatinos.
+ * - A CANdle wired on the CAN Bus, with a 5m led strip attached for the extra animations.
  * 
  * Controls (with Xbox controller):
  * Right Bumper: Increment animation
@@ -61,7 +61,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class LEDs extends AdvancedSubsystem {
     private AddressableLED strip;
@@ -122,7 +121,7 @@ public class LEDs extends AdvancedSubsystem {
     public void periodic() {
         // // Has Coral, Green
         // if(RobotContainer.coralHandler.hasCoral()) changeAnimation(AnimationTypes.OrangeSolid);
-        // activePattern.applyTo(buffer);
-        // strip.setData(buffer);
+        activePattern.applyTo(buffer);
+        strip.setData(buffer);
     }
 }

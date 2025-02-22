@@ -95,7 +95,7 @@ public class Climber extends AdvancedSubsystem {
     SmartDashboard.putData("Set Climber to -90", setClimberNeg90(climberAbsoluteAngle));
   }
 
-  // HEY I ALEADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :)
+  // HEY I ALREADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :)
   // -- Tanx
 
   @Override
@@ -170,7 +170,7 @@ public class Climber extends AdvancedSubsystem {
   }
 
   /**
-   * This method is intended to give the user the current target loctation of the
+   * This method is intended to give the user the current target location of the
    * climber
    * 
    * @returns target angle for the climber
