@@ -32,7 +32,7 @@ public class RobotContainer {
   public static final Swerve swerve = new Swerve();// new Swerve();
   public static final LEDs LEDs = new LEDs();
   public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
-  public static final RobotMechanism robotMechanism = new RobotMechanism();
+  public static final RobotMechanism robotMechanism = new RobotMechanism(() -> swerve.getPose());
   public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.OUTTAKE_MOTOR_ID,
   Constants.CoralHandler.HORIZONTAL_MOTOR_ID,
   Constants.CoralHandler.VERTICAL_MOTOR_ID,
