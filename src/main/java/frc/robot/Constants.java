@@ -72,7 +72,7 @@ public final class Constants {
 
   public static final class Elevator {
     @CanId(CanId.Type.MOTOR)
-    public static final int MOTOR_CAN_ID = 30;
+    public static final int MOTOR_ID = 30;
 
     public static final double P = 0.05;
     public static final double I = 0.00;
@@ -209,7 +209,6 @@ public final class Constants {
     // TODO figure out all actual constants
     public static final double METER_PER_MOTOR_REVOLUTION = 0.0;
 
-    // TODO Get actual CAN IDs
     @CanId(CanId.Type.MOTOR)
     public static final int OUTTAKE_MOTOR_ID = 40;
     @CanId(CanId.Type.MOTOR)
@@ -226,7 +225,7 @@ public final class Constants {
     public static final double CORAL_END_EFFECTOR_MASS = 0.5;
 
     public static final double OUTTAKE_WHEEL_MASS = Units.lbsToKilograms(0.5);
-    public static final double OUTTAGE_WHEEL_RADIUS = 0.02;
+    public static final double OUTTAKE_WHEEL_RADIUS = 0.02;
 
     public static final double CORAL_INTAKE_SPEED = 0;
     public static final double CORAL_OUTTAKE_SPEED = 0;
@@ -235,7 +234,7 @@ public final class Constants {
     public static final double HORIZONTAL_GEAR_RATIO = 100.0;
     public static final double VERTICAL_GEAR_RATIO = 100.0;
 
-    public static final double OUTTAKE_JKMETERS_SQUARED = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAGE_WHEEL_RADIUS, 2));
+    public static final double OUTTAKE_JKMETERS_SQUARED = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAKE_WHEEL_RADIUS, 2));
     public static final double OUTTAKE_MOTOR_MIN_VELOCITY = 0.0;
 
     public static final double HORIZONTAL_MOTOR_POS_P = 0.03;
@@ -308,9 +307,14 @@ public final class Constants {
   }
 
   public static final class Climber {
-    public static final int climberLimitIDLower = 10;
-    public static final int climberLimitIDUpper = 11;
-
+    @CanId(CanId.Type.MOTOR) 
+    public static final int CLIMBER_MOTOR_ID = 41;
+    @CanId(CanId.Type.ENCODER)
+    public static final int ENCODER_ID = 42;
+    @CanId(CanId.Type.PCM_CONTROLLER) 
+    public static final int PCM_ID = 5;
+    public static final int FORWARD_SOLENOID_ID = 14;
+    public static final int REVERSE_SOLENOID_ID = 7;
     public static final double MOTOR_KP = .05;
     public static final double MOTOR_KI = 0; // TODO Configure Climber PID
     public static final double MOTOR_KD = 0.00025;
@@ -322,60 +326,48 @@ public final class Constants {
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
     public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(0);
-    @CanId(CanId.Type.MOTOR)
-    public static final int MOTOR_CANID = 41;
-    @CanId(CanId.Type.PCM_CONTROLLER)
-    public static final int PCMID = 5;
-    public static final int FORWARDSOLENOID = 14;
-    public static final int REVERSESOLENOID = 7;
 
-    public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
-    public static final int ENCODERID = 0;
   }
 
   public static final class AlgaeHandler {
     // Creating constants for LEFT Algae Handler :D
-    // CANID's
     @CanId(CanId.Type.MOTOR)
-    static final int leftAlgaeMotorCANID = 20;
-    public static final int leftAlgaeSolenoidID = 15;
-    public static final int leftAlgaeLimitID = 0;
+    static final int LEFT_ALGAE_MOTOR_ID = 20;
+    public static final int LEFT_ALGAE_SOLENOID_ID = 15;
+    public static final int LEFT_ALGAE_LIMIT_ID = 0;
 
     // Creating constants for RIGHT Algae Handler :D
     @CanId(CanId.Type.MOTOR)
-    public static final int rightAlgaeMotorCANID = 21;
-    public static final int rightAlgaeSolenoidID = 13;
-    public static final int rightAlgaeLimitID = 1;
+    public static final int RIGHT_ALGAE_MOTOR_ID = 21;
+    public static final int RIGHT_ALGAE_SOLENOID_ID = 13;
+    public static final int RIGHT_ALGAE_LIMIT_ID = 1;
 
-    // all of these ID's are place holders and will need to be edited at a later
-    // date
-    public static final int degreesPerRevolution = 360;
     // These values will need to be changed, just place holders
-    public static final double algaeMotorP = 0.001;
-    public static final double algaeMotorI = 0.00;
-    public static final double algaeMotorD = 0.000;
-    public static final double algaeFF = 1.0 / (565.0 * 12);
-    public static final double algaeIZone = 0.0;
-    public static final double algaeMotorMaxVelocity = 6000.0;
-    public static final double algaeMotorMaxAcceleration = 0.0;
-    public static final double algaeMotorAllowedError = 1;
+    public static final double ALGAE_MOTOR_P = 0.001;
+    public static final double ALGAE_MOTOR_I = 0.00;
+    public static final double ALGAE_MOTOR_D = 0.000;
+    public static final double ALGAE_MOTOR_FF = 1.0 / (565.0 * 12);
+    public static final double ALGAE_MOTOR_I_ZONE = 0.0;
+    public static final double ALGAE_MOTOR_MAX_VELOCITY = 6000.0;
+    public static final double ALGAE_MOTOR_MAX_ACCELERATION = 0.0;
+    public static final double ALGAE_MOTOR_ALLOWED_CLOSED_LOOP_ERROR = 1;
     // Calculates moment of inertia for parameter in flywheel sim for bottom wheels
-    public static final double massOfBottomIntakeWheel = Units.lbsToKilograms(0.076);
-    public static final double radiusOfBottomIntakeWheel = .025;
-    public static final double momentOfInertiaOfTheBottomIntakeWheel = .5
-        * (massOfBottomIntakeWheel * (radiusOfBottomIntakeWheel * radiusOfBottomIntakeWheel));
+    public static final double MASS_OF_BOTTOM_INTAKE_WHEEL = Units.lbsToKilograms(0.076);
+    public static final double RADIUS_OF_BOTTOM_INTAKE_WHEEL = .025;
+    public static final double MOMENT_OF_INERTIA_OF_THE_BOTTOM_INTAKE_WHEEL = .5
+        * (MASS_OF_BOTTOM_INTAKE_WHEEL * (RADIUS_OF_BOTTOM_INTAKE_WHEEL * RADIUS_OF_BOTTOM_INTAKE_WHEEL));
 
     // Calculates moment of inertia for parameter in flywheel sim for top wheels
-    public static final double massOfTopIntakeWheel = Units.lbsToKilograms(0.035);
-    public static final double radiusOfTopIntakeWheel = 1;
-    public static final double momentOfInertiaOfTheTopIntakeWheel = massOfTopIntakeWheel
-        * (radiusOfTopIntakeWheel * radiusOfTopIntakeWheel);
+    public static final double MASS_OF_TOP_OF_INTAKE_WHEEL = Units.lbsToKilograms(0.035);
+    public static final double RADIUS_OF_TOP_INTAKE_WHEEL = 1;
+    public static final double momentOfInertiaOfTheTopIntakeWheel = MASS_OF_TOP_OF_INTAKE_WHEEL
+        * (RADIUS_OF_TOP_INTAKE_WHEEL * RADIUS_OF_TOP_INTAKE_WHEEL);
 
     // all of these ID's are place holders and will need to be edited at a later
     // date
-    public static final double metersPerMotorRevolution = 0;
-    public static final int amassOfAlgaeHandler = 6;
-    public static final double algaeGearRatio = 1.0 / 9.0;
+    public static final double METERS_PER_MOTOR_REVOLUTION = 0;
+    public static final int AMASS_OF_ALGAE_HANDLER = 6;
+    public static final double ALGAE_GEAR_RATIO = 1.0 / 9.0;
   }
 
 }

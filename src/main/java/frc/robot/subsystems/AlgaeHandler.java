@@ -42,8 +42,8 @@ private final RelativeEncoder algaeEncoder;
 //Creating simulation for algae handler ??Need to add constants??
 private final FlywheelSim m_algaeHandlerSim = 
   new FlywheelSim(LinearSystemId.createFlywheelSystem(DCMotor.getNeoVortex(1), 
-                  Constants.AlgaeHandler.momentOfInertiaOfTheBottomIntakeWheel, 
-                  Constants.AlgaeHandler.algaeGearRatio),
+                  Constants.AlgaeHandler.MOMENT_OF_INERTIA_OF_THE_BOTTOM_INTAKE_WHEEL, 
+                  Constants.AlgaeHandler.ALGAE_GEAR_RATIO),
                   DCMotor.getNeoVortex(1));
 
 
@@ -62,12 +62,12 @@ private final FlywheelSim m_algaeHandlerSim =
     ClosedLoopConfig algaeMotorPIDConfig = algaeMotorConfig.closedLoop;
     algaeMotorConfig.idleMode(IdleMode.kBrake);
     algaeMotorConfig.smartCurrentLimit(80);
-    algaeMotorPIDConfig.pidf(Constants.AlgaeHandler.algaeMotorP, Constants.AlgaeHandler.algaeMotorI, Constants.AlgaeHandler.algaeMotorD, Constants.AlgaeHandler.algaeFF);
+    algaeMotorPIDConfig.pidf(Constants.AlgaeHandler.ALGAE_MOTOR_P, Constants.AlgaeHandler.ALGAE_MOTOR_I, Constants.AlgaeHandler.ALGAE_MOTOR_D, Constants.AlgaeHandler.ALGAE_MOTOR_FF);
     
-    algaeMotorPIDConfig.iZone(Constants.AlgaeHandler.algaeIZone);
-    algaeMotorPIDConfig.maxMotion.maxVelocity(Constants.AlgaeHandler.algaeMotorMaxVelocity);
-    algaeMotorPIDConfig.maxMotion.maxAcceleration(Constants.AlgaeHandler.algaeMotorMaxAcceleration);
-    algaeMotorPIDConfig.maxMotion.allowedClosedLoopError(Constants.AlgaeHandler.algaeMotorAllowedError);
+    algaeMotorPIDConfig.iZone(Constants.AlgaeHandler.ALGAE_MOTOR_I_ZONE);
+    algaeMotorPIDConfig.maxMotion.maxVelocity(Constants.AlgaeHandler.ALGAE_MOTOR_MAX_VELOCITY);
+    algaeMotorPIDConfig.maxMotion.maxAcceleration(Constants.AlgaeHandler.ALGAE_MOTOR_MAX_ACCELERATION);
+    algaeMotorPIDConfig.maxMotion.allowedClosedLoopError(Constants.AlgaeHandler.ALGAE_MOTOR_ALLOWED_CLOSED_LOOP_ERROR);
     algaeMotor.configure(algaeMotorConfig,ResetMode.kResetSafeParameters,PersistMode.kNoPersistParameters);
     registerHardware("Algae Motor", algaeMotor);
   
@@ -93,7 +93,7 @@ m_algaeHandlerSim.setInputVoltage(inputVoltage);
 m_algaeHandlerSim.update(0.020);
 
  // Iterate the motor simulation9
-algaeHandlerMotorSim.iterate(m_algaeHandlerSim.getAngularVelocityRPM() * Constants.AlgaeHandler.algaeGearRatio, RobotController.getBatteryVoltage(), 0.020);
+algaeHandlerMotorSim.iterate(m_algaeHandlerSim.getAngularVelocityRPM() * Constants.AlgaeHandler.ALGAE_GEAR_RATIO, RobotController.getBatteryVoltage(), 0.020);
 
 
   // Update the RoboRioSim voltage to the default battery voltage based on the elevator motor current.
