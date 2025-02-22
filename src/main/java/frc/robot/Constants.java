@@ -360,7 +360,7 @@ public final class Constants {
     // Calculates moment of inertia for parameter in flywheel sim for top wheels
     public static final double MASS_OF_TOP_OF_INTAKE_WHEEL = Units.lbsToKilograms(0.035);
     public static final double RADIUS_OF_TOP_INTAKE_WHEEL = 1;
-    public static final double momentOfInertiaOfTheTopIntakeWheel = MASS_OF_TOP_OF_INTAKE_WHEEL
+    public static final double MOMENT_OF_INERTIA_OF_THE_TOP_INTAKE_WHEEL= MASS_OF_TOP_OF_INTAKE_WHEEL
         * (RADIUS_OF_TOP_INTAKE_WHEEL * RADIUS_OF_TOP_INTAKE_WHEEL);
 
     // all of these ID's are place holders and will need to be edited at a later
