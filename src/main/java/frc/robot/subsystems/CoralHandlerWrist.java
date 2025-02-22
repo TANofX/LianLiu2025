@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -11,11 +13,15 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.*;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
-import java.util.concurrent.TimeUnit;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -25,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 
-public class CoralHandlerWrist extends AdvancedSubsystem {
+public final class CoralHandlerWrist extends AdvancedSubsystem {
     // Creation of needed variables
     private final String name;
     private final double gearRatio;
@@ -85,41 +91,42 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         this.relativeEncoder.setPosition(startingAngle.getRotations());
         this.encoderConfig = new CANcoderConfiguration();
 
-
         LimitSwitchConfig limitConfig = new LimitSwitchConfig();
         limitConfig.forwardLimitSwitchType(limitSwitchType);
-        
-        //TODO Enable soft limit switch?
+
+        // TODO Enable soft limit switch?
         SoftLimitConfig softLimitConfig = new SoftLimitConfig();
         softLimitConfig.forwardSoftLimitEnabled(false);
         softLimitConfig.reverseSoftLimitEnabled(false);
         // softLimitConfig.reverseSoftLimit(clampMin / rotationDegreesPerRotation);
         // softLimitConfig.forwardSoftLimit(clampMax / rotationDegreesPerRotation);
 
-        //TODO should motorConfig configure the motor inverted?
+        // TODO Should motorConfig configure the motor inverted?
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.inverted(false);
         motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         // Configure the PID controls of motor
         ClosedLoopConfig pidConfig = motorConfig.closedLoop;
-        // pidConfig.pidf(posP, posI, posD, 0, ClosedLoopSlot.kSlot0, maxPosP, maxPosI, maxPosD, maxPosff, ClosedLoopSlot.kSlot1);
+        // pidConfig.pidf(posP, posI, posD, 0, ClosedLoopSlot.kSlot0, maxPosP, maxPosI,
+        // maxPosD, maxPosFF, ClosedLoopSlot.kSlot1);
         pidConfig
-            .p(posP, ClosedLoopSlot.kSlot0)
-            .d(posI, ClosedLoopSlot.kSlot0)
-            .d(posD, ClosedLoopSlot.kSlot0)
-            .velocityFF(posFF,ClosedLoopSlot.kSlot0)
-            .p(maxPosP, ClosedLoopSlot.kSlot1)
-            .i(maxPosI, ClosedLoopSlot.kSlot1)
-            .d(maxPosD, ClosedLoopSlot.kSlot1)
-            .velocityFF(maxPosFF, ClosedLoopSlot.kSlot1)
-            .iZone(posIZone, ClosedLoopSlot.kSlot0)
-            .iZone(maxPosIZone, ClosedLoopSlot.kSlot1);
+                .p(posP, ClosedLoopSlot.kSlot0)
+                .d(posI, ClosedLoopSlot.kSlot0)
+                .d(posD, ClosedLoopSlot.kSlot0)
+                .velocityFF(posFF, ClosedLoopSlot.kSlot0)
+                .p(maxPosP, ClosedLoopSlot.kSlot1)
+                .i(maxPosI, ClosedLoopSlot.kSlot1)
+                .d(maxPosD, ClosedLoopSlot.kSlot1)
+                .velocityFF(maxPosFF, ClosedLoopSlot.kSlot1)
+                .iZone(posIZone, ClosedLoopSlot.kSlot0)
+                .iZone(maxPosIZone, ClosedLoopSlot.kSlot1);
         pidConfig.maxMotion.maxAcceleration(maxAcceleration);
         pidConfig.maxMotion.maxVelocity(maxVelocity);
         pidConfig.maxMotion.allowedClosedLoopError(allowedError);
         motorConfig.apply(pidConfig);
-        motor.configure(motorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motor.configure(motorConfig, SparkBase.ResetMode.kResetSafeParameters,
+                SparkBase.PersistMode.kNoPersistParameters);
 
         // Configure Encoder
         encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
@@ -130,7 +137,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         this.absoluteSignal = absoluteEncoder.getAbsolutePosition();
         absoluteSignal.refresh();
         syncWristEncoder();
-            
+
         this.gearboxSim = DCMotor.getNeo550(1);
 
         // Creation of Coral Handler Physics Simulation
@@ -143,7 +150,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
                 armMaxRotation.getRadians(),
                 true, // Gravity Boolean
                 startingAngle.getRadians());
-            // ,Constants.CoralHandler.horizontalMotorStdDev);
+        // ,Constants.CoralHandler.horizontalMotorStdDev);
 
         this.motorSim = new SparkMaxSim(motor, gearboxSim);
 
@@ -156,8 +163,8 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         // Gets newest value of absolute encoder
         absoluteSignal.refresh();
     }
-    
-    //Time for logging on terminal
+
+    // Time for logging on terminal
     private long timeSinceLastLog = System.nanoTime();
 
     @Override
@@ -175,21 +182,22 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
         var armRotation = finalArmPos.minus(initialArmPos);
         var motorRotation = armRotation.times(gearRatio);
         var motorRpm = motorRotation.getRotations() * (60 / .02);
-        
+
         // Update the motor simulation using the found RPM of the motor
         motorSim.iterate(motorRpm, RoboRioSim.getVInVoltage(), 0.02);
 
         RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(motorSim.getMotorCurrent()));
-        
+
         // Logging in Terminal
-        if ( System.nanoTime() - timeSinceLastLog > TimeUnit.SECONDS.toNanos(1)) {
-            System.out.printf("[%s] arm %.0f deg, sim arm %.0f deg, motor %.1f degrees, inputVoltage: %.1f V motorVelocity: %.0f rpm%n",
+        if (System.nanoTime() - timeSinceLastLog > TimeUnit.SECONDS.toNanos(1)) {
+            System.out.printf(
+                    "[%s] arm %.0f deg, sim arm %.0f deg, motor %.1f degrees, inputVoltage: %.1f V motorVelocity: %.0f rpm%n",
                     name,
-                    Rotation2d.fromRotations(relativeEncoder.getPosition()).div(gearRatio).getDegrees(), //sim arm degrees
+                    Rotation2d.fromRotations(relativeEncoder.getPosition()).div(gearRatio).getDegrees(), // sim arm
+                                                                                                         // degrees
                     Rotation2d.fromRadians(coralHandlerPhysicsSim.getAngleRads()).getDegrees(), // arm degrees
                     Rotation2d.fromRotations(relativeEncoder.getPosition()).getDegrees(), // motor rotations
-                    inputVoltage, motorRpm
-            );
+                    inputVoltage, motorRpm);
             timeSinceLastLog = System.nanoTime();
         }
     }
@@ -197,7 +205,7 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
     public void runCoralWrist() {
         motor.set(.15);
     }
-    
+
     /**
      * Sets the angle of coral handler wrist.
      *
@@ -206,17 +214,21 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
     public void setAngle(Rotation2d targetArmAngle) {
         // // clamp target arm angle
         // targetArmAngle = Rotation2d.fromDegrees(
-        //         MathUtil.clamp(targetArmAngle.getDegrees(), armMinRotation.getDegrees(), armMaxRotation.getDegrees()));
+        // MathUtil.clamp(targetArmAngle.getDegrees(), armMinRotation.getDegrees(),
+        // armMaxRotation.getDegrees()));
         var targetMotorAngle = targetArmAngle.times(gearRatio);
 
         System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
-        
-        //TODO check if this PID changing method works and change comment after + change angle for when PID controltype changes
+
+        // TODO Check if this PID changing method works and change comment after +
+        // change angle for when PID controlType changes
         if ((targetMotorAngle.getDegrees() - getAngle().getDegrees()) > Rotation2d.fromDegrees(5).getDegrees())
-            controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-        
+            controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl,
+                    ClosedLoopSlot.kSlot0);
+
         else {
-            controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot1);
+            controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kPosition,
+                    ClosedLoopSlot.kSlot1);
         }
 
         timeSinceLastLog = System.nanoTime();
@@ -228,45 +240,54 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
     public Rotation2d getAngle() {
         return Rotation2d.fromRotations(relativeEncoder.getPosition()).div(gearRatio);
     }
-    
+
     /**
      * Stops the motor / Sets the speed of the motor to 0.
      */
     public void stopMotor() {
         motor.stopMotor();
     }
-    
+
     /**
-     * Syncs wrist Absolute encoder and Relative encoder together (based off of absolute encoder)
+     * Syncs wrist Absolute encoder and Relative encoder together (based off of
+     * absolute encoder)
      */
     public void syncWristEncoder() {
         motor.getEncoder().setPosition(absoluteEncoder.getAbsolutePosition().getValueAsDouble() * gearRatio);
     }
 
     /**
-     * Changes where the offset of the absolute encoder is and syncs relative encoder to it
+     * Changes where the offset of the absolute encoder is and syncs relative
+     * encoder to it
      */
     public void updateWristOffset() {
-        double currentOffset = encoderConfig.MagnetSensor.MagnetOffset; //of absolute encoder
-        double offset = (currentOffset - absoluteEncoder.getAbsolutePosition().getValueAsDouble()) % 1.0; //needed offset for absolute encoder
-        Preferences.setDouble(getName() + "RotationOffset", offset * 360.0); 
-        encoderConfig.MagnetSensor.MagnetOffset = offset; //makes it the new offset
-        absoluteEncoder.getConfigurator().apply(encoderConfig); //applys offset
-        syncWristEncoder(); //syncs absolute offset with relative
+        double currentOffset = encoderConfig.MagnetSensor.MagnetOffset; // of absolute encoder
+        double offset = (currentOffset - absoluteEncoder.getAbsolutePosition().getValueAsDouble()) % 1.0; // needed
+                                                                                                          // offset for
+                                                                                                          // absolute
+                                                                                                          // encoder
+        Preferences.setDouble(getName() + "RotationOffset", offset * 360.0);
+        encoderConfig.MagnetSensor.MagnetOffset = offset; // makes it the new offset
+        absoluteEncoder.getConfigurator().apply(encoderConfig); // applies offset
+        syncWristEncoder(); // syncs absolute offset with relative
     }
 
     /**
-     * Sets a target angle for the motor and runs the motor until the motor is close enough to the target angle (smaller than 5degrees). Stops motor once target angle is met.
+     * Sets a target angle for the motor and runs the motor until the motor is close
+     * enough to the target angle (smaller than 5degrees). Stops motor once target
+     * angle is met.
+     * 
      * @param targetAngle
-     * @return Print statement that outputs the value of difference between the target angle and actual angle.
+     * @return Print statement that outputs the value of difference between the
+     *         target angle and actual angle.
      */
     public Command setAngleCommand(Rotation2d targetAngle) {
         SmartDashboard.putNumber(name + "Target Angle in Degrees", targetAngle.getDegrees());
         return Commands.sequence(
-                Commands.runOnce(() -> 
-                    setAngle(targetAngle)),
+                Commands.runOnce(() -> setAngle(targetAngle)),
                 Commands.waitUntil(() -> {
-                    var difference = Math.abs((Rotation2d.fromRotations(relativeEncoder.getPosition()).minus(targetAngle)).getDegrees());
+                    var difference = Math.abs(
+                            (Rotation2d.fromRotations(relativeEncoder.getPosition()).minus(targetAngle)).getDegrees());
                     System.out.printf("[%s] difference=%.0f degrees%n", name, difference);
                     return difference < 5;
                 }),
@@ -295,8 +316,9 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
                 Commands.runOnce(
                         () -> {
                             if (Math.abs(getAngle().getDegrees() - Rotation2d.fromDegrees(45).getDegrees()) < 1) {
-                                addFault("[System Check] " + name + " Coral Motor did not get to target angle (45 degrees) using MaxMotionPositionControl",
-                                false, true);
+                                addFault("[System Check] " + name
+                                        + " Coral Motor did not get to target angle (45 degrees) using MaxMotionPositionControl",
+                                        false, true);
                             }
                         }, this),
                 Commands.runOnce(
@@ -307,8 +329,9 @@ public class CoralHandlerWrist extends AdvancedSubsystem {
                 Commands.runOnce(
                         () -> {
                             if (Math.abs(getAngle().getDegrees() - Rotation2d.fromDegrees(-45).getDegrees()) < 1) {
-                                addFault("[System Check] " + name + " Coral Motor did not get to target angle (-45 degrees) using MaxMotionPositionControl",
-                                false, true);
+                                addFault("[System Check] " + name
+                                        + " Coral Motor did not get to target angle (-45 degrees) using MaxMotionPositionControl",
+                                        false, true);
                             }
                             motor.stopMotor();
                         }, this));

@@ -1,6 +1,9 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
 
@@ -40,10 +43,10 @@ public class CoralHandler extends AdvancedSubsystem {
   // Creation of Flywheel Simulation for the simulation of the outtakeMotor
   private final FlywheelSim coralHandlerOuttakePhysicsSim = new FlywheelSim(
       LinearSystemId.createFlywheelSystem(DCMotor.getNeoVortex(1), 
-                                          Constants.CoralHandler.outtakeJKgMetersSquared, 
-                                          Constants.CoralHandler.outtakeMotorGearing),
+                                          Constants.CoralHandler.OUTTAKE_JKMETERS_SQUARED, 
+                                          Constants.CoralHandler.OUTTAKE_MOTOR_GEARING),
       DCMotor.getNeoVortex(1), 
-      Constants.CoralHandler.outtakeMotorGearing);
+      Constants.CoralHandler.OUTTAKE_MOTOR_GEARING);
 
   public CoralHandler(int outtakeMotorID, int horizontalMotorID, int verticalMotorID, int horizontalAbsoluteEncoderID,
       int verticalAbsoluteEncoderID) {
@@ -55,61 +58,61 @@ public class CoralHandler extends AdvancedSubsystem {
             "Horizontal",
             horizontalMotorID,
             horizontalAbsoluteEncoderID,
-            Constants.CoralHandler.horizontalGearRatio,
-            Constants.CoralHandler.horizontalMotorPosP,
-            Constants.CoralHandler.horizontalMotorPosI,
-            Constants.CoralHandler.horizontalMotorPosD,
-            Constants.CoralHandler.horizontalMotorMaxPosP, 
-            Constants.CoralHandler.horizontalMotorMaxPosI, 
-            Constants.CoralHandler.horizontalMotorMaxPosD, 
-            Constants.CoralHandler.horizontalMotorPosFeedForward,
-            Constants.CoralHandler.horizontalMotorMaxPosFeedForward,
-            Constants.CoralHandler.horizontalMotorPosIZone,
-            Constants.CoralHandler.horizontalMotorMaxPosIZone,
-            Constants.CoralHandler.horizontalMotorMinVelocity,
-            Constants.CoralHandler.horizontalMotorMaxVelocity,
-            Constants.CoralHandler.horizontalMotorMaxAccleration,
-            Constants.CoralHandler.horizontalMotorClosedLoopError,
+            Constants.CoralHandler.HORIZONTAL_GEAR_RATIO,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_POS_P,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_POS_I,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_POS_D,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_POS_P, 
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_POS_I, 
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_POS_D, 
+            Constants.CoralHandler.HORIZONTAL_MOTOR_POS_FEED_FORWARD,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_POS_FEED_FORWARD,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_POS_I_ZONE,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_POS_I_ZONE,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MIN_VELOCITY,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_VELOCITY,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_MAX_ACCELERATION,
+            Constants.CoralHandler.HORIZONTAL_MOTOR_CLOSED_LOPP_ERROR,
             Type.kNormallyOpen,
-            Constants.CoralHandler.horizontalMinAngle,
-            Constants.CoralHandler.horizontalMaxAngle,
-            Constants.CoralHandler.horizontalJKgMetersSquared,
-            Constants.CoralHandler.coralEndEffectorLength,
-            Constants.CoralHandler.horizontalStartingAngleInRadians
+            Constants.CoralHandler.HORIZONTAL_MIN_ANGLE,
+            Constants.CoralHandler.HORIZONTAL_MAX_ANGLE,
+            Constants.CoralHandler.HORIZONTAL_JKMETERS_SQUARED,
+            Constants.CoralHandler.CORAL_END_EFFECTOR_LENGTH,
+            Constants.CoralHandler.HORIZONTAL_STARTING_ANGLE_IN_RADIANS
             );
     horizontalWrist.registerSystemCheckWithSmartDashboard();
     verticalWrist = new CoralHandlerWrist(
             "Vertical",
             verticalMotorID,
             verticalAbsoluteEncoderID,
-            Constants.CoralHandler.verticalGearRatio,
-            Constants.CoralHandler.verticalMotorPosP,
-            Constants.CoralHandler.verticalMotorPosI,
-            Constants.CoralHandler.verticalMotorPosD,
-            Constants.CoralHandler.verticalMotorMaxPosP,
-            Constants.CoralHandler.verticalMotorMaxPosI, 
-            Constants.CoralHandler.verticalMotorMaxPosD, 
-            Constants.CoralHandler.verticalMotorPosFeedForward,
-            Constants.CoralHandler.verticalMotorMaxPosFeedForward, 
-            Constants.CoralHandler.verticalMotorPosIZone,
-            Constants.CoralHandler.verticalMotorMaxPosIZone,
-            Constants.CoralHandler.verticalMotorMinVelocity,
-            Constants.CoralHandler.verticalMotorMaxVelocity,
-            Constants.CoralHandler.verticalMotorMaxAccleration,
-            Constants.CoralHandler.verticalMotorClosedLoopError,
+            Constants.CoralHandler.VERTICAL_GEAR_RATIO,
+            Constants.CoralHandler.VERTICAL_MOTOR_POS_P,
+            Constants.CoralHandler.VERTICAL_MOTOR_POS_I,
+            Constants.CoralHandler.VERTICAL_MOTOR_POS_D,
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_POS_P,
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_POS_I, 
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_POS_D, 
+            Constants.CoralHandler.VERTICAL_MOTOR_POS_FEED_FORWARD,
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_POS_FEED_FORWARD, 
+            Constants.CoralHandler.VERTICAL_MOTOR_POS_I_ZONE,
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_POS_I_ZONE,
+            Constants.CoralHandler.VERTICAL_MOTOR_MIN_VELOCITY,
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_VELOCITY,
+            Constants.CoralHandler.VERTICAL_MOTOR_MAX_ACCELERATION,
+            Constants.CoralHandler.VERTICAL_MOTOR_CLOSED_LOOP_ERROR,
             Type.kNormallyOpen,
-            Constants.CoralHandler.verticalMinAngle,
-            Constants.CoralHandler.verticalMaxAngle,
-            Constants.CoralHandler.verticalJKgMetersSquared,
-            Constants.CoralHandler.coralEndEffectorLength,
-            Constants.CoralHandler.verticalStartingAngleInRadians
+            Constants.CoralHandler.VERTICAL_MIN_ANGLE,
+            Constants.CoralHandler.VERTICAL_MIN_ANGLE,
+            Constants.CoralHandler.VERTICAL_JKMETERS_SQUARED,
+            Constants.CoralHandler.CORAL_END_EFFECTOR_LENGTH,
+            Constants.CoralHandler.VERTICAL_STARTING_ANGLE_IN_RADIANS
     );
 
 
     verticalWrist.registerSystemCheckWithSmartDashboard();
 
     outtakeEncoder = outtakeMotor.getEncoder();
-    // TODO forward or reverse limit switch?
+    // TODO Forward or reverse limit switch?
     coralLimitSwitch = outtakeMotor.getForwardLimitSwitch(); 
     // Using SparkFlexConfig to create needed parameters for the outtakeMotor
     SparkFlexConfig outtakeConfig = new SparkFlexConfig();
@@ -143,8 +146,8 @@ public class CoralHandler extends AdvancedSubsystem {
 
     // Calculating the simulation velocity based on known values
     double outtakeMotorVelocity = coralHandlerOuttakePhysicsSim.getAngularVelocityRPM()
-        / Constants.CoralHandler.outtakeMotorGearing;
-
+        / Constants.CoralHandler.OUTTAKE_MOTOR_GEARING;
+    
 
     // Creation of the motor simulations
     coralHandlerOuttakeSim.iterate(outtakeMotorVelocity, RobotController.getBatteryVoltage(), 0.02);
@@ -227,7 +230,7 @@ public class CoralHandler extends AdvancedSubsystem {
   }
 
   /**
-   * Sets the verical positioning of the coral end effector to a specified angle.
+   * Sets the vertical positioning of the coral end effector to a specified angle.
    * 
    * @param targetAngle The desired vertical angle (degrees) for the coral end
    *                    effector.
@@ -244,34 +247,34 @@ public class CoralHandler extends AdvancedSubsystem {
     return horizontalWrist.getAngle();
   }
   public void setIntakeAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.horizontalIntakeAngle);
-    verticalWrist.setAngle(Constants.CoralHandler.vertialIntakeAngle);
+    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_INTAKE_ANGLE);
+    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE);
   }
 
-   // //TODO Change how this works using autoadjustments
+   // //TODO Change how this works using auto adjustments
   // public void setLevelOneAngle() {
   //   horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel1Angle);
-  //   verticalWrist.setAngle(Constants.CoralHandler.verticallLevel1Angle);
+  //   verticalWrist.setAngle(Constants.CoralHandler.verticalLevel1Angle);
   // }
 
   public void setLevelTwoAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel2Angle);
-    verticalWrist.setAngle(Constants.CoralHandler.verticallLevel2Angle);
+    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_LEVEL_2_ANGLE);
+    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_2_ANGLE);
   }
 
   public void setLevelThreeAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel3Angle);
-    verticalWrist.setAngle(Constants.CoralHandler.verticallLevel3Angle);
+    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_LEVEL_3_ANGLE);
+    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_3_ANGLE);
   }
   public void setLevelFourAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel4Angle);
-    verticalWrist.setAngle(Constants.CoralHandler.verticallLevel4Angle);
+    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_LEVEL_4_ANGLE);
+    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_4_ANGLE);
   }
  
 
   @Override
   public void periodic() {
-    // Values avalible shown on SmartDashboard
+    // Values available shown on SmartDashboard
     SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
   }
 
@@ -287,7 +290,7 @@ public class CoralHandler extends AdvancedSubsystem {
   public Command runCoralIntakeCommand() {
     return Commands.sequence(
         Commands.runOnce(
-            () -> runOuttakeMotor(Constants.CoralHandler.coralIntakeSpeed), this),
+            () -> runOuttakeMotor(Constants.CoralHandler.CORAL_INTAKE_SPEED), this),
         Commands.waitUntil(
             () -> hasCoral()),
         Commands.runOnce(
@@ -297,7 +300,7 @@ public class CoralHandler extends AdvancedSubsystem {
   public Command runCoralOuttakeCommand() {
     return Commands.sequence(
         Commands.runOnce(
-            () -> runOuttakeMotor(Constants.CoralHandler.coralOuttakeSpeed), this),
+            () -> runOuttakeMotor(Constants.CoralHandler.CORAL_OUTTAKE_SPEED), this),
         Commands.waitUntil(
             () -> !hasCoral()),
         Commands.waitSeconds(.5),
@@ -323,7 +326,7 @@ public class CoralHandler extends AdvancedSubsystem {
         Commands.waitSeconds(1.0),
         Commands.runOnce(
             () -> {
-              if ((outtakeEncoder.getVelocity()) < Constants.CoralHandler.outtakeMotorMinVelocity) {
+              if ((outtakeEncoder.getVelocity()) < Constants.CoralHandler.OUTTAKE_MOTOR_MIN_VELOCITY) {
                 addFault("[System Check] Outtake Coral Motor too slow (forward direction)", false, true);
               }
             }, this),
@@ -332,7 +335,7 @@ public class CoralHandler extends AdvancedSubsystem {
         Commands.waitSeconds(1.0),
         Commands.runOnce(
             () -> {
-              if ((outtakeEncoder.getVelocity()) < -Constants.CoralHandler.outtakeMotorMinVelocity) {
+              if ((outtakeEncoder.getVelocity()) < -Constants.CoralHandler.OUTTAKE_MOTOR_MIN_VELOCITY) {
                 addFault("[System Check] Outtake Coral Motor too slow (backwards direction)", false, true);
               }
             }, this));

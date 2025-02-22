@@ -28,7 +28,7 @@
  * This example has the robot using a Command Based template to control the CANdle.
  * 
  * This example uses:
- * - A CANdle wired on the CAN Bus, with a 5m led strip attached for the extra animatinos.
+ * - A CANdle wired on the CAN Bus, with a 5m led strip attached for the extra animations.
  * 
  * Controls (with Xbox controller):
  * Right Bumper: Increment animation
@@ -52,7 +52,6 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -61,11 +60,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class LEDs extends AdvancedSubsystem {
-    private AddressableLED strip;
-    private AddressableLEDBuffer buffer;
+    private final AddressableLED strip;
+    private final AddressableLEDBuffer buffer;
     private final LEDPattern rainbow = LEDPattern.rainbow(255, 255)
         .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(1 / 120.0));
     private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen)
@@ -85,8 +83,8 @@ public class LEDs extends AdvancedSubsystem {
     }
 
     public LEDs() {
-        strip = new AddressableLED(Constants.LEDs.stripPwm);
-        buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
+        strip = new AddressableLED(Constants.LEDs.PWM_PIN);
+        buffer = new AddressableLEDBuffer(Constants.LEDs.LENGTH);
 
         strip.setLength(buffer.getLength());
         strip.setData(buffer);
@@ -120,8 +118,8 @@ public class LEDs extends AdvancedSubsystem {
     
     @Override
     public void periodic() {
-        // Has Coral, Green
-        if(RobotContainer.coralHandler.hasCoral()) changeAnimation(AnimationTypes.OrangeSolid);
+        // // Has Coral, Green
+        // if(RobotContainer.coralHandler.hasCoral()) changeAnimation(AnimationTypes.OrangeSolid);
         activePattern.applyTo(buffer);
         strip.setData(buffer);
     }

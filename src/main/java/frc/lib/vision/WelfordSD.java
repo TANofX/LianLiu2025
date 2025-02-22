@@ -6,7 +6,7 @@ package frc.lib.vision;
 public class WelfordSD {
     private double mean = 0;
     private double m2 = 0;
-    private int count = 0;
+    private long count = 0;
     private boolean changed = false;
     private double previous = 0;
 
@@ -37,7 +37,7 @@ public class WelfordSD {
      * Get the count since the last reset.
      * @return The count
      */
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 

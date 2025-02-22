@@ -29,11 +29,17 @@ public class SubsystemFault {
       return true;
     }
 
-    if (other instanceof SubsystemFault) {
-      SubsystemFault o = (SubsystemFault) other;
+    if (other instanceof SubsystemFault o) {
 
       return description.equals(o.description) && isWarning == o.isWarning;
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = description.hashCode();
+    result = 31 * result + (isWarning ? 1 : 0);
+    return result;
   }
 }

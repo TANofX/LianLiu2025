@@ -37,9 +37,9 @@ public class AutoAiming extends SubsystemBase {
     //determines which reef is ours
     List<Pose2d> coordinates;
     if (alliance == Alliance.Red) {
-        coordinates = Constants.CoralPlacement.cordinatesCoralRed;
+        coordinates = Constants.CoralPlacement.coordinatesCoralRed;
     } else {
-        coordinates = Constants.CoralPlacement.cordinatesCoralBlue;
+        coordinates = Constants.CoralPlacement.coordinatesCoralBlue;
     }
     return robotPose.nearest(coordinates);
   }

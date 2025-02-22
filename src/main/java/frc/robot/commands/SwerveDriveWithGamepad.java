@@ -19,9 +19,9 @@ public class SwerveDriveWithGamepad extends Command {
   private static double maxSpeedForChild = 1;
 
   public SwerveDriveWithGamepad(boolean aimAtGamePiece) {
-    this.xVelLimiter = new SlewRateLimiter(Constants.Swerve.maxAccelTele);
-    this.yVelLimiter = new SlewRateLimiter(Constants.Swerve.maxAccelTele);
-    this.angularVelLimiter = new SlewRateLimiter(Constants.Swerve.maxAngularAccelTele);
+    this.xVelLimiter = new SlewRateLimiter(Constants.Swerve.TELEOP_MAX_ACCELERATION);
+    this.yVelLimiter = new SlewRateLimiter(Constants.Swerve.TELEOP_MAX_ACCELERATION);
+    this.angularVelLimiter = new SlewRateLimiter(Constants.Swerve.TELEOP_MAX_ANGULAR_ACCELERATION);
     addRequirements(RobotContainer.swerve);
   }
 
@@ -60,16 +60,20 @@ public class SwerveDriveWithGamepad extends Command {
       rot = -RobotContainer.driver.getRightX() * maxSpeedForChild;
       rot = Math.copySign(rot * rot, rot);
 
-    double targetAngularVel = rot * Constants.Swerve.maxAngularVelTele;
+    double targetAngularVel = rot * Constants.Swerve.TELEOP_MAX_ANGULAR_VELOCITY;
     boolean stop = x == 0 && y == 0 && rot == 0;
 
     // Only take over game piece aim if driver is not rotating and intake is
     // spinning (we don't have
     // a game piece in intake)
 
-    double xVel = this.xVelLimiter.calculate(x * Constants.Swerve.maxVelTele);
-    double yVel = this.yVelLimiter.calculate(y * Constants.Swerve.maxVelTele);
+    double xVel = this.xVelLimiter.calculate(x * Constants.Swerve.TELEOP_MAX_VELOCITY);
+    double yVel = this.yVelLimiter.calculate(y * Constants.Swerve.TELEOP_MAX_VELOCITY);
     double angularVel = this.angularVelLimiter.calculate(targetAngularVel);
+
+    SmartDashboard.putNumber("Joystick/X", xVel);
+    SmartDashboard.putNumber("Joystick/Y", yVel);
+    SmartDashboard.putNumber("Joystick/Ang", angularVel);
 
     if (stop)
       RobotContainer.swerve.driveFieldRelative(new ChassisSpeeds(xVel, yVel, angularVel));

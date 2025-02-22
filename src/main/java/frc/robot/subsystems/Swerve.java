@@ -10,32 +10,27 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.numbers.N1;
-//import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearAcceleration;
-//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.lib.subsystem.AdvancedSubsystem;
-//import frc.lib.subsystem.SubsystemFault;
-import frc.lib.swerve.Mk4SwerveModulePro;
+import frc.lib.swerve.Mk4SwerveModuleProSparkFlex;
 import frc.lib.util.Vector3;
-//import frc.lib.vision.limelight.LimelightHelpers;
 import frc.robot.Constants;
 import frc.robot.util.RobotPoseLookup;
 
-public class Swerve extends AdvancedSubsystem {
+public final class Swerve extends AdvancedSubsystem {
   protected final SwerveDrivePoseEstimator odometry;
   public final SwerveDriveKinematics kinematics;
 
-  protected final Mk4SwerveModulePro[] modules;
+  protected final Mk4SwerveModuleProSparkFlex[] modules;
 
   protected final Pigeon2 imu;
   protected final Pigeon2SimState imuSim;
@@ -53,24 +48,25 @@ public class Swerve extends AdvancedSubsystem {
 
   protected final Field2d field2d = new Field2d();
 
-  private StructArrayPublisher<SwerveModuleState> ModuleStatesPublisher = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("/Swerve/States", SwerveModuleState.struct).publish();
-  private StructArrayPublisher<SwerveModuleState> targetModuleStatesPublisher = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
-    private StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
-    .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
-    public Swerve() {
-    poseLookup = new RobotPoseLookup<Pose2d>();
+  private final StructArrayPublisher<SwerveModuleState> ModuleStatesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/Swerve/States", SwerveModuleState.struct).publish();
+  private final StructArrayPublisher<SwerveModuleState> targetModuleStatesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
+  private final StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
+      .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
 
-    imu = new Pigeon2(Constants.Swerve.imuCanID, Constants.canivoreBusName);
+  public Swerve() {
+    poseLookup = new RobotPoseLookup<>();
+
+    imu = new Pigeon2(Constants.Swerve.IMU_ID, Constants.CARNIVORE_BUS_NAME);
     Pigeon2Configuration imuConfig = new Pigeon2Configuration();
     imu.getConfigurator().apply(imuConfig);
     zeroIMU();
 
     imuSim = imu.getSimState();
 
-    teleopVelConstraint = Constants.Swerve.maxVelTele;
-    teleopAngularVelConstraint = Constants.Swerve.maxAngularVelTele;
+    teleopVelConstraint = Constants.Swerve.TELEOP_MAX_VELOCITY;
+    teleopAngularVelConstraint = Constants.Swerve.TELEOP_MAX_ANGULAR_VELOCITY;
 
     imuRollSignal = imu.getRoll();
     imuPitchSignal = imu.getPitch();
@@ -79,31 +75,31 @@ public class Swerve extends AdvancedSubsystem {
     // imuAccelYSignal = imu.getAccelerationY();
     imuAccelZSignal = imu.getAccelerationZ();
 
-    modules = new Mk4SwerveModulePro[] {
-        new Mk4SwerveModulePro(
-            Mk4SwerveModulePro.ModuleCode.FL,
-            Constants.Swerve.FrontLeftModule.driveMotorCanID,
-            Constants.Swerve.FrontLeftModule.rotationMotorCanID,
-            Constants.Swerve.FrontLeftModule.rotationEncoderCanID,
-            Constants.canivoreBusName), // FL
-        new Mk4SwerveModulePro(
-            Mk4SwerveModulePro.ModuleCode.FR,
-            Constants.Swerve.FrontRightModule.driveMotorCanID,
-            Constants.Swerve.FrontRightModule.rotationMotorCanID,
-            Constants.Swerve.FrontRightModule.rotationEncoderCanID,
-            Constants.canivoreBusName), // FR
-        new Mk4SwerveModulePro(
-            Mk4SwerveModulePro.ModuleCode.BL,
-            Constants.Swerve.BackLeftModule.driveMotorCanID,
-            Constants.Swerve.BackLeftModule.rotationMotorCanID,
-            Constants.Swerve.BackLeftModule.rotationEncoderCanID,
-            Constants.canivoreBusName), // BL
-        new Mk4SwerveModulePro(
-            Mk4SwerveModulePro.ModuleCode.BR,
-            Constants.Swerve.BackRightModule.driveMotorCanID,
-            Constants.Swerve.BackRightModule.rotationMotorCanID,
-            Constants.Swerve.BackRightModule.rotationEncoderCanID,
-            Constants.canivoreBusName) // BR
+    modules = new Mk4SwerveModuleProSparkFlex[] {
+        new Mk4SwerveModuleProSparkFlex(
+            Mk4SwerveModuleProSparkFlex.ModuleCode.FL,
+            Constants.Swerve.FrontLeftModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.FrontLeftModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.FrontLeftModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME), // FL
+        new Mk4SwerveModuleProSparkFlex(
+            Mk4SwerveModuleProSparkFlex.ModuleCode.FR,
+            Constants.Swerve.FrontRightModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.FrontRightModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.FrontRightModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME), // FR
+        new Mk4SwerveModuleProSparkFlex(
+            Mk4SwerveModuleProSparkFlex.ModuleCode.BL,
+            Constants.Swerve.BackLeftModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.BackLeftModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.BackLeftModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME), // BL
+        new Mk4SwerveModuleProSparkFlex(
+            Mk4SwerveModuleProSparkFlex.ModuleCode.BR,
+            Constants.Swerve.BackRightModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.BackRightModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.BackRightModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME) // BR
     };
 
     kinematics = new SwerveDriveKinematics(
@@ -126,33 +122,40 @@ public class Swerve extends AdvancedSubsystem {
     // SmartDashboard.putData("Tune Steer Motor", SteerTuner);
     SmartDashboard.putData("Field", field2d);
     SmartDashboard.putData("Trim Modules", zeroModulesCommand());
-    
+
     // Configure auto builder
     // AutoBuilder.configureHolonomic(
-    //         this::getPose, // Robot pose supplier
-    //         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-    //         this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //         this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-    //                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    //                 new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-    //                 4.5, // Max module speed, in m/s
-    //                 0.43, // Drive base radius in meters. Distance from robot center to furthest module.
-    //                 new ReplanningConfig() // Default path replanning config. See the API for the options here
-    //         ),
-    //         () -> {
-    //             // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //             // This will flip the path being followed to the red side of the field.
-    //             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // this::getPose, // Robot pose supplier
+    // this::resetOdometry, // Method to reset odometry (will be called if your auto
+    // has a starting pose)
+    // this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    // this::driveRobotRelative, // Method that will drive the robot given ROBOT
+    // RELATIVE ChassisSpeeds
+    // new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
+    // likely live in your Constants class
+    // new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    // new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+    // 4.5, // Max module speed, in m/s
+    // 0.43, // Drive base radius in meters. Distance from robot center to furthest
+    // module.
+    // new ReplanningConfig() // Default path replanning config. See the API for the
+    // options here
+    // ),
+    // () -> {
+    // // Boolean supplier that controls when the path will be mirrored for the red
+    // alliance
+    // // This will flip the path being followed to the red side of the field.
+    // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //             var alliance = DriverStation.getAlliance();
-    //             if (alliance.isPresent()) {
-    //                 return alliance.get() == DriverStation.Alliance.Red;
-    //             }
-    //             return false;
-    //         },
-    //         (Subsystem) this // Reference to this subsystem to set requirements
+    // var alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent()) {
+    // return alliance.get() == DriverStation.Alliance.Red;
+    // }
+    // return false;
+    // },
+    // (Subsystem) this // Reference to this subsystem to set requirements
     // );
+    SmartDashboard.putData("Check Swerve", systemCheckCommand());
   }
 
   @Override
@@ -165,17 +168,15 @@ public class Swerve extends AdvancedSubsystem {
     SmartDashboard.putNumber("Swerve/OdomRuntime", correctTimeMS);
     field2d.setRobotPose(currentPose);
     poseLookup.addPose(currentPose);
-    SwerveModuleState[] moduleStates = 
-      new SwerveModuleState[] {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[] {
         modules[0].getState(),
         modules[1].getState(),
         modules[2].getState(),
         modules[3].getState()
     };
     ModuleStatesPublisher.set(moduleStates);
-     
-    SwerveModuleState[] targetModuleStates = 
-      new SwerveModuleState[] {
+
+    SwerveModuleState[] targetModuleStates = new SwerveModuleState[] {
         modules[0].getTargetState(),
         modules[1].getTargetState(),
         modules[2].getTargetState(),
@@ -186,7 +187,8 @@ public class Swerve extends AdvancedSubsystem {
 
     gyroPublisher.set(getYaw());
     ChassisSpeeds Chassis = getCurrentSpeeds();
-    SmartDashboard.putNumberArray("Swerve/RobotVelocity", new double[] {Chassis.vxMetersPerSecond, Chassis.vyMetersPerSecond, Chassis.omegaRadiansPerSecond});
+    SmartDashboard.putNumberArray("Swerve/RobotVelocity",
+        new double[] { Chassis.vxMetersPerSecond, Chassis.vyMetersPerSecond, Chassis.omegaRadiansPerSecond });
     SmartDashboard.putNumberArray(
         "Swerve/Odometry",
         new double[] {
@@ -196,13 +198,13 @@ public class Swerve extends AdvancedSubsystem {
     SmartDashboard.putNumber("Swerve/FLRelativeAngle", modules[0].getRelativeRotationDegrees());
     // SmartDashboard.putNumber("OdometryX", currentPose.getX());
     // SmartDashboard.putNumber("OdometryY", currentPose.getY());
-    // SmartDashboard.putNumber("OdometryR", currentPose.getRotation().getDegrees());
+    // SmartDashboard.putNumber("OdometryR",
+    // currentPose.getRotation().getDegrees());
 
     SmartDashboard.putNumber("FL", modules[0].getDriveVelocityMetersPerSecond());
     SmartDashboard.putNumber("FR", modules[1].getDriveVelocityMetersPerSecond());
     SmartDashboard.putNumber("BL", modules[2].getDriveVelocityMetersPerSecond());
     SmartDashboard.putNumber("BR", modules[3].getDriveVelocityMetersPerSecond());
-  
 
     SmartDashboard.putNumberArray(
         "Swerve/ModuleStates",
@@ -229,7 +231,6 @@ public class Swerve extends AdvancedSubsystem {
             modules[3].getTargetState().angle.getDegrees(),
             modules[3].getTargetState().speedMetersPerSecond,
         });
-      
 
     // Rotation3d orientation = getOrientation();
     // SmartDashboard.putNumberArray(
@@ -299,7 +300,7 @@ public class Swerve extends AdvancedSubsystem {
   public void driveRobotRelative(ChassisSpeeds speeds) {
     SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(speeds);
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Mk4SwerveModulePro.DRIVE_MAX_VEL);
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Mk4SwerveModuleProSparkFlex.DRIVE_MAX_VEL);
 
     setModuleStates(targetStates);
   }
@@ -435,7 +436,7 @@ public class Swerve extends AdvancedSubsystem {
   }
 
   public void lockModules() {
-    for (Mk4SwerveModulePro module : modules) {
+    for (Mk4SwerveModuleProSparkFlex module : modules) {
       module.lockModule();
     }
   }
@@ -448,7 +449,7 @@ public class Swerve extends AdvancedSubsystem {
   public Command zeroModulesCommand() {
     return Commands.runOnce(
         () -> {
-          for (Mk4SwerveModulePro module : modules) {
+          for (Mk4SwerveModuleProSparkFlex module : modules) {
             module.updateRotationOffset();
           }
         })
@@ -459,213 +460,6 @@ public class Swerve extends AdvancedSubsystem {
     return kinematics.toChassisSpeeds(getStates());
   }
 
-  /*
-   * public Command autoBalance(double maxVel) {
-   * PIDController controller =
-   * new PIDController(
-   * Constants.AutoBalance.BALANCE_CONSTANTS.kP,
-   * Constants.AutoBalance.BALANCE_CONSTANTS.kI,
-   * Constants.AutoBalance.BALANCE_CONSTANTS.kD);
-   * controller.setTolerance(3);
-   * 
-   * Timer lockTimer = new Timer();
-   * 
-   * return Commands.sequence(
-   * Commands.runOnce(
-   * () -> {
-   * controller.reset();
-   * lockTimer.stop();
-   * lockTimer.reset();
-   * },
-   * this),
-   * Commands.run(
-   * () -> {
-   * Pose3d robotOrientation =
-   * new Pose3d(
-   * new Translation3d(),
-   * new Rotation3d(
-   * Units.degreesToRadians(getRoll()),
-   * Units.degreesToRadians(getPitch()),
-   * getPose().getRotation().getRadians()));
-   * 
-   * Pose3d chargeStationOrientation =
-   * robotOrientation.transformBy(
-   * new Transform3d(
-   * new Translation3d(),
-   * new Rotation3d(0, 0, -getPose().getRotation().getRadians())));
-   * 
-   * double chargeStationPitch =
-   * Units.radiansToDegrees(chargeStationOrientation.getRotation().getY());
-   * 
-   * double rollVel = imu.getAngularVelocityXDevice().getValue();
-   * double pitchVel = imu.getAngularVelocityYDevice().getValue();
-   * double angularVel = Math.sqrt(Math.pow(rollVel, 2) + Math.pow(pitchVel, 2));
-   * 
-   * if (Math.abs(chargeStationPitch) < 3 || angularVel > 10) {
-   * lockModules();
-   * lockTimer.start();
-   * } else {
-   * lockTimer.stop();
-   * lockTimer.reset();
-   * double x = controller.calculate(chargeStationPitch, 0);
-   * if (Math.abs(x) > maxVel) {
-   * x = Math.copySign(maxVel, x);
-   * }
-   * driveFieldRelative(new ChassisSpeeds(x, 0, 0));
-   * }
-   * },
-   * this)
-   * .until(() -> lockTimer.hasElapsed(0.25)),
-   * Commands.run(this::lockModules, this));
-   * }
-   * 
-   * public void correctOdom(boolean force, boolean correctYaw) {
-   * double time = Timer.getFPGATimestamp();
-   * 
-   * Pose2d leftBotPose = null;
-   * double leftPoseTimestamp =
-   * time
-   * - ((LimelightHelpers.getLatency_Capture("limelight-left")
-   * + LimelightHelpers.getLatency_Pipeline("limelight-left"))
-   * / 1000.0);
-   * Pose2d rightBotPose = null;
-   * double rightPoseTimestamp =
-   * time
-   * - ((LimelightHelpers.getLatency_Capture("limelight-right")
-   * + LimelightHelpers.getLatency_Pipeline("limelight-right"))
-   * / 1000.0);
-   * 
-   * Pose2d robotAtLeftCapture = poseLookup.lookup(leftPoseTimestamp);
-   * Pose2d robotAtRightCapture = poseLookup.lookup(rightPoseTimestamp);
-   * 
-   * if (LimelightHelpers.getTV("limelight-left")) {
-   * Pose2d botpose =
-   * (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
-   * ? LimelightHelpers.getBotPose2d_wpiBlue("limelight-left")
-   * : LimelightHelpers.getBotPose2d_wpiRed("limelight-left"));
-   * 
-   * if (botpose.getX() > 0.1
-   * && botpose.getX() < Constants.fieldSize.getX() - 0.1
-   * && botpose.getY() > 0.1
-   * && botpose.getY() < Constants.fieldSize.getY() - 1) {
-   * leftBotPose = botpose;
-   * }
-   * }
-   * 
-   * if (LimelightHelpers.getTV("limelight-right")) {
-   * Pose2d botpose =
-   * (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
-   * ? LimelightHelpers.getBotPose2d_wpiBlue("limelight-right")
-   * : LimelightHelpers.getBotPose2d_wpiRed("limelight-right"));
-   * 
-   * if (botpose.getX() > 0.1
-   * && botpose.getX() < Constants.fieldSize.getX() - 0.1
-   * && botpose.getY() > 0.1
-   * && botpose.getY() < Constants.fieldSize.getY() - 1) {
-   * rightBotPose = botpose;
-   * }
-   * }
-   * 
-   * Pose2d correctionPose = null;
-   * Pose2d robotAtCorrectionPose = null;
-   * double correctionTimestamp = 0;
-   * Matrix<N3, N1> correctionDevs = null;
-   * 
-   * if (leftBotPose != null && rightBotPose != null) {
-   * // Left and right have poses
-   * Pose2d leftToRightDiff = leftBotPose.relativeTo(rightBotPose);
-   * if (leftToRightDiff.getTranslation().getNorm() < 0.3
-   * && (!correctYaw || Math.abs(leftToRightDiff.getRotation().getDegrees()) <
-   * 15)) {
-   * // They agree
-   * correctionPose = leftBotPose.interpolate(rightBotPose, 0.5);
-   * robotAtCorrectionPose = robotAtLeftCapture.interpolate(robotAtRightCapture,
-   * 0.5);
-   * correctionTimestamp = (leftPoseTimestamp + rightPoseTimestamp) / 2.0;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevsTrust;
-   * } else {
-   * // They don't agree
-   * Pose2d leftDiff = leftBotPose.relativeTo(robotAtLeftCapture);
-   * Pose2d rightDiff = rightBotPose.relativeTo(robotAtRightCapture);
-   * double leftDist = leftDiff.getTranslation().getNorm();
-   * double rightDist = rightDiff.getTranslation().getNorm();
-   * 
-   * if ((leftDist < 2.0 || force) && leftDist <= rightDist) {
-   * // Left closest
-   * if (!correctYaw || force || Math.abs(leftDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = leftBotPose;
-   * robotAtCorrectionPose = robotAtLeftCapture;
-   * correctionTimestamp = leftPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * } else if ((rightDist < 2.0 || force) && rightDist <= leftDist) {
-   * // Right closest
-   * if (!correctYaw || force || Math.abs(rightDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = rightBotPose;
-   * robotAtCorrectionPose = robotAtRightCapture;
-   * correctionTimestamp = rightPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * }
-   * }
-   * } else if (leftBotPose != null) {
-   * Pose2d leftDiff = leftBotPose.relativeTo(robotAtLeftCapture);
-   * double leftDist = leftDiff.getTranslation().getNorm();
-   * 
-   * if (leftDist < 2.0 || force) {
-   * if (!correctYaw || force || Math.abs(leftDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = leftBotPose;
-   * robotAtCorrectionPose = robotAtLeftCapture;
-   * correctionTimestamp = leftPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * }
-   * } else if (rightBotPose != null) {
-   * Pose2d rightDiff = rightBotPose.relativeTo(robotAtRightCapture);
-   * double rightDist = rightDiff.getTranslation().getNorm();
-   * 
-   * if (rightDist < 2.0 || force) {
-   * if (!correctYaw || force || Math.abs(rightDiff.getRotation().getDegrees()) <
-   * 15) {
-   * correctionPose = rightBotPose;
-   * robotAtCorrectionPose = robotAtRightCapture;
-   * correctionTimestamp = rightPoseTimestamp;
-   * correctionDevs = Constants.Swerve.Odometry.visionStdDevs;
-   * }
-   * }
-   * }
-   * 
-   * if (correctionPose != null) {
-   * odometry.addVisionMeasurement(
-   * (correctYaw)
-   * ? correctionPose
-   * : new Pose2d(correctionPose.getTranslation(),
-   * robotAtCorrectionPose.getRotation()),
-   * correctionTimestamp,
-   * correctionDevs);
-   * }
-   * 
-   * if (leftBotPose != null) {
-   * SmartDashboard.putNumberArray(
-   * "Swerve/LLPoseLeft",
-   * new double[] {
-   * leftBotPose.getX(), leftBotPose.getY(),
-   * leftBotPose.getRotation().getDegrees()
-   * });
-   * }
-   * if (rightBotPose != null) {
-   * SmartDashboard.putNumberArray(
-   * "Swerve/LLPoseRight",
-   * new double[] {
-   * rightBotPose.getX(), rightBotPose.getY(),
-   * rightBotPose.getRotation().getDegrees()
-   * });
-   * }
-   * }
-   */
   @SuppressWarnings("removal")
   @Override
   protected Command systemCheckCommand() {
@@ -707,16 +501,13 @@ public class Swerve extends AdvancedSubsystem {
             },
             this))
         .until(
-            () -> getFaults().size() > 0
-                || modules[0].getFaults().size() > 0
-                || modules[1].getFaults().size() > 0
-                || modules[2].getFaults().size() > 0
-                || modules[3].getFaults().size() > 0)
+            () -> !getFaults().isEmpty()
+                || !modules[0].getFaults().isEmpty()
+                || !modules[1].getFaults().isEmpty()
+                || !modules[2].getFaults().isEmpty()
+                || !modules[3].getFaults().isEmpty())
         .andThen(Commands.runOnce(() -> driveFieldRelative(new ChassisSpeeds()), this));
   }
-
-  
-    
 
   /*
    * @Override

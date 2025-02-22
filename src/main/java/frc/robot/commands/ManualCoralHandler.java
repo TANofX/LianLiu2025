@@ -20,7 +20,7 @@ public class ManualCoralHandler extends Command {
     vertController = vertJoystickSupplier;
     hortController = hortJoystickSupplier;
 
-    addRequirements(RobotContainer.coralHandler);
+    // addRequirements(RobotContainer.coralHandler);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,8 +31,8 @@ public class ManualCoralHandler extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double verticalTargetAngleInDegrees = Constants.CoralHandler.horizontalAngleChangeDegreesPerSecond * 1;
-    double horizontalTargetAngleInDegrees = Constants.CoralHandler.verticalAngleChangeDegreesPerSecond * 1;
+    double verticalTargetAngleInDegrees = Constants.CoralHandler.HORIZONTAL_ANGLE_CHANGE_DEGREES_PER_SECOND * 1;
+    double horizontalTargetAngleInDegrees = Constants.CoralHandler.VERTICAL_ANGLE_CHANGE_DEGREES_PER_SECOND * 1;
 
     RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + (verticalTargetAngleInDegrees * vertController.getAsDouble())));
     RobotContainer.coralHandler.setHorizontalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getHorizontalAngle().getDegrees() + (horizontalTargetAngleInDegrees * hortController.getAsDouble())));

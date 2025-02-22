@@ -1,5 +1,7 @@
 package frc.lib.input.controllers.rumble;
 
+import java.util.Objects;
+
 public class RumblePulse extends RumbleAnimation {
   private final double pulsePeriod;
   private final double intensity;
@@ -29,5 +31,10 @@ public class RumblePulse extends RumbleAnimation {
     RumblePulse that = (RumblePulse) o;
     return Double.compare(that.pulsePeriod, pulsePeriod) == 0
         && Double.compare(that.intensity, intensity) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(pulsePeriod, intensity);
   }
 }
