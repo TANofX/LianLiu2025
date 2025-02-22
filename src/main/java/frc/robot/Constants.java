@@ -326,7 +326,13 @@ public final class Constants {
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
     public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(0);
-
+    @CanId(CanId.Type.MOTOR) public static final int MOTOR_CANID = 41;
+    @CanId(CanId.Type.PCM_CONTROLLER) public static final int PCMID = 5;
+    public static final int FORWARDSOLENOID = 14;
+    public static final int REVERSESOLENOID = 7;
+   
+    public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
+    public static final int ENCODERID = 42;
   }
 
   public static final class AlgaeHandler {

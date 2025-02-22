@@ -5,8 +5,13 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.input.controllers.XboxControllerWrapper;import frc.robot.commands.Notifications;
-import frc.robot.subsystems.*;
+import frc.lib.input.controllers.XboxControllerWrapper;
+import frc.robot.commands.Notifications;
+import frc.robot.subsystems.AlgaeHandler;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
 
 
 
@@ -46,13 +51,47 @@ public class RobotContainer {
    
    
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
-    SmartDashboard.putData("Climb Climber", climber.climbCommand());
+    SmartDashboard.putData("Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-150)));
     SmartDashboard.putData("Run Claw Motor", climber.runClimberMotorCommand());
-    SmartDashboard.putData("Reverse Claw Motor", climber.runClimberMotorCommandOpposite());
+    SmartDashboard.putData("Reverse Claw Motor", climber.reverseClimbMotorCommand());
     SmartDashboard.putData("Climber System Check", climber.getSystemCheckCommand());
     SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand(false));
     SmartDashboard.putData("Reverse Calibrate Command", climber.getCalibrateCommand(true));
-    SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90(Rotation2d.fromDegrees(-90)));
+    SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
+    // Register Named Commands for pathplanner
+    //ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
+    // NamedCommands.registerCommand("ElevatorL4", elevator.getElevatorHeightCommand(0));
+    // NamedCommands.registerCommand("ElevatorL1", elevator.getElevatorHeightCommand(0.00000001));
+    // NamedCommands.registerCommand("ElevatorIntake", elevator.getElevatorHeightCommand(0.00001));
+    //NamedCommands.registerCommand("Collect", new ______());
+  
+    
+    // //Do I need this?
+    // elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
+    // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
+    // SmartDashboard.putData(intake.getIntakePivotTuner());
+    // SmartDashboard.putData(intake.getIntakeTuner());
+    //SmartDashboard.putData("Tune Elevation", shooterWrist.getElevationTunerCommand());
+    //SmartDashboard.putData("Tune Shooter", shooter.getShooterTunerCommand());
+    //SmartDashboard.putData("Tune Shooter Intake", shooter.getIntakeTunerCommand());
+    //SmartDashboard.putData("Tune Intake", intake.getIntakeTuner());
+    // SmartDashboard.putData(Commands.runOnce(() -> {
+    // intake.updateRotationOffset();}, intake));
+
+    //SmartDashboard.putData("Tune Elevator Motor", elevator.getHeightTunerCommand());
+    //SmartDashboard.putData("Elevator Extents", new FindMotorExtents())
+    // SmartDashboard.putData("Robot At Center Blue Ring", Commands.runOnce(() -> {
+    //   swerve.resetOdometry(new Pose2d(new Translation2d(2.9, 5.55), Rotation2d.fromDegrees(0)));
+    // }, swerve));
+    // SmartDashboard.putData("Robot At Red Speaker", new AtRedSubWoofer());
+
+    // Register Named Commands for pathplanner
+    //NamedCommands.registerCommand("ReadyToShootInSpeaker", new ShootInSpeaker());
+    //NamedCommands.registerCommand("SpeakerShot", new Shoot(false));
+    //NamedCommands.registerCommand("New AutoSpeakerShot", newAutoShootInSpeaker());
+    // NamedCommands.registerCommand("", );
+    
+    //PPHolonomicDriveController.setRotationTargetOverride(this::overrideAngle);
   }
   
 
@@ -66,9 +105,10 @@ public class RobotContainer {
     // coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
     // coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
     // coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
-    coDriver.A().whileTrue(climber.runClimberMotorCommand());
-    coDriver.B().onTrue(climber.getOpenCommand());
-    coDriver.X().onTrue(climber.getStowCommand());
+   driver.B().onTrue(climber.getPrepareCommand());
+   driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-150)));
+   
+   
     coDriver.START();
     // coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
 
