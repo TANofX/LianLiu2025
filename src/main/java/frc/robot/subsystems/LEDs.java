@@ -60,6 +60,7 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -76,7 +77,8 @@ public class LEDs extends AdvancedSubsystem {
     private AlgaeHandler algaeHandler;
     private CoralHandler coralHandler;
     private AddressableLED strip;
-    private AddressableLEDBuffer buffer;
+    private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
+    private final AddressableLEDBufferView coralWriterBuffer = buffer.createView(50,100);
     private static final Distance LED_SPACING = Meters.of(1.0/60);
     private static final LinearVelocity LED_VELOCITY = InchesPerSecond.of(2);
     // Set patterns for use
@@ -100,6 +102,8 @@ public class LEDs extends AdvancedSubsystem {
     private final LEDPattern greenOWave = LEDPattern.solid(Color.kGreen).scrollAtAbsoluteSpeed(LED_VELOCITY.times(-1), LED_SPACING);
 
     private final LEDPattern whiteOWave = LEDPattern.solid(Color.kWhite).scrollAtAbsoluteSpeed(LED_VELOCITY.times(-1), LED_SPACING);
+
+
     /**
      * Constructs an LEDs subsystem and initializes the LED strip and buffer.5
      */
@@ -107,7 +111,6 @@ public class LEDs extends AdvancedSubsystem {
         this.algaeHandler = algaeHandler;
         this.coralHandler = coralHandler;
         strip = new AddressableLED(Constants.LEDs.stripPwm);
-        buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
 
         strip.setLength(buffer.getLength());
         strip.setData(buffer);
@@ -135,7 +138,7 @@ public class LEDs extends AdvancedSubsystem {
 
         // Signals for coral
         if (coralHandler.hasCoral()) {
-            whitePattern.applyTo(buffer.createView(50, 100));
+            whitePattern.applyTo(coralWriterBuffer);
             System.out.println("LED acknowledge collected Coral");
         } else if (coralHandler.getIntaking() == 1) {
             whiteWave.applyTo(buffer.createView(50, 100));
