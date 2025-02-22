@@ -71,6 +71,7 @@ public final class Constants {
   }
 
   public static final class Elevator {
+    
     @CanId(CanId.Type.MOTOR)
     public static final int MOTOR_ID = 30;
 

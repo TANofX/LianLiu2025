@@ -4,14 +4,19 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.input.controllers.XboxControllerWrapper;
+import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.Notifications;
 import frc.robot.subsystems.AlgaeHandler;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.CoralHandler;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.util.RobotMechanism;
 
 public class RobotContainer {
   // Controllers
@@ -22,15 +27,13 @@ public class RobotContainer {
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
   public static final LEDs LEDs = new LEDs();
-  // public static final Elevator elevator = new
-  // Elevator(Constants.Elevator.motorCanID);
-  // public static final RobotMechanism robotMechanism = new RobotMechanism();
-  // public static final CoralHandler coralHandler = new
-  // CoralHandler(Constants.CoralHandler.outtakeMotorID,
-  // Constants.CoralHandler.horizontalMotorID,
-  // Constants.CoralHandler.verticalMotorID,
-  // Constants.CoralHandler.horizontalEncoderID,
-  // Constants.CoralHandler.verticalEncoderID);
+  public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
+  public static final RobotMechanism robotMechanism = new RobotMechanism();
+  public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.OUTTAKE_MOTOR_ID,
+  Constants.CoralHandler.HORIZONTAL_MOTOR_ID,
+  Constants.CoralHandler.VERTICAL_MOTOR_ID,
+  Constants.CoralHandler.HORIZONTAL_ENCODER_ID,
+  Constants.CoralHandler.VERTICAL_ENCODER_ID);
   public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
       Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
   public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.RIGHT_ALGAE_MOTOR_ID,
@@ -40,17 +43,17 @@ public class RobotContainer {
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
 
   public RobotContainer() {
-    // coralHandler.registerSystemCheckWithSmartDashboard();
-    // SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
+    coralHandler.registerSystemCheckWithSmartDashboard();
+    SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
 
     SmartDashboard.putData(swerve.zeroModulesCommand());
     configureButtonBindings();
     LEDs.setDefaultCommand(new Notifications());
-    // elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
-    // SmartDashboard.putData("Left Algae Handler Test",
-    // leftAlgaeHandler.getSystemCheckCommand());
-    // SmartDashboard.putData("Right Algae Handler Test",
-    // rightAlgaeHandler.getSystemCheckCommand());
+    elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
+    SmartDashboard.putData("Left Algae Handler Test",
+    leftAlgaeHandler.getSystemCheckCommand());
+    SmartDashboard.putData("Right Algae Handler Test",
+    rightAlgaeHandler.getSystemCheckCommand());
 
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
     SmartDashboard.putData("Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-140)));
@@ -110,10 +113,10 @@ public class RobotContainer {
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    // coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    // coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    // coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
-    // coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
+    coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
+    coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
+    coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
     driver.B().onTrue(climber.getPrepareCommand());
     driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-150)));
 

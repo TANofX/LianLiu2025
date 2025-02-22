@@ -1,43 +1,47 @@
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// package frc.robot.commands;
+package frc.robot.commands;
 
-// /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-// public class CoralHandlerAngleEstimator extends Command {
-//   /** Creates a new CoralHandlerEstimator. */
-//   public CoralHandlerAngleEstimator() {
-//     addRequirements(RobotContainer.coralHandler, RobotContainer.elevator);
-//     // Use addRequirements() here to declare subsystem dependencies.
-//   }
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
-//   // Called when the command is initially scheduled.
-//   @Override
-//   public void initialize() {}
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class CoralHandlerAngleEstimator extends Command {
+  /** Creates a new CoralHandlerEstimator. */
+  public CoralHandlerAngleEstimator() {
+    addRequirements(RobotContainer.coralHandler, RobotContainer.elevator);
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
 
-//   // Called every time the scheduler runs while the command is scheduled.
-//   @Override
-//   public void execute() {
-//     // TODO uncomment line below after merge with AutoAiming and fix with needed method
-//     if (((RobotContainer.elevator.getElevation() - Constants.Elevator.level1Height) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-//       //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-//     }
-//     else if (((RobotContainer.elevator.getElevation() - Constants.Elevator.level1Height) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-//       //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-//     }
-//     else {
-//       RobotContainer.coralHandler.setIntakeAngle();
-//     }
-//   }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
 
-//   // Called once the command ends or is interrupted.
-//   @Override
-//   public void end(boolean interrupted) {}
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    // TODO uncomment line below after merge with AutoAiming and fix with needed method
+    if (((RobotContainer.elevator.getElevation() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    }
+    else if (((RobotContainer.elevator.getElevation() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    }
+    else {
+      RobotContainer.coralHandler.setIntakeAngle();
+    }
+  }
 
-//   // Returns true when the command should end.
-//   @Override
-//   public boolean isFinished() {
-//     return false;
-//   }
-// }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}
