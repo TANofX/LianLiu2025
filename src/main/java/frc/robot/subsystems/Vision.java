@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -21,7 +20,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.util.RobotPoseLookup;
 
-public class Vision extends AdvancedSubsystem {
+public final class Vision extends AdvancedSubsystem {
     private final ArrayList<Camera> cameras = new ArrayList<>();
     private final Field2d aprilField = new Field2d();
 
@@ -36,7 +35,7 @@ public class Vision extends AdvancedSubsystem {
     @Override
     public void periodic() {
         for (Camera cam : cameras) {
-            List<PhotonPipelineResult> results = cam.getCamera().getAllUnreadResults();
+            List<PhotonPipelineResult> results = cam.getResults();
             for(PhotonPipelineResult result : results) processResult(result, cam);
         }
     }
@@ -77,7 +76,7 @@ public class Vision extends AdvancedSubsystem {
     }
 
     public void addCamera(String cameraName, Transform3d pos) {
-        cameras.add(new Camera(new PhotonCamera(cameraName), pos));
+        cameras.add(new Camera(cameraName, pos));
     }
 
     @Override
