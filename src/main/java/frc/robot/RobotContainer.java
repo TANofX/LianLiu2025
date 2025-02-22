@@ -7,7 +7,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.input.controllers.XboxControllerWrapper;
+import frc.robot.commands.CoralHandlerAngleEstimator;
 import frc.robot.commands.ElevatorJoystickControl;
+import frc.robot.commands.ManualCoralHandler;
 import frc.robot.commands.Notifications;
 import frc.robot.subsystems.AlgaeHandler;
 import frc.robot.subsystems.Climber;
@@ -22,6 +24,8 @@ public class RobotContainer {
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
   public static final XboxControllerWrapper coDriver = new XboxControllerWrapper(1, 0.1);
+
+
 
   // Subsystems
   public static final Vision vision = new Vision();
@@ -104,10 +108,36 @@ public class RobotContainer {
     // newAutoShootInSpeaker());
     // NamedCommands.registerCommand("", );
 
-    // PPHolonomicDriveController.setRotationTargetOverride(this::overrideAngle);
   }
+    
+    //PPHolonomicDriveController.setRotationTargetOverride(this::overrideAngle);
+  
 
   private void configureButtonBindings() {
+    driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
+
+    coDriver.START();
+    coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
+    // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY, coDriver::getLeftX));
+    coralHandler.setDefaultCommand(new ManualCoralHandler(() -> {
+      if (coDriver.DUp().getAsBoolean()) {
+        return 0.5;
+      }
+      if (coDriver.DDown().getAsBoolean()){
+        return -0.5;
+      }
+      return 0.0;
+    }, () -> {
+      if (coDriver.DRight().getAsBoolean()) {
+        return -0.5;
+      }
+      if (coDriver.DLeft().getAsBoolean()) {
+        return 0.5;
+      }
+      return 0.0;
+    }));
+
+    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
 
     driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
@@ -121,7 +151,31 @@ public class RobotContainer {
     driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-150)));
 
     coDriver.START();
-    // coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
+    driver.Y().onTrue(climber.getPrepareCommand());
+    coDriver.START();
+    coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
+
+//
+
+   //ONCE WE ADD ALGAE TO MAIN THESE COMMANDS SHOULD WORK:
+   //driver.LT().onTrue(new getAlgaeIntakeCommand());
+   //driver.RT().onTrue(new shootAlgaeCommand());
+   //driver.START().onTrue(new ); //callibrate elevator
+    coDriver.START();
+    SmartDashboard.putData("Calibrate Elevator", elevator.getCalibrationCommand());
+    SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
+    SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
+    SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
+  /*   
+        }, shooter))).andThen(new Shoot().andThen(Commands.waitSeconds(0.5).andThen(Commands.runOnce(() -> {
+          shooter.stopMotors();
+
+        }))))); */
+    //driver.B().onTrue(climber.getStowCommand());
+    //driver.Y().onTrue(climber.getPrepareCommand());
+    //driver.X().onTrue(climber.getCloseCommand());
+    //driver.A().onTrue(climber.getClimbCommand());
+
 
     // ONCE WE ADD ALGAE TO MAIN THESE COMMANDS SHOULD WORK:
     // driver.LT().onTrue(new getAlgaeIntakeCommand());
