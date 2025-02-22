@@ -57,15 +57,15 @@ public class Swerve extends AdvancedSubsystem {
     public Swerve() {
     poseLookup = new RobotPoseLookup<Pose2d>();
 
-    imu = new Pigeon2(Constants.Swerve.imuCanID, Constants.canivoreBusName);
+    imu = new Pigeon2(Constants.Swerve.IMU_ID, Constants.CARNIVORE_BUS_NAME);
     Pigeon2Configuration imuConfig = new Pigeon2Configuration();
     imu.getConfigurator().apply(imuConfig);
     zeroIMU();
 
     imuSim = imu.getSimState();
 
-    teleopVelConstraint = Constants.Swerve.maxVelTele;
-    teleopAngularVelConstraint = Constants.Swerve.maxAngularVelTele;
+    teleopVelConstraint = Constants.Swerve.TELEOP_MAX_VELOCITY;
+    teleopAngularVelConstraint = Constants.Swerve.TELEOP_MAX_ANGULAR_VELOCITY;
 
     imuRollSignal = imu.getRoll();
     imuPitchSignal = imu.getPitch();
@@ -77,28 +77,28 @@ public class Swerve extends AdvancedSubsystem {
     modules = new Mk4SwerveModuleProSparkFlex[] {
         new Mk4SwerveModuleProSparkFlex(
             Mk4SwerveModuleProSparkFlex.ModuleCode.FL,
-            Constants.Swerve.FrontLeftModule.driveMotorCanID,
-            Constants.Swerve.FrontLeftModule.rotationMotorCanID,
-            Constants.Swerve.FrontLeftModule.rotationEncoderCanID,
-            Constants.canivoreBusName), // FL
+            Constants.Swerve.FrontLeftModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.FrontLeftModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.FrontLeftModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME), // FL
         new Mk4SwerveModuleProSparkFlex(
             Mk4SwerveModuleProSparkFlex.ModuleCode.FR,
-            Constants.Swerve.FrontRightModule.driveMotorCanID,
-            Constants.Swerve.FrontRightModule.rotationMotorCanID,
-            Constants.Swerve.FrontRightModule.rotationEncoderCanID,
-            Constants.canivoreBusName), // FR
+            Constants.Swerve.FrontRightModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.FrontRightModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.FrontRightModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME), // FR
         new Mk4SwerveModuleProSparkFlex(
             Mk4SwerveModuleProSparkFlex.ModuleCode.BL,
-            Constants.Swerve.BackLeftModule.driveMotorCanID,
-            Constants.Swerve.BackLeftModule.rotationMotorCanID,
-            Constants.Swerve.BackLeftModule.rotationEncoderCanID,
-            Constants.canivoreBusName), // BL
+            Constants.Swerve.BackLeftModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.BackLeftModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.BackLeftModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME), // BL
         new Mk4SwerveModuleProSparkFlex(
             Mk4SwerveModuleProSparkFlex.ModuleCode.BR,
-            Constants.Swerve.BackRightModule.driveMotorCanID,
-            Constants.Swerve.BackRightModule.rotationMotorCanID,
-            Constants.Swerve.BackRightModule.rotationEncoderCanID,
-            Constants.canivoreBusName) // BR
+            Constants.Swerve.BackRightModule.DRIVE_MOTOR_ID,
+            Constants.Swerve.BackRightModule.ROTATION_MOTOR_ID,
+            Constants.Swerve.BackRightModule.ROTATION_ENCODER_ID,
+            Constants.CARNIVORE_BUS_NAME) // BR
     };
 
     kinematics = new SwerveDriveKinematics(

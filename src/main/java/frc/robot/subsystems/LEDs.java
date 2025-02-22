@@ -52,7 +52,6 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -84,8 +83,8 @@ public class LEDs extends AdvancedSubsystem {
     }
 
     public LEDs() {
-        strip = new AddressableLED(Constants.LEDs.stripPwm);
-        buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
+        strip = new AddressableLED(Constants.LEDs.PWM_PIN);
+        buffer = new AddressableLEDBuffer(Constants.LEDs.LENGTH);
 
         strip.setLength(buffer.getLength());
         strip.setData(buffer);

@@ -38,18 +38,10 @@ public class Notifications extends Command {
   public void execute() {
    if (currentState != setState) {
     switch (setState) {
-      case ALGAE_HOLD:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.OrangeSolid);
-        break;
-      case CLIMB:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.BlueTilt);
-        break;
-      case CORAL_HOLD:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.GreenBreeze);
-        break;
-      default:
-        RobotContainer.LEDs.changeAnimation(AnimationTypes.Rainbow);
-        break;
+      case ALGAE_HOLD -> RobotContainer.LEDs.changeAnimation(AnimationTypes.OrangeSolid);
+      case CLIMB -> RobotContainer.LEDs.changeAnimation(AnimationTypes.BlueTilt);
+      case CORAL_HOLD -> RobotContainer.LEDs.changeAnimation(AnimationTypes.GreenBreeze);
+      default -> RobotContainer.LEDs.changeAnimation(AnimationTypes.Rainbow);
     }
    }
 
