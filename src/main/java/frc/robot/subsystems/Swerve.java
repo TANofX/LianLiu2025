@@ -26,7 +26,7 @@ import frc.lib.util.Vector3;
 import frc.robot.Constants;
 import frc.robot.util.RobotPoseLookup;
 
-public class Swerve extends AdvancedSubsystem {
+public final class Swerve extends AdvancedSubsystem {
   protected final SwerveDrivePoseEstimator odometry;
   public final SwerveDriveKinematics kinematics;
 
@@ -48,14 +48,15 @@ public class Swerve extends AdvancedSubsystem {
 
   protected final Field2d field2d = new Field2d();
 
-  private StructArrayPublisher<SwerveModuleState> ModuleStatesPublisher = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("/Swerve/States", SwerveModuleState.struct).publish();
-  private StructArrayPublisher<SwerveModuleState> targetModuleStatesPublisher = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
-    private StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
-    .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
-    public Swerve() {
-    poseLookup = new RobotPoseLookup<Pose2d>();
+  private final StructArrayPublisher<SwerveModuleState> ModuleStatesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/Swerve/States", SwerveModuleState.struct).publish();
+  private final StructArrayPublisher<SwerveModuleState> targetModuleStatesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
+  private final StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
+      .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
+
+  public Swerve() {
+    poseLookup = new RobotPoseLookup<>();
 
     imu = new Pigeon2(Constants.Swerve.IMU_ID, Constants.CARNIVORE_BUS_NAME);
     Pigeon2Configuration imuConfig = new Pigeon2Configuration();
@@ -121,32 +122,38 @@ public class Swerve extends AdvancedSubsystem {
     // SmartDashboard.putData("Tune Steer Motor", SteerTuner);
     SmartDashboard.putData("Field", field2d);
     SmartDashboard.putData("Trim Modules", zeroModulesCommand());
-    
+
     // Configure auto builder
     // AutoBuilder.configureHolonomic(
-    //         this::getPose, // Robot pose supplier
-    //         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-    //         this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //         this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-    //                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    //                 new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-    //                 4.5, // Max module speed, in m/s
-    //                 0.43, // Drive base radius in meters. Distance from robot center to furthest module.
-    //                 new ReplanningConfig() // Default path replanning config. See the API for the options here
-    //         ),
-    //         () -> {
-    //             // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //             // This will flip the path being followed to the red side of the field.
-    //             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // this::getPose, // Robot pose supplier
+    // this::resetOdometry, // Method to reset odometry (will be called if your auto
+    // has a starting pose)
+    // this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    // this::driveRobotRelative, // Method that will drive the robot given ROBOT
+    // RELATIVE ChassisSpeeds
+    // new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
+    // likely live in your Constants class
+    // new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    // new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+    // 4.5, // Max module speed, in m/s
+    // 0.43, // Drive base radius in meters. Distance from robot center to furthest
+    // module.
+    // new ReplanningConfig() // Default path replanning config. See the API for the
+    // options here
+    // ),
+    // () -> {
+    // // Boolean supplier that controls when the path will be mirrored for the red
+    // alliance
+    // // This will flip the path being followed to the red side of the field.
+    // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //             var alliance = DriverStation.getAlliance();
-    //             if (alliance.isPresent()) {
-    //                 return alliance.get() == DriverStation.Alliance.Red;
-    //             }
-    //             return false;
-    //         },
-    //         (Subsystem) this // Reference to this subsystem to set requirements
+    // var alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent()) {
+    // return alliance.get() == DriverStation.Alliance.Red;
+    // }
+    // return false;
+    // },
+    // (Subsystem) this // Reference to this subsystem to set requirements
     // );
     SmartDashboard.putData("Check Swerve", systemCheckCommand());
   }
@@ -161,17 +168,15 @@ public class Swerve extends AdvancedSubsystem {
     SmartDashboard.putNumber("Swerve/OdomRuntime", correctTimeMS);
     field2d.setRobotPose(currentPose);
     poseLookup.addPose(currentPose);
-    SwerveModuleState[] moduleStates = 
-      new SwerveModuleState[] {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[] {
         modules[0].getState(),
         modules[1].getState(),
         modules[2].getState(),
         modules[3].getState()
     };
     ModuleStatesPublisher.set(moduleStates);
-     
-    SwerveModuleState[] targetModuleStates = 
-      new SwerveModuleState[] {
+
+    SwerveModuleState[] targetModuleStates = new SwerveModuleState[] {
         modules[0].getTargetState(),
         modules[1].getTargetState(),
         modules[2].getTargetState(),
@@ -182,7 +187,8 @@ public class Swerve extends AdvancedSubsystem {
 
     gyroPublisher.set(getYaw());
     ChassisSpeeds Chassis = getCurrentSpeeds();
-    SmartDashboard.putNumberArray("Swerve/RobotVelocity", new double[] {Chassis.vxMetersPerSecond, Chassis.vyMetersPerSecond, Chassis.omegaRadiansPerSecond});
+    SmartDashboard.putNumberArray("Swerve/RobotVelocity",
+        new double[] { Chassis.vxMetersPerSecond, Chassis.vyMetersPerSecond, Chassis.omegaRadiansPerSecond });
     SmartDashboard.putNumberArray(
         "Swerve/Odometry",
         new double[] {
@@ -192,13 +198,13 @@ public class Swerve extends AdvancedSubsystem {
     SmartDashboard.putNumber("Swerve/FLRelativeAngle", modules[0].getRelativeRotationDegrees());
     // SmartDashboard.putNumber("OdometryX", currentPose.getX());
     // SmartDashboard.putNumber("OdometryY", currentPose.getY());
-    // SmartDashboard.putNumber("OdometryR", currentPose.getRotation().getDegrees());
+    // SmartDashboard.putNumber("OdometryR",
+    // currentPose.getRotation().getDegrees());
 
     SmartDashboard.putNumber("FL", modules[0].getDriveVelocityMetersPerSecond());
     SmartDashboard.putNumber("FR", modules[1].getDriveVelocityMetersPerSecond());
     SmartDashboard.putNumber("BL", modules[2].getDriveVelocityMetersPerSecond());
     SmartDashboard.putNumber("BR", modules[3].getDriveVelocityMetersPerSecond());
-  
 
     SmartDashboard.putNumberArray(
         "Swerve/ModuleStates",
@@ -225,7 +231,6 @@ public class Swerve extends AdvancedSubsystem {
             modules[3].getTargetState().angle.getDegrees(),
             modules[3].getTargetState().speedMetersPerSecond,
         });
-      
 
     // Rotation3d orientation = getOrientation();
     // SmartDashboard.putNumberArray(
@@ -496,16 +501,13 @@ public class Swerve extends AdvancedSubsystem {
             },
             this))
         .until(
-            () -> getFaults().size() > 0
-                || modules[0].getFaults().size() > 0
-                || modules[1].getFaults().size() > 0
-                || modules[2].getFaults().size() > 0
-                || modules[3].getFaults().size() > 0)
+            () -> !getFaults().isEmpty()
+                || !modules[0].getFaults().isEmpty()
+                || !modules[1].getFaults().isEmpty()
+                || !modules[2].getFaults().isEmpty()
+                || !modules[3].getFaults().isEmpty())
         .andThen(Commands.runOnce(() -> driveFieldRelative(new ChassisSpeeds()), this));
   }
-
-  
-    
 
   /*
    * @Override

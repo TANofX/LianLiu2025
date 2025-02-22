@@ -4,30 +4,25 @@
 //All my imports ;D
 package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
-
+import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
-
-
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
-import com.revrobotics.sim.SparkMaxSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
@@ -36,13 +31,13 @@ import frc.robot.Constants;
 
 
 public class AlgaeHandler extends AdvancedSubsystem {
-private SparkMax algaeMotor;
-private Solenoid algaePiston;
-private DigitalInput algaeLimitSwitch;
+private final SparkMax algaeMotor;
+private final Solenoid algaePiston;
+private final DigitalInput algaeLimitSwitch;
 
-private SparkMaxSim algaeHandlerMotorSim;
+private final SparkMaxSim algaeHandlerMotorSim;
 
-private RelativeEncoder algaeEncoder;
+private final RelativeEncoder algaeEncoder;
 
 //Creating simulation for algae handler ??Need to add constants??
 private final FlywheelSim m_algaeHandlerSim = 

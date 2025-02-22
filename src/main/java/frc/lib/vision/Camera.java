@@ -15,8 +15,8 @@ import edu.wpi.first.math.numbers.N3;
  * information
  */
 public class Camera {
-    private PhotonCamera camera;
-    private Transform3d position;
+    private final PhotonCamera camera;
+    private final Transform3d position;
 
     private final WelfordSD sdX = new WelfordSD();
     private final WelfordSD sdY = new WelfordSD();

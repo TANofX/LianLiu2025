@@ -19,6 +19,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -34,7 +35,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
 
-public class Climber extends AdvancedSubsystem {
+public final class Climber extends AdvancedSubsystem {
   private final SparkFlex climberMotor;
   private final SparkFlexConfig climberMotorConfig = new SparkFlexConfig();
   private final DoubleSolenoid climberPiston;

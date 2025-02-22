@@ -71,6 +71,7 @@
     "odometry",
     "pathplanner",
     "PCMID",
+    "photonvision",
     "PIDFF",
     "Reefscape",
     "REVERSESOLENOID",
@@ -81,6 +82,7 @@
     "Tanx",
     "Tele",
     "teleop",
+    "Welford",
     "wpilibj"
   ]
 }

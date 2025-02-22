@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 
-public class CoralHandlerWrist extends AdvancedSubsystem {
+public final class CoralHandlerWrist extends AdvancedSubsystem {
     // Creation of needed variables
     private final String name;
     private final double gearRatio;
