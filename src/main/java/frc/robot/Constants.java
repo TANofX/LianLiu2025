@@ -235,94 +235,79 @@ public final class Constants {
     public static final double HORIZONTAL_GEAR_RATIO = 100.0;
     public static final double VERTICAL_GEAR_RATIO = 100.0;
 
-    public static final double outtakeJKgMetersSquared = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAGE_WHEEL_RADIUS, 2));
-    public static final double outtakeMotorMinVelocity = 0.0;
-    // public static final int outtakeEncoderID = 0.0;
+    public static final double OUTTAKE_JKMETERS_SQUARED = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAGE_WHEEL_RADIUS, 2));
+    public static final double OUTTAKE_MOTOR_MIN_VELOCITY = 0.0;
 
-    public static final double horizontalMotorPosP = 0.03;
-    public static final double horizontalMotorPosI = 0.0;
-    public static final double horizontalMotorMaxPosD = 0.0;
-    public static final double horizontalMotorMaxPosP = 0.00;
-    public static final double horizontalMotorMaxPosI = 0.0;
-    public static final double horizontalMotorPosD = 0.0;
-    public static final double horizontalMotorPosFeedForward = 1.0 / (565.0 * 12.0);
-    public static final double horizontalMotorMaxPosFeedForward = 1.0 / (565.0 * 12.0);
-    public static final double horizontalMotorPosIZone = 0.0;
-    public static final double horizontalMotorMaxPosIZone = 0.0;
-    public static final double horizontalMotorMaxAcceleration = 25000.0; // RPM per Sec
-    public static final double horizontalMotorMaxVelocity = 3500.0; // RPM
-    public static final double horizontalMotorClosedLoopError = 1.0;
+    public static final double HORIZONTAL_MOTOR_POS_P = 0.03;
+    public static final double HORIZONTAL_MOTOR_POS_I = 0.0;
+    public static final double HORIZONTAL_MOTOR_POS_D = 0.0;
+    public static final double HORIZONTAL_MOTOR_MAX_POS_P = 0.0;
+    public static final double HORIZONTAL_MOTOR_MAX_POS_I = 0.0;
+    public static final double HORIZONTAL_MOTOR_MAX_POS_D = 0.0;
+    public static final double HORIZONTAL_MOTOR_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
+    public static final double HORIZONTAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
+    public static final double HORIZONTAL_MOTOR_POS_I_ZONE = 0.0;
+    public static final double HORIZONTAL_MOTOR_MAX_POS_I_ZONE = 0.0;
+    public static final double HORIZONTAL_MOTOR_MAX_ACCELERATION = 25000.0; // RPM per Sec
+    public static final double HORIZONTAL_MOTOR_MAX_VELOCITY = 3500.0; // RPM
+    public static final double HORIZONTAL_MOTOR_CLOSED_LOPP_ERROR = 1.0;
 
-    public static final double verticalMotorPosP = 0.03;
-    public static final double verticalMotorPosI = 0.0;
-    public static final double verticalMotorPosD = 0.0;
-    public static final double verticalMotorMaxPosP = 0.03;
-    public static final double verticalMotorMaxPosI = 0.0;
-    public static final double verticalMotorMaxPosD = 0.0;
-    public static final double verticalMotorPosFeedForward = 1.0 / (565.0 * 12.0);
-    public static final double verticalMotorMaxPosFeedForward = 1.0 / (565.0 * 12.0);
-    public static final double verticalMotorPosIZone = 0.0;
-    public static final double verticalMotorMaxPosIZone = 0.0;
-    public static final double verticalMotorMaxAcceleration = 25000.0; // RPM per Sec
-    public static final double verticalMotorMaxVelocity = 3500.0; // RPM
-    public static final double verticalMotorClosedLoopError = 1.0;
+    public static final double VERTICAL_MOTOR_POS_P = 0.03;
+    public static final double VERTICAL_MOTOR_POS_I = 0.0;
+    public static final double VERTICAL_MOTOR_POS_D = 0.0;
+    public static final double VERTICAL_MOTOR_MAX_POS_P = 0.03;
+    public static final double VERTICAL_MOTOR_MAX_POS_I = 0.0;
+    public static final double VERTICAL_MOTOR_MAX_POS_D = 0.0;
+    public static final double VERTICAL_MOTOR_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
+    public static final double VERTICAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
+    public static final double VERTICAL_MOTOR_POS_I_ZONE = 0.0;
+    public static final double VERTICAL_MOTOR_MAX_POS_I_ZONE = 0.0;
+    public static final double VERTICAL_MOTOR_MAX_ACCELERATION = 25000.0; // RPM per Sec
+    public static final double VERTICAL_MOTOR_MAX_VELOCITY = 3500.0; // RPM
+    public static final double VERTICAL_MOTOR_CLOSED_LOOP_ERROR = 1.0;
 
-    public static final double horizontalJKgMetersSquared = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
+    public static final double HORIZONTAL_JKMETERS_SQUARED = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
         * Math.pow(CORAL_END_EFFECTOR_LENGTH, 2.0);
-    public static final double verticalJKgMetersSquared = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
+    public static final double VERTICAL_JKMETERS_SQUARED = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
         * Math.pow(CORAL_END_EFFECTOR_LENGTH, 2.0);
 
-    public static final Rotation2d horizontalMinAngle = Rotation2d.fromDegrees(-100);
-    public static final Rotation2d horizontalMaxAngle = Rotation2d.fromDegrees(100);
+    public static final Rotation2d HORIZONTAL_MIN_ANGLE = Rotation2d.fromDegrees(-100);
+    public static final Rotation2d HORIZONTAL_MAX_ANGLE = Rotation2d.fromDegrees(100);
 
-    public static final Rotation2d verticalMinAngle = Rotation2d.fromDegrees(-90);
-    public static final Rotation2d verticalMaxAngle = Rotation2d.fromDegrees(90);
+    public static final Rotation2d VERTICAL_MIN_ANGLE = Rotation2d.fromDegrees(-90);
+    public static final Rotation2d VERTICAL_MAX_ANGLE = Rotation2d.fromDegrees(90);
 
-    public static final Rotation2d horizontalStartingAngleInRadians = Rotation2d.fromDegrees(-90);
-    public static final Rotation2d verticalStartingAngleInRadians = Rotation2d.fromDegrees(-100);
+    public static final Rotation2d HORIZONTAL_STARTING_ANGLE_IN_RADIANS = Rotation2d.fromDegrees(-90);
+    public static final Rotation2d VERTICAL_STARTING_ANGLE_IN_RADIANS = Rotation2d.fromDegrees(-100);
 
-    public static final double horizontalMotorStdDev = 0.0;
-    public static final double verticalMotorStdDev = 0.0;
+    public static final double HORIZONTAL_MOTOR_STD_DEV = 0.0;
+    public static final double VERTICAL_MOTOR_STD_DEV = 0.0;
 
-    public static final double horizontalMotorMinVelocity = 0.0;
-    public static final double verticalMotorMinVelocity = 0.0;
+    public static final double HORIZONTAL_MOTOR_MIN_VELOCITY = 0.0;
+    public static final double VERTICAL_MOTOR_MIN_VELOCITY = 0.0;
 
-    public static final double verticalRotationDegreesPerRotation = 360 / VERTICAL_GEAR_RATIO;
-    public static final double horizontalRotationDegreesPerRotation = 360 / HORIZONTAL_GEAR_RATIO;
+    public static final double VERTICAL_ROTATION_DEGREES_PER_ROTATION = 360 / VERTICAL_GEAR_RATIO;
+    public static final double HORIZONTAL_ROTATION_DEGREES_PER_ROTATION = 360 / HORIZONTAL_GEAR_RATIO;
 
     // Need different name, for manual coral joystick control
-    public static final double verticalAngleChangeDegreesPerSecond = (verticalMotorMaxVelocity * VERTICAL_GEAR_RATIO)
-        / 60;
-    public static final double horizontalAngleChangeDegreesPerSecond = (horizontalMotorMaxVelocity
-        * HORIZONTAL_GEAR_RATIO) / 60;
+    public static final double VERTICAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (VERTICAL_MOTOR_MAX_VELOCITY * VERTICAL_GEAR_RATIO) / 60;
+    public static final double HORIZONTAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (HORIZONTAL_MOTOR_MAX_VELOCITY * HORIZONTAL_GEAR_RATIO) / 60;
 
-    public static final Rotation2d horizontalIntakeAngle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d horizontalLevel1AngleRight = Rotation2d.fromDegrees(0);
-    public static final Rotation2d horizontalLevel1AngleLeft = Rotation2d.fromDegrees(0);
-    public static final Rotation2d horizontalLevel2Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d horizontalLevel3Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d horizontalLevel4Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticalIntakeAngle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticalLevel1Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticalLevel2Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticalLevel3Angle = Rotation2d.fromDegrees(0);
-    public static final Rotation2d verticalLevel4Angle = Rotation2d.fromDegrees(0);
-    // ???? what do you do for offset for position (use gear ratio to figure out)
-    // public static final double RotationDegreesPerRotation = 0;
+    public static final Rotation2d HORIZONTAL_INTAKE_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d HORIZONTAL_LEVEL_1_ANGLE_RIGHT = Rotation2d.fromDegrees(0);
+    public static final Rotation2d HORIZONTAL_LEVEL_1_ANGLE_LEFT = Rotation2d.fromDegrees(0);
+    public static final Rotation2d HORIZONTAL_LEVEL_2_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d HORIZONTAL_LEVEL_3_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d HORIZONTAL_LEVEL_4_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d VERTICAL_LEVEL_1_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d VERTICAL_LEVEL_2_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d VERTICAL_LEVEL_3_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d VERTICAL_LEVEL_4_ANGLE = Rotation2d.fromDegrees(0);
 
-    public static double horizontalMotorAllowedError;
-  }
-
-  public static final class AutoBalance {
-    // public static final PIDConstants BALANCE_CONSTANTS = new PIDConstants(0.3,
-    // 0.0, 0.1);
-    public static final double maxVelAuto = 0.4;
-    public static final double maxVelTele = 0.3;
   }
 
   public static final class Climber {
-    public static final double firstStageGearRatio = 8 / 60;
-    public static final double secondStageGearRatio = 18 / 58;
     public static final int climberLimitIDLower = 10;
     public static final int climberLimitIDUpper = 11;
 
