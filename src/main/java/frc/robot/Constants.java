@@ -319,7 +319,7 @@ public final class Constants {
     public static final int REVERSESOLENOID = 7;
    
     public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
-    public static final int ENCODERID = 0;
+    public static final int ENCODERID = 42;
   }
  
 public static final class AlgaeHandler {

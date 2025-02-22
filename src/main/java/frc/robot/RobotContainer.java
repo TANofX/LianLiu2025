@@ -60,13 +60,13 @@ public class RobotContainer {
    
    
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
-    SmartDashboard.putData("Climb Climber", climber.climbCommand());
+    SmartDashboard.putData("Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-150)));
     SmartDashboard.putData("Run Claw Motor", climber.runClimberMotorCommand());
-    SmartDashboard.putData("Reverse Claw Motor", climber.runClimberMotorCommandOpposite());
+    SmartDashboard.putData("Reverse Claw Motor", climber.reverseClimbMotorCommand());
     SmartDashboard.putData("Climber System Check", climber.getSystemCheckCommand());
     SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand(false));
     SmartDashboard.putData("Reverse Calibrate Command", climber.getCalibrateCommand(true));
-    SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90(Rotation2d.fromDegrees(-90)));
+    SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
     // Register Named Commands for pathplanner
     //ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
     // NamedCommands.registerCommand("ElevatorL4", elevator.getElevatorHeightCommand(0));
@@ -114,9 +114,10 @@ public class RobotContainer {
     // coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
     // coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
     // coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
-    coDriver.A().whileTrue(climber.runClimberMotorCommand());
-    coDriver.B().onTrue(climber.getOpenCommand());
-    coDriver.X().onTrue(climber.getStowCommand());
+   driver.B().onTrue(climber.getPrepareCommand());
+   driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-150)));
+   
+   
     coDriver.START();
     // coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
  
