@@ -78,7 +78,6 @@ public class LEDs extends AdvancedSubsystem {
     private CoralHandler coralHandler;
     private AddressableLED strip;
     private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(Constants.LEDs.stripLength);
-    private final AddressableLEDBufferView coralWriterBuffer = buffer.createView(50,100);
     private static final Distance LED_SPACING = Meters.of(1.0/60);
     private static final LinearVelocity LED_VELOCITY = InchesPerSecond.of(2);
     // Set patterns for use
@@ -103,7 +102,11 @@ public class LEDs extends AdvancedSubsystem {
 
     private final LEDPattern whiteOWave = LEDPattern.solid(Color.kWhite).scrollAtAbsoluteSpeed(LED_VELOCITY.times(-1), LED_SPACING);
 
+    private final AddressableLEDBufferView coralSegment = buffer.createView(50, 100);
 
+    private final AddressableLEDBufferView algaeSegmentA = buffer.createView(25,50);
+
+    private final AddressableLEDBufferView algaeSegmentB = buffer.createView(100,125);
     /**
      * Constructs an LEDs subsystem and initializes the LED strip and buffer.5
      */
@@ -138,33 +141,33 @@ public class LEDs extends AdvancedSubsystem {
 
         // Signals for coral
         if (coralHandler.hasCoral()) {
-            whitePattern.applyTo(coralWriterBuffer);
+            whitePattern.applyTo(coralSegment);
             System.out.println("LED acknowledge collected Coral");
         } else if (coralHandler.getIntaking() == 1) {
-            whiteWave.applyTo(buffer.createView(50, 100));
+            whiteWave.applyTo(coralSegment);
             System.out.println("LED acknowledge intaking Coral");
         } else if (coralHandler.getIntaking() == -1) {
-            whiteOWave.applyTo(buffer.createView(50, 100));
+            whiteOWave.applyTo(coralSegment);
             System.out.println("LED acknowledge outaking Coral");
         } else {
-            standby.applyTo(buffer.createView(50, 100));
+            standby.applyTo(coralSegment);
         }
 
         if (algaeHandler.hasAlgae()) {
-            greenPattern.applyTo(buffer.createView(25, 50));
-            greenPattern.applyTo(buffer.createView(100, 125));
+            greenPattern.applyTo(algaeSegmentA);
+            greenPattern.applyTo(algaeSegmentB);
             System.out.println("LED acknowledge collected Algae");
         }else if (algaeHandler.getIntaking()==1){
-            greenWave.applyTo(buffer.createView(25, 50));
-            greenWave.applyTo(buffer.createView(100, 125));
+            greenWave.applyTo(algaeSegmentA);
+            greenWave.applyTo(algaeSegmentB);
             System.out.println("LED acknowledge intaking Algae");
         } else if (algaeHandler.getIntaking()==-1){
-                greenOWave.applyTo(buffer.createView(25, 50));
-                greenOWave.applyTo(buffer.createView(100, 125));
+                greenOWave.applyTo(algaeSegmentA);
+                greenOWave.applyTo(algaeSegmentB);
                 System.out.println("LED acknowledge outaking Algae");
         } else {
-            standby.applyTo(buffer.createView(25, 50));
-            standby.applyTo(buffer.createView(100, 125));
+            standby.applyTo(algaeSegmentA);
+            standby.applyTo(algaeSegmentB);
 
         }
 
