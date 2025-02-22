@@ -34,7 +34,7 @@ public class Camera {
      * @param pos The position of the camera
      */
     public Camera(String name, Transform3d pos) {
-        prefix = "Vision/Camera/" + name;
+        prefix = "Vision/AprilTag/" + name;
         camera = new PhotonCamera(name);
         position = pos;
     }

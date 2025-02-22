@@ -9,8 +9,10 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import static edu.wpi.first.units.Units.Inch;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -28,8 +30,18 @@ public final class Vision extends AdvancedSubsystem {
     private boolean isStopped = true;
 
     public Vision() {
-        // TODO Add cameras
-        addCamera("photonvision", new Transform3d());
+        addCamera("swerveL", new Transform3d(
+            Inch.of(13.280346266), // Cad Z
+            Inch.of(-11.580914897), // Cad X
+            Inch.of( 8.177878478), // Cad Y
+            new Rotation3d(0, -15, -90)
+        ));
+        addCamera("swerveR", new Transform3d(
+            Inch.of(13.280346266), // Cad Z
+            Inch.of(11.580914897), // Cad X
+            Inch.of( 8.177878478), // Cad Y
+            new Rotation3d(0, -15, 90)
+        ));
     }
 
     @Override
