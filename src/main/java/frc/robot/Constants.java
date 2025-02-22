@@ -102,7 +102,7 @@ public final class Constants {
 
   public static final class Swerve {
     @CanId(CanId.Type.PIGEON)
-    public static final int IMU_ID = 3;
+    public static final int IMU_ID = 5;
     public static final double TELEOP_MAX_VELOCITY = 4.6;
     public static final double TELEOP_MAX_ACCELERATION = 6.0; // todo
     public static final double TELEOP_MAX_ANGULAR_VELOCITY = Units.degreesToRadians(180);
@@ -310,9 +310,9 @@ public final class Constants {
 
   public static final class Climber {
     @CanId(CanId.Type.MOTOR)
-    public static final int CLIMBER_MOTOR_ID = 41;
+    public static final int CLIMBER_MOTOR_ID = 51;
     @CanId(CanId.Type.ENCODER)
-    public static final int ENCODER_ID = 42;
+    public static final int ENCODER_ID = 51;
     @CanId(CanId.Type.PCM_CONTROLLER)
     public static final int PCM_ID = 5;
     public static final int FORWARD_SOLENOID_ID = 14;
@@ -328,8 +328,6 @@ public final class Constants {
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
     public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(0);
-    @CanId(CanId.Type.MOTOR)
-    public static final int MOTOR_CANID = 41;
     public static final int FORWARDSOLENOID = 14;
     public static final int REVERSESOLENOID = 7;
 

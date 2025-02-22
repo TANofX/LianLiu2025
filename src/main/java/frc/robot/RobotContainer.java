@@ -53,7 +53,7 @@ public class RobotContainer {
     // rightAlgaeHandler.getSystemCheckCommand());
 
     SmartDashboard.putData("Prepare Climber", climber.getPrepareCommand());
-    SmartDashboard.putData("Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-150)));
+    SmartDashboard.putData("Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-140)));
     SmartDashboard.putData("Run Claw Motor", climber.runClimberMotorCommand());
     SmartDashboard.putData("Reverse Claw Motor", climber.reverseClimbMotorCommand());
     SmartDashboard.putData("Climber System Check", climber.getSystemCheckCommand());
