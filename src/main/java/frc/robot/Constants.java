@@ -331,7 +331,7 @@ public final class Constants {
     public static final int FORWARDSOLENOID = 14;
     public static final int REVERSESOLENOID = 7;
    
-    public static final double climberRotationDegreesPerRotation = 360 / GEAR_RATIO;
+    public static final double CLIMBER_DEGREES_PER_ROTATION = 360 / GEAR_RATIO;
     public static final int ENCODERID = 42;
   }
 
