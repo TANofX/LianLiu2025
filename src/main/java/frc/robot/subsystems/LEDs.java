@@ -62,8 +62,8 @@ import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
 
 public class LEDs extends AdvancedSubsystem {
-    private AddressableLED strip;
-    private AddressableLEDBuffer buffer;
+    private final AddressableLED strip;
+    private final AddressableLEDBuffer buffer;
     private final LEDPattern rainbow = LEDPattern.rainbow(255, 255)
         .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meters.of(1 / 120.0));
     private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen)

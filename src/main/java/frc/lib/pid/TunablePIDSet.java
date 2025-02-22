@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /** Add your docs here. */
 public class TunablePIDSet implements TunablePID {
-    private ArrayList<TunablePID> pidList = new ArrayList<TunablePID>();
+    private final ArrayList<TunablePID> pidList = new ArrayList<>();
 
     private double kP;
     private double kI;

@@ -289,8 +289,10 @@ public final class Constants {
     public static final double HORIZONTAL_ROTATION_DEGREES_PER_ROTATION = 360 / HORIZONTAL_GEAR_RATIO;
 
     // Need different name, for manual coral joystick control
-    public static final double VERTICAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (VERTICAL_MOTOR_MAX_VELOCITY * VERTICAL_GEAR_RATIO) / 60;
-    public static final double HORIZONTAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (HORIZONTAL_MOTOR_MAX_VELOCITY * HORIZONTAL_GEAR_RATIO) / 60;
+    public static final double VERTICAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (VERTICAL_MOTOR_MAX_VELOCITY
+        * VERTICAL_GEAR_RATIO) / 60;
+    public static final double HORIZONTAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (HORIZONTAL_MOTOR_MAX_VELOCITY
+        * HORIZONTAL_GEAR_RATIO) / 60;
 
     public static final Rotation2d HORIZONTAL_INTAKE_ANGLE = Rotation2d.fromDegrees(0);
     public static final Rotation2d HORIZONTAL_LEVEL_1_ANGLE_RIGHT = Rotation2d.fromDegrees(0);
@@ -307,11 +309,11 @@ public final class Constants {
   }
 
   public static final class Climber {
-    @CanId(CanId.Type.MOTOR) 
+    @CanId(CanId.Type.MOTOR)
     public static final int CLIMBER_MOTOR_ID = 41;
     @CanId(CanId.Type.ENCODER)
     public static final int ENCODER_ID = 42;
-    @CanId(CanId.Type.PCM_CONTROLLER) 
+    @CanId(CanId.Type.PCM_CONTROLLER)
     public static final int PCM_ID = 5;
     public static final int FORWARD_SOLENOID_ID = 14;
     public static final int REVERSE_SOLENOID_ID = 7;
@@ -326,11 +328,11 @@ public final class Constants {
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
     public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(0);
-    @CanId(CanId.Type.MOTOR) public static final int MOTOR_CANID = 41;
-    @CanId(CanId.Type.PCM_CONTROLLER) public static final int PCMID = 5;
+    @CanId(CanId.Type.MOTOR)
+    public static final int MOTOR_CANID = 41;
     public static final int FORWARDSOLENOID = 14;
     public static final int REVERSESOLENOID = 7;
-   
+
     public static final double CLIMBER_DEGREES_PER_ROTATION = 360 / GEAR_RATIO;
     public static final int ENCODERID = 42;
   }
@@ -366,7 +368,7 @@ public final class Constants {
     // Calculates moment of inertia for parameter in flywheel sim for top wheels
     public static final double MASS_OF_TOP_OF_INTAKE_WHEEL = Units.lbsToKilograms(0.035);
     public static final double RADIUS_OF_TOP_INTAKE_WHEEL = 1;
-    public static final double MOMENT_OF_INERTIA_OF_THE_TOP_INTAKE_WHEEL= MASS_OF_TOP_OF_INTAKE_WHEEL
+    public static final double MOMENT_OF_INERTIA_OF_THE_TOP_INTAKE_WHEEL = MASS_OF_TOP_OF_INTAKE_WHEEL
         * (RADIUS_OF_TOP_INTAKE_WHEEL * RADIUS_OF_TOP_INTAKE_WHEEL);
 
     // all of these ID's are place holders and will need to be edited at a later

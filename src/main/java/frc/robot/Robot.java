@@ -13,14 +13,14 @@ public class Robot extends TimedRobot {
   private Command autoCommand;
   private Command m_autonomousCommand;
 
-  //private RobotContainer m_robotContainer;
+  @SuppressWarnings("unused")
+  private RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
     System.out.println("Robot Init Called");
-    new RobotContainer();
+    m_robotContainer = new RobotContainer();
     //Autos.init();
-     
   }
 
   @Override

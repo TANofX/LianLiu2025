@@ -107,9 +107,6 @@ public final class Climber extends AdvancedSubsystem {
     SmartDashboard.putData("Set Climber to -90", setClimberNeg90());
   }
 
-  // HEY I ALREADY PUT IN THE STAGE GEAR RATIOS IN THE CONSTANTS!! -- Shirley C. :)
-  // -- Tanx
-
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Climber/AbsoluteAngle", absoluteEncoderAngle.getValueAsDouble() * 360);
@@ -160,7 +157,7 @@ public final class Climber extends AdvancedSubsystem {
     double armRotation = (angle.getRotations());
     double difference = armRotation - currentAngle.getRotations();
     double motorRotation = difference / Constants.Climber.GEAR_RATIO;
-    double actualTarget = motorRotation + climberEncoder.getPosition(); //...thats so stupdi
+    double actualTarget = motorRotation + climberEncoder.getPosition();
     climberController.setReference(actualTarget, ControlType.kPosition);
   }
 
@@ -275,7 +272,7 @@ public final class Climber extends AdvancedSubsystem {
   public Command getOpenClawCommand() {
     return Commands.runOnce(() -> {
       if (getCurrentAngle().getDegrees() < -80)
-       openClaw();
+        openClaw();
     }, this);
   }
 
@@ -305,12 +302,11 @@ public final class Climber extends AdvancedSubsystem {
                   openClaw();
                 })),
             Commands.run(
-              () -> {
-              setClimberAngle(Rotation2d.fromDegrees(0));})
-            ));
+                () -> {
+                  setClimberAngle(Rotation2d.fromDegrees(0));
+                })));
   }
 
-  
   // Clamp jaw
   public Command getCloseClawCommand() {
     return Commands.runOnce(() -> {
@@ -318,10 +314,7 @@ public final class Climber extends AdvancedSubsystem {
     }, this);
   }
 
-  // Rotate thy clamped jaw
-
-
-  
+  // Rotate the clamped jaw
   public Command runClimberMotorCommand() {
     return Commands.sequence(
         Commands.runOnce(() -> {
@@ -343,15 +336,13 @@ public final class Climber extends AdvancedSubsystem {
         Commands.runOnce(() -> {
           stopClimberMotor();
         }, this));
-
   }
 
   public Command getPrepareCommandS() {
     return Commands.runOnce(() -> {
       closeClaw();
       setClimberAngle(Rotation2d.fromDegrees(0));
-    },
-        this);
+    }, this);
   }
 
   public Command getRotateCommandS(Rotation2d desiredAngle) {
@@ -359,7 +350,6 @@ public final class Climber extends AdvancedSubsystem {
       setClimberAngle(desiredAngle);
     }, this);
   }
-
 
   public Command climbCommand(Rotation2d angle) {
     return Commands.sequence(
@@ -370,10 +360,9 @@ public final class Climber extends AdvancedSubsystem {
         Commands.run(
             () -> {
               setClimberAngle(angle);
-            }, this)
-
-    );
+            }, this));
   }
+
   /**
    * A method that is used to check that the motors are moving at the right speed.
    */

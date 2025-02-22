@@ -18,12 +18,14 @@ public class RobotMechanicalConfiguration {
     MechanismRoot2d m_root;
     MechanismLigament2d m_elevatorExtension;
 
-    // Does this gets drawn correctly in SmartDashboard? AdvantageScope did not seem to draw the mechanism in a manner
+    // Does this gets drawn correctly in SmartDashboard? AdvantageScope did not seem
+    // to draw the mechanism in a manner
     // to understand the robot's configuration.
     public RobotMechanicalConfiguration() {
         m_mechanism = new Mechanism2d(Units.inchesToMeters(15.0), Units.inchesToMeters(4) + Elevator.MAX_HEIGHT_METERS);
         m_root = m_mechanism.getRoot("Elevator", Units.inchesToMeters(15.0 - 7.0), Units.inchesToMeters(4.0));
-        m_elevatorExtension = new MechanismLigament2d("Elavator Extension", 0, 0.0, Units.inchesToMeters(3.0), new Color8Bit(128, 128, 128));
+        m_elevatorExtension = new MechanismLigament2d("Elavator Extension", 0, 0.0, Units.inchesToMeters(3.0),
+                new Color8Bit(128, 128, 128));
         m_root.append(m_elevatorExtension);
     }
 

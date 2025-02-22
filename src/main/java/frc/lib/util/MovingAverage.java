@@ -6,7 +6,7 @@ public class MovingAverage {
   private final CircularBuffer<Double> buffer;
 
   public MovingAverage(int size) {
-    buffer = new CircularBuffer<Double>(size);
+    buffer = new CircularBuffer<>(size);
   }
 
   public void add(double d) {

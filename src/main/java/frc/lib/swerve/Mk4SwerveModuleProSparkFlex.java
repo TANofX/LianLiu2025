@@ -3,7 +3,8 @@ package frc.lib.swerve;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.*;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.REVLibError;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
@@ -11,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -24,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.pid.TunablePID;
 import frc.lib.pid.TunableSparkPIDController;
 import frc.lib.subsystem.AdvancedSubsystem;
-import com.revrobotics.*;
 
 /**
  * Implementation for an SDS Mk4 swerve module using RevNeo Vortex with
@@ -86,7 +87,6 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
 
   private final SparkFlexConfig driveMotorConfig = new SparkFlexConfig();
   private final SparkFlex driveMotor;
-  // private final REVPhysicsSim driveSimState;
 
   private final SparkFlexConfig rotationMotorConfig = new SparkFlexConfig();
   private final SparkFlex rotationMotor;
@@ -119,7 +119,7 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
       int rotationMotorCanID,
       int encoderCanID,
       String canBus) {
-    super(moduleCode.name() + "SwerveModule");
+    super("Swerve/" + moduleCode.name());
 
     this.moduleCode = moduleCode;
 
@@ -508,7 +508,7 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
               }
             },
             this))
-        .until(() -> getFaults().size() > 0)
+        .until(() -> !getFaults().isEmpty())
         .andThen(Commands.runOnce(this::stopMotors, this));
   }
 }

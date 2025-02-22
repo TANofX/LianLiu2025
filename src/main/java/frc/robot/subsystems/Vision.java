@@ -31,24 +31,23 @@ public final class Vision extends AdvancedSubsystem {
 
     public Vision() {
         addCamera("swerveL", new Transform3d(
-            Inch.of(13.280346266), // Cad Z
-            Inch.of(-11.580914897), // Cad X
-            Inch.of( 8.177878478), // Cad Y
-            new Rotation3d(0, -15, -90)
-        ));
+                Inch.of(13.280346266), // Cad Z
+                Inch.of(-11.580914897), // Cad X
+                Inch.of(8.177878478), // Cad Y
+                new Rotation3d(0, -15, -90)));
         addCamera("swerveR", new Transform3d(
-            Inch.of(13.280346266), // Cad Z
-            Inch.of(11.580914897), // Cad X
-            Inch.of( 8.177878478), // Cad Y
-            new Rotation3d(0, -15, 90)
-        ));
+                Inch.of(13.280346266), // Cad Z
+                Inch.of(11.580914897), // Cad X
+                Inch.of(8.177878478), // Cad Y
+                new Rotation3d(0, -15, 90)));
     }
 
     @Override
     public void periodic() {
         for (Camera cam : cameras) {
             List<PhotonPipelineResult> results = cam.getResults();
-            for(PhotonPipelineResult result : results) processResult(result, cam);
+            for (PhotonPipelineResult result : results)
+                processResult(result, cam);
         }
     }
 

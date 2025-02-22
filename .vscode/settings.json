@@ -67,6 +67,7 @@
     "ENCODERID",
     "FORWARDSOLENOID",
     "Holonomic",
+    "Izone",
     "Jetson",
     "odometry",
     "pathplanner",
@@ -78,10 +79,12 @@
     "REVPH",
     "revrobotics",
     "Robo",
+    "selfcheck",
     "smartdashboard",
     "Tanx",
     "Tele",
     "teleop",
+    "undervoltage",
     "Welford",
     "wpilibj"
   ]

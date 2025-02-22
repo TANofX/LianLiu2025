@@ -19,7 +19,7 @@
 //   // Called every time the scheduler runs while the command is scheduled.
 //   @Override
 //   public void execute() {
-//     //TODO uncomment line below after merge with AutoAiming and fix with needed method
+//     // TODO uncomment line below after merge with AutoAiming and fix with needed method
 //     if (((RobotContainer.elevator.getElevation() - Constants.Elevator.level1Height) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
 //       //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
 //     }

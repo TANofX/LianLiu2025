@@ -58,11 +58,11 @@ public class XboxControllerWrapper extends XboxController {
   }
 
   public Trigger LB() {
-    return new Trigger(this::getLeftBumper);
+    return new Trigger(this::getLeftBumperButton);
   }
 
   public Trigger RB() {
-    return new Trigger(this::getRightBumper);
+    return new Trigger(this::getRightBumperButton);
   }
 
   public Trigger START() {
