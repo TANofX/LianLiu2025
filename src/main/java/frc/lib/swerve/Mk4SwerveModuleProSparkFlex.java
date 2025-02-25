@@ -138,8 +138,7 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
     ClosedLoopConfig driveMotorPidConfig = driveMotorConfig.closedLoop;
     driveMotorPidConfig.pid(DRIVE_KP, DRIVE_KI, DRIVE_KD);
     driveMotorPidConfig.iZone(DRIVE_I_ZONE);
-    driveMotorPidConfig.velocityFF(DRIVE_FEED_FORWARD); // ?
-    driveMotorConfig.smartCurrentLimit(100, 80);
+    driveMotorPidConfig.velocityFF(DRIVE_FEED_FORWARD);
     // driveSimState.addSparkMax(driveMotor, 8.0f, 5500.0f);
     driveMotor.configure(driveMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
 
