@@ -26,7 +26,7 @@ public class ElevatorJoystickControl extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    targetHeight = RobotContainer.elevator.getElevation();
+    targetHeight = RobotContainer.elevator.getElevationMeters();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

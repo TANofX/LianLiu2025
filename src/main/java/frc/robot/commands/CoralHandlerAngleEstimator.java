@@ -24,10 +24,10 @@ public class CoralHandlerAngleEstimator extends Command {
   @Override
   public void execute() {
     // TODO uncomment line below after merge with AutoAiming and fix with needed method
-    if (((RobotContainer.elevator.getElevation() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+    if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
       //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
     }
-    else if (((RobotContainer.elevator.getElevation() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+    else if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
       //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
     }
     else {
