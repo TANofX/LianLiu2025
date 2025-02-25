@@ -166,6 +166,8 @@ public class RobotContainer {
     SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
     SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
     SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
+    SmartDashboard.putData("Move Elevator UP", elevator.getSlowElevatorUpCommand());
+    SmartDashboard.putData("Move Elevator Down", elevator.getSlowElevatorDownCommand());
   /*   
         }, shooter))).andThen(new Shoot().andThen(Commands.waitSeconds(0.5).andThen(Commands.runOnce(() -> {
           shooter.stopMotors();
