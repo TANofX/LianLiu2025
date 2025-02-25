@@ -1,6 +1,9 @@
 package frc.lib.vision;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -9,14 +12,16 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Simple class that stores Camera along with the position(aka cameraToRobot)
  * information
  */
 public class Camera {
-    private PhotonCamera camera;
-    private Transform3d position;
+    private final PhotonCamera camera;
+    private final Transform3d position;
+    private final String prefix;
 
     private final WelfordSD sdX = new WelfordSD();
     private final WelfordSD sdY = new WelfordSD();
@@ -25,11 +30,12 @@ public class Camera {
     /**
      * Create a new Camera object
      * 
-     * @param cam The PhotonCamera object
+     * @param name The PhotonCamera name
      * @param pos The position of the camera
      */
-    public Camera(PhotonCamera cam, Transform3d pos) {
-        camera = cam;
+    public Camera(String name, Transform3d pos) {
+        prefix = "Vision/AprilTag/" + name;
+        camera = new PhotonCamera(name);
         position = pos;
     }
 
@@ -82,5 +88,12 @@ public class Camera {
                 sdX.getStandardDeviation(),
                 sdY.getStandardDeviation(),
                 sdTheta.getStandardDeviation());
+    }
+
+    public List<PhotonPipelineResult> getResults() {
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        SmartDashboard.putBoolean(prefix + "/online", camera.isConnected());
+        SmartDashboard.putNumber(prefix + "/results", results.size());
+        return results;
     }
 }

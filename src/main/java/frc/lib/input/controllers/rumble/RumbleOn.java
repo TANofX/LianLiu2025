@@ -10,4 +10,9 @@ public class RumbleOn extends RumbleAnimation {
   public boolean equals(Object obj) {
     return obj instanceof RumbleOn;
   }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

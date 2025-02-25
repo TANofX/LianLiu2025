@@ -20,4 +20,9 @@ public class RumbleSinWave extends RumbleAnimation {
     RumbleSinWave that = (RumbleSinWave) o;
     return Double.compare(that.period, period) == 0;
   }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

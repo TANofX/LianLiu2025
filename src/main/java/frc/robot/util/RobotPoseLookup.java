@@ -1,7 +1,8 @@
 package frc.robot.util;
 
-import edu.wpi.first.wpilibj.Timer;
 import java.util.ArrayList;
+
+import edu.wpi.first.wpilibj.Timer;
 
 public class RobotPoseLookup<T> {
   private final ArrayList<Timestamped<T>> prevPoses;
@@ -19,7 +20,7 @@ public class RobotPoseLookup<T> {
   public void addPose(T pose) {
     double timestamp = Timer.getFPGATimestamp();
 
-    prevPoses.add(new Timestamped<T>(pose, timestamp));
+    prevPoses.add(new Timestamped<>(pose, timestamp));
     if (prevPoses.get(0).getTimestamp() < timestamp - maxAge) {
       prevPoses.remove(0);
     }
