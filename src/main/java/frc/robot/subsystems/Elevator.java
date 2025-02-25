@@ -57,7 +57,7 @@ public class Elevator extends AdvancedSubsystem {
     newConfig.idleMode(IdleMode.kBrake);
 
     // Configure the closed loop controller. This includes the  PIDF gains and the max motion settings.
-    newConfig.closedLoop.pidf(Constants.Elevator.P, Constants.Elevator.I, Constants.Elevator.D, Constants.Elevator.FF, ClosedLoopSlot.kSlot0);
+    newConfig.closedLoop.pidf(Constants.Elevator.P, Constants.Elevator.I, Constants.Elevator.D, 0.0, ClosedLoopSlot.kSlot0);
     newConfig.closedLoop.maxMotion.allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0);
     newConfig.closedLoop.maxMotion.maxAcceleration(Constants.Elevator.MAX_ACCELERATION, ClosedLoopSlot.kSlot0);
     newConfig.closedLoop.maxMotion.maxVelocity(Constants.Elevator.MAX_VELOCITY, ClosedLoopSlot.kSlot0);
@@ -149,7 +149,7 @@ public class Elevator extends AdvancedSubsystem {
   public void toHeightMeters(double amount) {
     double rotations = amount / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION;
 
-    elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
 
   //A method to check the Elevators current height
