@@ -158,13 +158,6 @@ public class CoralHandler extends AdvancedSubsystem {
         horizontalWrist.motorSim.getMotorCurrent(), verticalWrist.motorSim.getMotorCurrent()));
   }
 
-  public void runHorizontalMotor() {
-    horizontalWrist.runCoralWrist();
-  }
-
-  public void runVerticalMotor() {
-    verticalWrist.runCoralWrist();
-  }
   /**
    * Stops motor for the coral end effector intake/outtake motor. Sets motor speed
    * to zero.
@@ -276,6 +269,10 @@ public class CoralHandler extends AdvancedSubsystem {
   public void periodic() {
     // Values available shown on SmartDashboard
     SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
+    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Relative Angle", horizontalWrist.getAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Relative Angle", verticalWrist.getAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Absolute Angle", horizontalWrist.getAbsoluteAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Absolute Angle", verticalWrist.getAbsoluteAngle().getDegrees());
   }
 
   public Command zeroWristCommand() {
@@ -313,6 +310,22 @@ public class CoralHandler extends AdvancedSubsystem {
   }
   public Command setHorizontalAngleCommand(Rotation2d vTargetAngle) {
     return horizontalWrist.setAngleCommand(vTargetAngle);
+  }
+  
+  public Command runHorizontalMotorPositiveCommand() {
+    return Commands.run(() -> {horizontalWrist.runCoralWrist(0.05);}, this).finallyDo(() -> horizontalWrist.stopMotor());
+  }
+
+  public Command runHorizontalMotorNegativeCommand() {
+    return Commands.run(() -> {horizontalWrist.runCoralWrist(-0.05);}, this).finallyDo(() -> horizontalWrist.stopMotor());
+  }
+
+  public Command runVerticalMotorPositiveCommand() {
+    return Commands.run(() -> {verticalWrist.runCoralWrist(0.1);}, this).finallyDo(() -> verticalWrist.stopMotor());
+  }
+
+  public Command runVerticalMotorNegativeCommand() {
+    return Commands.run(() -> {verticalWrist.runCoralWrist(-0.1);}, this).finallyDo(() -> verticalWrist.stopMotor());
   }
 
   @Override

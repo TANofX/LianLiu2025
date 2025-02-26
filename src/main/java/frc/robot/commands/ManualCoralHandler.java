@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.CoralHandler;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualCoralHandler extends Command {
@@ -19,6 +20,7 @@ public class ManualCoralHandler extends Command {
   public ManualCoralHandler(DoubleSupplier vertJoystickSupplier, DoubleSupplier hortJoystickSupplier) {
     vertController = vertJoystickSupplier;
     hortController = hortJoystickSupplier;
+    addRequirements(RobotContainer.coralHandler);
 
     // addRequirements(RobotContainer.coralHandler);
     // Use addRequirements() here to declare subsystem dependencies.
