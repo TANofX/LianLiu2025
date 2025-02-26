@@ -77,14 +77,14 @@ public final class Constants {
 
     public static final double P = 0.05;
     public static final double I = 0.00;
-    public static final double D = 0.00;
+    public static final double D = 0.025;
     public static final double FF = 1.0 / (565.0 * 12);
 
-    public static final double METERS_PER_MOTOR_REVOLUTION = 2 * Units.inchesToMeters(1.0 / 8.0);
+    public static final double METERS_PER_MOTOR_REVOLUTION =  Units.inchesToMeters(1.0 / 8.0);
     public static final double ELEVATOR_MASS = Units.lbsToKilograms(20.0);
     public static final double GEAR_RATIO = 1.0;
     public static final double MIN_HEIGHT_METERS = 0.0;
-    public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(56.0);
+    public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(-112.0);
     public static final double STARTING_HEIGHT_METERS = MIN_HEIGHT_METERS
         + (MIN_HEIGHT_METERS + MAX_HEIGHT_METERS) / 2.0;
 
@@ -93,7 +93,7 @@ public final class Constants {
     public static final double LEVEL3_HEIGHT = 0;
     public static final double LEVEL4_HEIGHT = 0;
     public static final double MAX_ACCELERATION = 24000.0;
-    public static final double MAX_VELOCITY = 6000.0;
+    public static final double MAX_VELOCITY = 6500.0;
   };
 
   public static final class LEDs {
@@ -105,7 +105,7 @@ public final class Constants {
     @CanId(CanId.Type.PIGEON)
     public static final int IMU_ID = 5;
     public static final double TELEOP_MAX_VELOCITY = 4.6;
-    public static final double TELEOP_MAX_ACCELERATION = 6.0; // todo
+    public static final double TELEOP_MAX_ACCELERATION = 5.5; // todo
     public static final double TELEOP_MAX_ANGULAR_VELOCITY = Units.degreesToRadians(180);
     public static final double TELEOP_MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(540);
     public static final double TELEOP_ANGLE_HOLD_FACTOR = 3.0;

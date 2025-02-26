@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
@@ -21,7 +22,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -58,7 +58,12 @@ public class Elevator extends AdvancedSubsystem {
         elevatorMotor = new SparkFlex(elevatorCanID, MotorType.kBrushless);
         SparkFlexConfig newConfig = new SparkFlexConfig();
         newConfig.idleMode(IdleMode.kBrake);
-
+        newConfig.inverted(false);
+        //switched reverse and forward for limits due to wiring mistake
+        newConfig.softLimit.reverseSoftLimit(Constants.Elevator.MAX_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
+        newConfig.softLimit.forwardSoftLimit(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
+        newConfig.softLimit.forwardSoftLimitEnabled(false);
+        newConfig.softLimit.reverseSoftLimitEnabled(false);
         // Configure the closed loop controller. This includes the PIDFF gains and the
         // max motion settings.
         newConfig.closedLoop.pidf(Constants.Elevator.P, Constants.Elevator.I, Constants.Elevator.D,
@@ -68,7 +73,7 @@ public class Elevator extends AdvancedSubsystem {
         newConfig.closedLoop.maxMotion.maxVelocity(Constants.Elevator.MAX_VELOCITY, ClosedLoopSlot.kSlot0);
         newConfig.closedLoop.maxMotion.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot0);
 
-        elevatorMotor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        elevatorMotor.configure(newConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         elevatorEncoder = elevatorMotor.getEncoder();
         elevatorController = elevatorMotor.getClosedLoopController();
 
@@ -85,10 +90,15 @@ public class Elevator extends AdvancedSubsystem {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Elevator Motor Velocity", elevatorEncoder.getVelocity());
-        SmartDashboard.putNumber("Elevator Position", getElevation());
+        SmartDashboard.putNumber("Elevator/Elevator Motor Velocity", elevatorEncoder.getVelocity());
+        SmartDashboard.putNumber("Elevator/Elevator Position", getElevationMeters());
+    SmartDashboard.putBoolean("Elevator/calibrated", calibrated);
+    SmartDashboard.putBoolean("Elevator/BottomLimitPressed", elevatorMotor.getReverseLimitSwitch().isPressed());
+    SmartDashboard.putBoolean("Elevator/UpperLimitPressed",elevatorMotor.getForwardLimitSwitch().isPressed());
+    SmartDashboard.putNumber("Elevator/Applied Output", elevatorMotor.getAppliedOutput());
 
-    }
+}
+
 
     @Override
     public void simulationPeriodic() {
@@ -99,7 +109,7 @@ public class Elevator extends AdvancedSubsystem {
         double inputVoltage = elevatorMotorSim.getAppliedOutput() * RobotController.getBatteryVoltage();
         SmartDashboard.putNumber("Elevator Simulation/Simulated Voltage", inputVoltage);
         SmartDashboard.putNumber("Elevator Simulation/Motor Position", elevatorMotorSim.getPosition());
-        SmartDashboard.putNumber("Elevator Simulation/Height", this.getElevation());
+        SmartDashboard.putNumber("Elevator Simulation/Height", this.getElevationMeters());
         SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Velocity",
                 elevatorPhysicsSim.getVelocityMetersPerSecond());
         SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Height",
@@ -130,14 +140,30 @@ public class Elevator extends AdvancedSubsystem {
 
     // Check to make sure that the elevator moves at the anticipated speeds up and
     // down
+    //HEY YOU!! Noticing mistakes? Are things just not adding up? Well thats because of
+    // MECHANICAL Incorrect wiring so we needed to negate velocities and more stuff :(
     @Override
     protected Command systemCheckCommand() {
         return Commands.sequence(
                 Commands.runOnce(
                         () -> {
+                            elevatorMotor.set(-0.25);
+                        }, this),
+                Commands.waitSeconds(0.5),
+                Commands.runOnce(
+                        () -> {
+                            if (((elevatorEncoder.getVelocity() / 60.0)
+                                    * Constants.Elevator.METERS_PER_MOTOR_REVOLUTION) >  -0.16) {
+                                addFault("[System Check] Elevator velocity too slow", false, true);
+                            }
+                            elevatorMotor.stopMotor();
+                        }, this),
+                Commands.waitSeconds(0.25),
+                Commands.runOnce(
+                        () -> {
                             elevatorMotor.set(0.25);
                         }, this),
-                Commands.waitSeconds(5),
+                Commands.waitSeconds(0.25),
                 Commands.runOnce(
                         () -> {
                             if (((elevatorEncoder.getVelocity() / 60.0)
@@ -146,36 +172,45 @@ public class Elevator extends AdvancedSubsystem {
                             }
                             elevatorMotor.stopMotor();
                         }, this),
-                Commands.waitSeconds(0.25),
-                Commands.runOnce(
-                        () -> {
-                            elevatorMotor.set(-0.25);
-                        }, this),
-                Commands.waitSeconds(0.25),
-                Commands.runOnce(
-                        () -> {
-                            if (((elevatorEncoder.getVelocity() / 60.0)
-                                    * Constants.Elevator.METERS_PER_MOTOR_REVOLUTION) > -0.16) {
-                                addFault("[System Check] Elevator velocity too slow", false, true);
-                            }
-                            elevatorMotor.stopMotor();
-                        }, this));
+                getCalibrationCommand()).finallyDo(()->{elevatorMotor.stopMotor();});
     }
 
     // A method to change the Height of the elevator to the required height
+    //negated due to faulty wiring
     public void toHeightMeters(double amount) {
+        amount *= -1.0;
+        if (amount > Constants.Elevator.MIN_HEIGHT_METERS) {
+            amount = Constants.Elevator.MIN_HEIGHT_METERS;
+        } else if (amount < Constants.Elevator.MAX_HEIGHT_METERS) {
+            amount = Constants.Elevator.MAX_HEIGHT_METERS;
+        }
         double rotations = amount / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION;
 
         elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
     // A method to check the Elevators current height
-    public double getElevation() {
-        return elevatorEncoder.getPosition() * Constants.Elevator.METERS_PER_MOTOR_REVOLUTION;
+    //negated because of faulty wiring
+    public double getElevationMeters() {
+        return (elevatorEncoder.getPosition() * Constants.Elevator.METERS_PER_MOTOR_REVOLUTION) * -1.0;
     }
 
     public void stop() {
         elevatorMotor.stopMotor();
+    }
+
+    public Command getSlowElevatorUpCommand() {
+        return Commands.run(
+            () -> {
+                elevatorMotor.set(-0.2);
+            }, this).finallyDo(() -> elevatorMotor.stopMotor());
+    }
+
+    public Command getSlowElevatorDownCommand() {
+        return Commands.run(
+            () -> {
+                elevatorMotor.set(0.2);
+            }, this).finallyDo(() -> elevatorMotor.stopMotor());
     }
 
     // Calibration Command to reset the encoder to a known position
@@ -184,20 +219,26 @@ public class Elevator extends AdvancedSubsystem {
                 Commands.runOnce(
                         () -> {
                             if (!calibrated)
-                                elevatorMotor.set(-0.25);
+                                elevatorMotor.set(0.07);
                         }, this),
                 Commands.waitUntil(
                         () -> {
-                            return (calibrated || elevatorMotor.getReverseLimitSwitch().isPressed());
+                            return (calibrated || elevatorMotor.getForwardLimitSwitch().isPressed());
                         }),
                 Commands.runOnce(
                         () -> {
-                            if (!calibrated && elevatorMotor.getReverseLimitSwitch().isPressed()) {
+                            if (!calibrated && elevatorMotor.getForwardLimitSwitch().isPressed()) {
                                 elevatorEncoder.setPosition(Constants.Elevator.MIN_HEIGHT_METERS
                                         / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
                                 calibrated = true;
+                          
+                                SparkFlexConfig newConfig = new SparkFlexConfig();
+                                newConfig.softLimit.forwardSoftLimitEnabled(true);
+                                newConfig.softLimit.reverseSoftLimitEnabled(true);
+                                elevatorMotor.configure(newConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+
                             }
-                        }, this));
+                        }, this)).withTimeout(6.0).finallyDo(()->{elevatorMotor.stopMotor();});
     }
 
     // Get a command instance that will move the elevator to a target height
@@ -209,7 +250,7 @@ public class Elevator extends AdvancedSubsystem {
                                 toHeightMeters(targetHeightMeters);
                             }, this),
                     Commands.waitUntil(() -> {
-                        return Math.abs(targetHeightMeters - getElevation()) < 0.0025;
+                        return Math.abs(targetHeightMeters - getElevationMeters()) < 0.0025;
                     }),
                     Commands.runOnce(
                             () -> {
@@ -222,7 +263,7 @@ public class Elevator extends AdvancedSubsystem {
                                 toHeightMeters(targetHeightMeters);
                             }, this),
                     Commands.waitUntil(() -> {
-                        return Math.abs(targetHeightMeters - getElevation()) < 0.0025;
+                        return Math.abs(targetHeightMeters - getElevationMeters()) < 0.0025;
                     }));
         }
     }

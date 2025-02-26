@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -202,8 +204,8 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         }
     }
 
-    public void runCoralWrist() {
-        motor.set(.15);
+    public void runCoralWrist(double speed) {
+        motor.set(speed);
     }
 
     /**
@@ -235,10 +237,17 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
     }
 
     /**
-     * Gets the angle from the motor in a Rotation2d.
+     * Gets the angle from the motor in a Rotation2d from relative encoder.
      */
     public Rotation2d getAngle() {
         return Rotation2d.fromRotations(relativeEncoder.getPosition()).div(gearRatio);
+    }
+
+    /**
+     * Gets the angle from the motor in a Rotation2d from relative encoder.
+     */
+    public Rotation2d getAbsoluteAngle() {
+        return Rotation2d.fromDegrees(absoluteEncoder.getPosition().getValueAsDouble() * 360);
     }
 
     /**

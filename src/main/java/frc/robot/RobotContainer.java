@@ -166,7 +166,17 @@ public class RobotContainer {
     SmartDashboard.putData("Check Elevator", elevator.getSystemCheckCommand());
     SmartDashboard.putData("Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
     SmartDashboard.putData("Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
-  /*   
+    SmartDashboard.putData("Move Elevator UP", elevator.getSlowElevatorUpCommand());
+    SmartDashboard.putData("Move Elevator Down", elevator.getSlowElevatorDownCommand());
+    SmartDashboard.putData("Elevator 1.35", elevator.getElevatorHeightCommand(0.0));
+    SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
+    SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
+    SmartDashboard.putData("CoralHandler/Vertical Run Positive", coralHandler.runVerticalMotorPositiveCommand());
+    SmartDashboard.putData("CoralHandler/Vertial Run Negative", coralHandler.runVerticalMotorNegativeCommand());
+     
+    /*  
+  
+  
         }, shooter))).andThen(new Shoot().andThen(Commands.waitSeconds(0.5).andThen(Commands.runOnce(() -> {
           shooter.stopMotors();
 
