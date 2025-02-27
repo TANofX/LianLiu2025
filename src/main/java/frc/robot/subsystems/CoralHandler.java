@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.spark.SparkBase;
@@ -78,7 +79,12 @@ public class CoralHandler extends AdvancedSubsystem {
             Constants.CoralHandler.HORIZONTAL_MAX_ANGLE,
             Constants.CoralHandler.HORIZONTAL_JKMETERS_SQUARED,
             Constants.CoralHandler.CORAL_END_EFFECTOR_LENGTH,
-            Constants.CoralHandler.HORIZONTAL_STARTING_ANGLE_IN_RADIANS
+            Constants.CoralHandler.HORIZONTAL_STARTING_ANGLE_IN_RADIANS,
+            false,
+            SensorDirectionValue.Clockwise_Positive,
+            Constants.CoralHandler.HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE,
+            Constants.CoralHandler.HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE,
+            Constants.CoralHandler.HORIZONTAL_ROTATION_DEGREES_PER_ROTATION
             );
     horizontalWrist.registerSystemCheckWithSmartDashboard();
     verticalWrist = new CoralHandlerWrist(
@@ -105,7 +111,12 @@ public class CoralHandler extends AdvancedSubsystem {
             Constants.CoralHandler.VERTICAL_MIN_ANGLE,
             Constants.CoralHandler.VERTICAL_JKMETERS_SQUARED,
             Constants.CoralHandler.CORAL_END_EFFECTOR_LENGTH,
-            Constants.CoralHandler.VERTICAL_STARTING_ANGLE_IN_RADIANS
+            Constants.CoralHandler.VERTICAL_STARTING_ANGLE_IN_RADIANS,
+            true,
+            SensorDirectionValue.Clockwise_Positive,
+            Constants.CoralHandler.VERTICAL_SOFT_LIMIT_FORWARD_ANGLE,
+            Constants.CoralHandler.VERTICAL_SOFT_LIMIT_REVERSE_ANGLE,
+            Constants.CoralHandler.VERTICAL_ROTATION_DEGREES_PER_ROTATION
     );
 
 
@@ -126,8 +137,6 @@ public class CoralHandler extends AdvancedSubsystem {
 
     // Register Hardware
     registerHardware("Coral Intake/Outtake Motor", outtakeMotor);
-
-    SmartDashboard.putData("Zero Wrist", zeroWristCommand());
   }
 
   @Override
@@ -269,10 +278,12 @@ public class CoralHandler extends AdvancedSubsystem {
   public void periodic() {
     // Values available shown on SmartDashboard
     SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
-    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Relative Angle", horizontalWrist.getAngle().getDegrees());
-    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Relative Angle", verticalWrist.getAngle().getDegrees());
-    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Absolute Angle", horizontalWrist.getAbsoluteAngle().getDegrees());
-    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Absolute Angle", verticalWrist.getAbsoluteAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Relative Angle (Deg.)", horizontalWrist.getAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Relative Angle (Deg.)", verticalWrist.getAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Absolute Angle (Deg.)", horizontalWrist.getAbsoluteAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Absolute Angle (Deg.)", verticalWrist.getAbsoluteAngle().getDegrees());
+    SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Motor Position (Rot.)", horizontalWrist.getMotorRotations().getRotations());
+    SmartDashboard.putNumber("CoralHandler/Vertical Wrist Motor Position (Rot.)", verticalWrist.getMotorRotations().getRotations());
   }
 
   public Command zeroWristCommand() {

@@ -67,6 +67,13 @@ public class RobotContainer {
     SmartDashboard.putData("Calibrate Climber", climber.getCalibrateCommand(false));
     SmartDashboard.putData("Reverse Calibrate Command", climber.getCalibrateCommand(true));
     SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
+
+
+    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
+    SmartDashboard.putData("CoralHandler/Horizontal to +10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
+    SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
+    SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
+    SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
     // Register Named Commands for pathplanner
     // ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
     // NamedCommands.registerCommand("ElevatorL4",
@@ -136,8 +143,6 @@ public class RobotContainer {
       }
       return 0.0;
     }));
-
-    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
 
     driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());

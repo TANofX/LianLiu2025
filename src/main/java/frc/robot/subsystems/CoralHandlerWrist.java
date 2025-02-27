@@ -32,14 +32,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
+import frc.robot.Constants;
 
 public final class CoralHandlerWrist extends AdvancedSubsystem {
     // Creation of needed variables
     private final String name;
     private final double gearRatio;
-    // private final Rotation2d armMinRotation;
-    // private final Rotation2d armMaxRotation;
-    // private final double minVelocity;
 
     private final SparkMax motor;
     private final SparkClosedLoopController controller;
@@ -53,7 +51,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
     private final SingleJointedArmSim coralHandlerPhysicsSim;
 
     private final CANcoderConfiguration encoderConfig;
-
+    
     // Creation of needed parameters for the Coral Handler Wrist
     public CoralHandlerWrist(
             String name, // "Horizontal" or "Vertical"
@@ -79,18 +77,21 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
             Rotation2d armMaxRotation,
             double jKgMetersSquared,
             double coralEndEffectorLength,
-            Rotation2d startingAngle) {
+            Rotation2d startingAngle,
+            Boolean motorInvert,
+            SensorDirectionValue encoderDirection,
+            Rotation2d softLimitForwardAngle,
+            Rotation2d softLimitReverseAngle,
+            double rotationDegreesPerRotation
+            ) {
         super("CoralHandlerWrist" + name);
         this.name = name;
         this.gearRatio = gearRatio;
-        // this.minVelocity = minVelocity;
-        // this.armMinRotation = armMinRotation;
-        // this.armMaxRotation = armMaxRotation;
 
         this.motor = new SparkMax(motorId, SparkLowLevel.MotorType.kBrushless);
+        this.absoluteEncoder = new CANcoder(encoderId);
         this.controller = motor.getClosedLoopController();
         this.relativeEncoder = motor.getEncoder();
-        this.relativeEncoder.setPosition(startingAngle.getRotations());
         this.encoderConfig = new CANcoderConfiguration();
 
         LimitSwitchConfig limitConfig = new LimitSwitchConfig();
@@ -98,23 +99,24 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
 
         // TODO Enable soft limit switch?
         SoftLimitConfig softLimitConfig = new SoftLimitConfig();
-        softLimitConfig.forwardSoftLimitEnabled(false);
-        softLimitConfig.reverseSoftLimitEnabled(false);
+        softLimitConfig.forwardSoftLimitEnabled(true);
+        softLimitConfig.reverseSoftLimitEnabled(true);
+        softLimitConfig.forwardSoftLimit(softLimitForwardAngle.getDegrees() / rotationDegreesPerRotation);
+        softLimitConfig.forwardSoftLimit(softLimitReverseAngle.getDegrees() / rotationDegreesPerRotation);
+
         // softLimitConfig.reverseSoftLimit(clampMin / rotationDegreesPerRotation);
         // softLimitConfig.forwardSoftLimit(clampMax / rotationDegreesPerRotation);
 
-        // TODO Should motorConfig configure the motor inverted?
         SparkMaxConfig motorConfig = new SparkMaxConfig();
-        motorConfig.inverted(false);
+        motorConfig.inverted(motorInvert);
         motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
         // Configure the PID controls of motor
         ClosedLoopConfig pidConfig = motorConfig.closedLoop;
-        // pidConfig.pidf(posP, posI, posD, 0, ClosedLoopSlot.kSlot0, maxPosP, maxPosI,
-        // maxPosD, maxPosFF, ClosedLoopSlot.kSlot1);
+
         pidConfig
                 .p(posP, ClosedLoopSlot.kSlot0)
-                .d(posI, ClosedLoopSlot.kSlot0)
+                .i(posI, ClosedLoopSlot.kSlot0)
                 .d(posD, ClosedLoopSlot.kSlot0)
                 .velocityFF(posFF, ClosedLoopSlot.kSlot0)
                 .p(maxPosP, ClosedLoopSlot.kSlot1)
@@ -131,13 +133,12 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
                 SparkBase.PersistMode.kNoPersistParameters);
 
         // Configure Encoder
-        encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        encoderConfig.MagnetSensor.MagnetOffset = Preferences.getDouble(name.toLowerCase() + "RotationalOffset", 0);
-        this.absoluteEncoder = new CANcoder(encoderId);
+        encoderConfig.MagnetSensor.SensorDirection = encoderDirection;
+        encoderConfig.MagnetSensor.MagnetOffset = Preferences.getDouble(name.toLowerCase() + "RotationOffset", 0) / 360.0;
+        encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+
         absoluteEncoder.getConfigurator().apply(encoderConfig);
-        absoluteEncoder.getConfigurator().setPosition(startingAngle.getRotations());
         this.absoluteSignal = absoluteEncoder.getAbsolutePosition();
-        absoluteSignal.refresh();
         syncWristEncoder();
 
         this.gearboxSim = DCMotor.getNeo550(1);
@@ -163,8 +164,10 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
     @Override
     public void periodic() {
         // Gets newest value of absolute encoder
-        absoluteSignal.refresh();
-    }
+        StatusSignal.waitForAll(
+        0,
+        absoluteSignal);
+  }
 
     // Time for logging on terminal
     private long timeSinceLastLog = System.nanoTime();
@@ -224,7 +227,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
 
         // TODO Check if this PID changing method works and change comment after +
         // change angle for when PID controlType changes
-        if ((targetMotorAngle.getDegrees() - getAngle().getDegrees()) > Rotation2d.fromDegrees(5).getDegrees())
+        if ((Math.abs(targetMotorAngle.getDegrees() - getAngle().getDegrees())) > Rotation2d.fromDegrees(1).getDegrees())
             controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl,
                     ClosedLoopSlot.kSlot0);
 
@@ -236,6 +239,9 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         timeSinceLastLog = System.nanoTime();
     }
 
+    public Rotation2d getMotorRotations() {
+        return Rotation2d.fromRotations(relativeEncoder.getPosition());
+    }
     /**
      * Gets the angle from the motor in a Rotation2d from relative encoder.
      */
@@ -247,7 +253,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      * Gets the angle from the motor in a Rotation2d from relative encoder.
      */
     public Rotation2d getAbsoluteAngle() {
-        return Rotation2d.fromDegrees(absoluteEncoder.getPosition().getValueAsDouble() * 360);
+        return Rotation2d.fromDegrees(absoluteSignal.getValueAsDouble() * 360);
     }
 
     /**
@@ -262,7 +268,8 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      * absolute encoder)
      */
     public void syncWristEncoder() {
-        motor.getEncoder().setPosition(absoluteEncoder.getAbsolutePosition().getValueAsDouble() * gearRatio);
+        absoluteSignal.waitForUpdate(1);
+        motor.getEncoder().setPosition(absoluteSignal.getValueAsDouble() * gearRatio);
     }
 
     /**
@@ -271,11 +278,9 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      */
     public void updateWristOffset() {
         double currentOffset = encoderConfig.MagnetSensor.MagnetOffset; // of absolute encoder
-        double offset = (currentOffset - absoluteEncoder.getAbsolutePosition().getValueAsDouble()) % 1.0; // needed
-                                                                                                          // offset for
-                                                                                                          // absolute
-                                                                                                          // encoder
-        Preferences.setDouble(getName() + "RotationOffset", offset * 360.0);
+        absoluteSignal.refresh();
+        double offset = (currentOffset - absoluteSignal.getValue().magnitude()) % 1.0; // needed offset for absolute encoder
+        Preferences.setDouble(name.toLowerCase() + "RotationOffset", offset * 360.0);
         encoderConfig.MagnetSensor.MagnetOffset = offset; // makes it the new offset
         absoluteEncoder.getConfigurator().apply(encoderConfig); // applies offset
         syncWristEncoder(); // syncs absolute offset with relative
@@ -293,17 +298,10 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
     public Command setAngleCommand(Rotation2d targetAngle) {
         SmartDashboard.putNumber(name + "Target Angle in Degrees", targetAngle.getDegrees());
         return Commands.sequence(
-                Commands.runOnce(() -> setAngle(targetAngle)),
-                Commands.waitUntil(() -> {
-                    var difference = Math.abs(
-                            (Rotation2d.fromRotations(relativeEncoder.getPosition()).minus(targetAngle)).getDegrees());
-                    System.out.printf("[%s] difference=%.0f degrees%n", name, difference);
-                    return difference < 5;
-                }),
-                Commands.runOnce(() -> {
-                    setAngle(targetAngle);
-                    System.out.printf("[%s] got within 5 degrees", name);
-                }, this));
+                Commands.run(() -> { setAngle(targetAngle);
+                }, this).until( () -> {
+                    return Math.abs(targetAngle.getDegrees() - getAngle().getDegrees()) < 0.1;
+                })).finallyDo(() -> {stopMotor();});
     }
 
     /**
