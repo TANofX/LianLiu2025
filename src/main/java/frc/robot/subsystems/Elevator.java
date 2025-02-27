@@ -4,19 +4,19 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
@@ -56,24 +56,29 @@ public class Elevator extends AdvancedSubsystem {
     public Elevator(int elevatorCanID) {
         super("Elevator");
         elevatorMotor = new SparkFlex(elevatorCanID, MotorType.kBrushless);
-        SparkFlexConfig newConfig = new SparkFlexConfig();
-        newConfig.idleMode(IdleMode.kBrake);
-        newConfig.inverted(false);
+        SparkFlexConfig config = new SparkFlexConfig();
+        config.idleMode(IdleMode.kBrake);
+        config.inverted(false);
         //switched reverse and forward for limits due to wiring mistake
-        newConfig.softLimit.reverseSoftLimit(Constants.Elevator.MAX_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
-        newConfig.softLimit.forwardSoftLimit(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
-        newConfig.softLimit.forwardSoftLimitEnabled(false);
-        newConfig.softLimit.reverseSoftLimitEnabled(false);
+        config.softLimit.reverseSoftLimit(Constants.Elevator.MAX_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
+        config.softLimit.forwardSoftLimit(Constants.Elevator.MIN_HEIGHT_METERS / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION);
+        config.softLimit.forwardSoftLimitEnabled(false);
+        config.softLimit.reverseSoftLimitEnabled(false);
         // Configure the closed loop controller. This includes the PIDFF gains and the
         // max motion settings.
-        newConfig.closedLoop.pidf(Constants.Elevator.P, Constants.Elevator.I, Constants.Elevator.D,
-                Constants.Elevator.FF, ClosedLoopSlot.kSlot0);
-        newConfig.closedLoop.maxMotion.allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0);
-        newConfig.closedLoop.maxMotion.maxAcceleration(Constants.Elevator.MAX_ACCELERATION, ClosedLoopSlot.kSlot0);
-        newConfig.closedLoop.maxMotion.maxVelocity(Constants.Elevator.MAX_VELOCITY, ClosedLoopSlot.kSlot0);
-        newConfig.closedLoop.maxMotion.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot0);
+        config.closedLoop
+            .pidf(Constants.Elevator.P, Constants.Elevator.I, Constants.Elevator.D,
+                Constants.Elevator.FF, ClosedLoopSlot.kSlot0)
+            .pidf(Constants.Elevator.POSITION_HOLD.P, Constants.Elevator.POSITION_HOLD.I,
+                Constants.Elevator.POSITION_HOLD.D, Constants.Elevator.POSITION_HOLD.FF,
+                ClosedLoopSlot.kSlot1)
+            .maxMotion
+                .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0)
+                .maxAcceleration(Constants.Elevator.MAX_ACCELERATION, ClosedLoopSlot.kSlot0)
+                .maxVelocity(Constants.Elevator.MAX_VELOCITY, ClosedLoopSlot.kSlot0)
+                .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot0);
 
-        elevatorMotor.configure(newConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        elevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         elevatorEncoder = elevatorMotor.getEncoder();
         elevatorController = elevatorMotor.getClosedLoopController();
 
@@ -186,7 +191,9 @@ public class Elevator extends AdvancedSubsystem {
         }
         double rotations = amount / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION;
 
-        elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        if(Math.abs(getElevationMeters() * -1.0 - amount) > Constants.Elevator.POSITION_HOLD.THRESHOLD)
+            elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        else elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     // A method to check the Elevators current height
