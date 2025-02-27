@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -249,39 +251,39 @@ public final class Constants {
     public static final double CORAL_OUTTAKE_SPEED = 0;
 
     public static final double OUTTAKE_MOTOR_GEARING = 1.0;
-    public static final double HORIZONTAL_GEAR_RATIO = 100.0;
-    public static final double VERTICAL_GEAR_RATIO = 100.0;
+    public static final double HORIZONTAL_GEAR_RATIO = 720.0;
+    public static final double VERTICAL_GEAR_RATIO = 1440.0;
 
     public static final double OUTTAKE_JKMETERS_SQUARED = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAKE_WHEEL_RADIUS, 2));
     public static final double OUTTAKE_MOTOR_MIN_VELOCITY = 0.0;
 
-    public static final double HORIZONTAL_MOTOR_POS_P = 0.03;
+    public static final double HORIZONTAL_MOTOR_POS_P = 1.0;
     public static final double HORIZONTAL_MOTOR_POS_I = 0.0;
     public static final double HORIZONTAL_MOTOR_POS_D = 0.0;
-    public static final double HORIZONTAL_MOTOR_MAX_POS_P = 0.0;
+    public static final double HORIZONTAL_MOTOR_MAX_POS_P = 0.0005;
     public static final double HORIZONTAL_MOTOR_MAX_POS_I = 0.0;
-    public static final double HORIZONTAL_MOTOR_MAX_POS_D = 0.0;
-    public static final double HORIZONTAL_MOTOR_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
-    public static final double HORIZONTAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
+    public static final double HORIZONTAL_MOTOR_MAX_POS_D = 0.00025;
+    public static final double HORIZONTAL_MOTOR_POS_FEED_FORWARD = 0.0; //1.0 / (565.0 * 12.0);
+    public static final double HORIZONTAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / 11004.0;
     public static final double HORIZONTAL_MOTOR_POS_I_ZONE = 0.0;
-    public static final double HORIZONTAL_MOTOR_MAX_POS_I_ZONE = 0.0;
-    public static final double HORIZONTAL_MOTOR_MAX_ACCELERATION = 25000.0; // RPM per Sec
-    public static final double HORIZONTAL_MOTOR_MAX_VELOCITY = 3500.0; // RPM
-    public static final double HORIZONTAL_MOTOR_CLOSED_LOPP_ERROR = 1.0;
+    public static final double HORIZONTAL_MOTOR_MAX_POS_I_ZONE = 1000.0;
+    public static final double HORIZONTAL_MOTOR_MAX_ACCELERATION = 20000.0; // RPM per Sec
+    public static final double HORIZONTAL_MOTOR_MAX_VELOCITY = 10500.0; // RPM
+    public static final double HORIZONTAL_MOTOR_CLOSED_LOPP_ERROR = 10.0;
 
-    public static final double VERTICAL_MOTOR_POS_P = 0.03;
+    public static final double VERTICAL_MOTOR_POS_P = 1.0;
     public static final double VERTICAL_MOTOR_POS_I = 0.0;
     public static final double VERTICAL_MOTOR_POS_D = 0.0;
-    public static final double VERTICAL_MOTOR_MAX_POS_P = 0.03;
+    public static final double VERTICAL_MOTOR_MAX_POS_P = 0.0005;
     public static final double VERTICAL_MOTOR_MAX_POS_I = 0.0;
-    public static final double VERTICAL_MOTOR_MAX_POS_D = 0.0;
-    public static final double VERTICAL_MOTOR_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
-    public static final double VERTICAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / (565.0 * 12.0);
+    public static final double VERTICAL_MOTOR_MAX_POS_D = 0.00025;
+    public static final double VERTICAL_MOTOR_POS_FEED_FORWARD = 0.0; //1.0 / (565.0 * 12.0);
+    public static final double VERTICAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / 11004.0;
     public static final double VERTICAL_MOTOR_POS_I_ZONE = 0.0;
-    public static final double VERTICAL_MOTOR_MAX_POS_I_ZONE = 0.0;
-    public static final double VERTICAL_MOTOR_MAX_ACCELERATION = 25000.0; // RPM per Sec
-    public static final double VERTICAL_MOTOR_MAX_VELOCITY = 3500.0; // RPM
-    public static final double VERTICAL_MOTOR_CLOSED_LOOP_ERROR = 1.0;
+    public static final double VERTICAL_MOTOR_MAX_POS_I_ZONE = 1000.0;
+    public static final double VERTICAL_MOTOR_MAX_ACCELERATION = 20000.0; // RPM per Sec
+    public static final double VERTICAL_MOTOR_MAX_VELOCITY = 10500.0; // RPM
+    public static final double VERTICAL_MOTOR_CLOSED_LOOP_ERROR = 10.0;
 
     public static final double HORIZONTAL_JKMETERS_SQUARED = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
         * Math.pow(CORAL_END_EFFECTOR_LENGTH, 2.0);
@@ -290,9 +292,14 @@ public final class Constants {
 
     public static final Rotation2d HORIZONTAL_MIN_ANGLE = Rotation2d.fromDegrees(-100);
     public static final Rotation2d HORIZONTAL_MAX_ANGLE = Rotation2d.fromDegrees(100);
+    public static final Rotation2d HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE = Rotation2d.fromDegrees(85.6);
+    public static final Rotation2d HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE = Rotation2d.fromDegrees(-85.6);
 
     public static final Rotation2d VERTICAL_MIN_ANGLE = Rotation2d.fromDegrees(-90);
     public static final Rotation2d VERTICAL_MAX_ANGLE = Rotation2d.fromDegrees(90);
+    public static final Rotation2d VERTICAL_SOFT_LIMIT_FORWARD_ANGLE = Rotation2d.fromDegrees(83.2);
+    public static final Rotation2d VERTICAL_SOFT_LIMIT_REVERSE_ANGLE = Rotation2d.fromDegrees(-32.0);
+
 
     public static final Rotation2d HORIZONTAL_STARTING_ANGLE_IN_RADIANS = Rotation2d.fromDegrees(-90);
     public static final Rotation2d VERTICAL_STARTING_ANGLE_IN_RADIANS = Rotation2d.fromDegrees(-100);
