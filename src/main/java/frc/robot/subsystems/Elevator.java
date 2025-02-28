@@ -95,8 +95,8 @@ public class Elevator extends AdvancedSubsystem {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Elevator/Elevator Motor Velocity", elevatorEncoder.getVelocity());
-        SmartDashboard.putNumber("Elevator/Elevator Position", getElevationMeters());
+    SmartDashboard.putNumber("Elevator/Elevator Motor Velocity", elevatorEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator/Elevator Position", getElevationMeters());
     SmartDashboard.putBoolean("Elevator/calibrated", calibrated);
     SmartDashboard.putBoolean("Elevator/BottomLimitPressed", elevatorMotor.getReverseLimitSwitch().isPressed());
     SmartDashboard.putBoolean("Elevator/UpperLimitPressed",elevatorMotor.getForwardLimitSwitch().isPressed());
