@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,52 +52,53 @@ public class RobotContainer {
 
     LEDs.setDefaultCommand(new Notifications());
 
-    SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
-    SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
-    SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
+    // SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
+    // SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
+    // SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
+    //CameraServer.startAutomaticCapture().setResolution(200, 150);
 
-    // Climber SmartDashboard Commands
-    SmartDashboard.putData("Climber/Prepare Climber", climber.getPrepareCommand());
-    SmartDashboard.putData("Climber/Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-140)));
-    SmartDashboard.putData("Climber/Run Claw Motor", climber.runClimberMotorCommand());
-    SmartDashboard.putData("Climber/Reverse Claw Motor", climber.reverseClimbMotorCommand());
-    SmartDashboard.putData("Climber/Climber System Check", climber.getSystemCheckCommand());
+    // // Climber SmartDashboard Commands
+    // SmartDashboard.putData("Climber/Prepare Climber", climber.getPrepareCommand());
+    // SmartDashboard.putData("Climber/Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-140)));
+    // SmartDashboard.putData("Climber/Run Claw Motor", climber.runClimberMotorCommand());
+    // SmartDashboard.putData("Climber/Reverse Claw Motor", climber.reverseClimbMotorCommand());
+    // SmartDashboard.putData("Climber/Climber System Check", climber.getSystemCheckCommand());
     SmartDashboard.putData("Climber/Calibrate Climber", climber.getCalibrateCommand(false));
     SmartDashboard.putData("Climber/Reverse Calibrate Command", climber.getCalibrateCommand(true));
-    SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
+    // SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
 
     // Coral Handler SmartDashboard Commands
-    SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
-    SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
-    SmartDashboard.putData("CoralHandler/Vertical Run Positive", coralHandler.runVerticalMotorPositiveCommand());
-    SmartDashboard.putData("CoralHandler/Vertial Run Negative", coralHandler.runVerticalMotorNegativeCommand());
-    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
+    // SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
+    // SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
+    // SmartDashboard.putData("CoralHandler/Vertical Run Positive", coralHandler.runVerticalMotorPositiveCommand());
+    // SmartDashboard.putData("CoralHandler/Vertial Run Negative", coralHandler.runVerticalMotorNegativeCommand());
+    // SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
 
-    SmartDashboard.putData("CoralHandler/Horizontal to +45degrees",
-        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
-    SmartDashboard.putData("CoralHandler/Vertical to +20degrees",
-        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
-    SmartDashboard.putData("CoralHandler/Horizontal to -45degrees",
-        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
-    SmartDashboard.putData("CoralHandler/Vertical to -20degrees",
-        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
-    SmartDashboard.putData("CoralHandler/Vertical to -30degrees",
-        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-30)));
-    SmartDashboard.putData("CoralHandler/Horizontal to Max",
-        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(95)));
-    SmartDashboard.putData("CoralHandler/Set Angles to Home", coralHandler.setHomeAngleCommand());
-    SmartDashboard.putData("CoralHandler/Set Angles to Zero", coralHandler.setToZeroAngleCommand());
-    SmartDashboard.putData("CoralHandler/Run Inake Wheel", coralHandler.runCoralIntakeCommand());
-    SmartDashboard.putData("CoralHandler/Run Extake Wheel", coralHandler.runCoralOuttakeCommand());
+    // SmartDashboard.putData("CoralHandler/Horizontal to +45degrees",
+    //     coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
+    // SmartDashboard.putData("CoralHandler/Vertical to +20degrees",
+    //     coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
+    // SmartDashboard.putData("CoralHandler/Horizontal to -45degrees",
+    //     coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
+    // SmartDashboard.putData("CoralHandler/Vertical to -20degrees",
+    //     coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
+    // SmartDashboard.putData("CoralHandler/Vertical to -30degrees",
+    //     coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-30)));
+    // SmartDashboard.putData("CoralHandler/Horizontal to Max",
+    //     coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(95)));
+    // SmartDashboard.putData("CoralHandler/Set Angles to Home", coralHandler.setHomeAngleCommand());
+    // SmartDashboard.putData("CoralHandler/Set Angles to Zero", coralHandler.setToZeroAngleCommand());
+    // SmartDashboard.putData("CoralHandler/Run Inake Wheel", coralHandler.runCoralIntakeCommand());
+    // SmartDashboard.putData("CoralHandler/Run Extake Wheel", coralHandler.runCoralOuttakeCommand());
 
     // Elevator SmartDashboard Values
     SmartDashboard.putData("Elevator/Calibrate Elevator", elevator.getCalibrationCommand());
-    SmartDashboard.putData("Elevator/Check Elevator", elevator.getSystemCheckCommand());
-    SmartDashboard.putData("Elevator/Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
-    SmartDashboard.putData("Elevator/Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
+    // SmartDashboard.putData("Elevator/Check Elevator", elevator.getSystemCheckCommand());
+    // SmartDashboard.putData("Elevator/Elevator 1.25", elevator.getElevatorHeightCommand(1.25));
+    // SmartDashboard.putData("Elevator/Elevator 0.0", elevator.getElevatorHeightCommand(0.0));
     SmartDashboard.putData("Elevator/Move Elevator UP", elevator.getSlowElevatorUpCommand());
     SmartDashboard.putData("Elevator/Move Elevator Down", elevator.getSlowElevatorDownCommand());
-    SmartDashboard.putData("Elevator/Elevator 1.35", elevator.getElevatorHeightCommand(0.0));
+    // SmartDashboard.putData("Elevator/Elevator 1.35", elevator.getElevatorHeightCommand(0.0));
 
     // Register Named Commands for pathplanner ??
     // ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:

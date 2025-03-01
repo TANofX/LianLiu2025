@@ -23,16 +23,16 @@ public class CoralHandlerAngleEstimator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO uncomment line below after merge with AutoAiming and fix with needed method
-    if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-    }
-    else if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-    }
-    else {
-      RobotContainer.coralHandler.setIntakeAngle();
-    }
+    // // TODO uncomment line below after merge with AutoAiming and fix with needed method
+    // if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+    //   //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    // }
+    // else if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+    //   //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    // }
+    // else {
+    //   RobotContainer.coralHandler.setIntakeAngle();
+    // }
   }
 
   // Called once the command ends or is interrupted.

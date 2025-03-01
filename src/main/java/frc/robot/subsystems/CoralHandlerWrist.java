@@ -220,7 +220,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         // armMaxRotation.getDegrees()));
         var targetMotorAngle = targetArmAngle.times(gearRatio);
 
-        System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
+        // System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
 
         // TODO Check if this PID changing method works and change comment after +
         // change angle for when PID controlType changes
@@ -306,7 +306,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      *         target angle and actual angle.
      */
     public Command setAngleCommand(Rotation2d targetAngle) {
-        SmartDashboard.putNumber(name + "Target Angle in Degrees", targetAngle.getDegrees());
+        // SmartDashboard.putNumber(name + "Target Angle in Degrees", targetAngle.getDegrees());
         return Commands.sequence(
                 Commands.run(() -> { setAngle(targetAngle);
                 }, this).until( () -> {

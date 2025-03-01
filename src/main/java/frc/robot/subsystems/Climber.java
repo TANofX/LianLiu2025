@@ -102,9 +102,9 @@ public final class Climber extends AdvancedSubsystem {
     motorSimulation = new SparkFlexSim(climberMotor, DCMotor.getNeoVortex(1));
     physicsSimulation.wouldHitLowerLimit(-3 * Math.PI / 4);
     physicsSimulation.wouldHitUpperLimit(0.0);
-    SmartDashboard.putData("Open Claw", getOpenClawCommand());
-    SmartDashboard.putData("Close Claw", getCloseClawCommand());
-    SmartDashboard.putData("Set Climber to -90", setClimberNeg90());
+    // SmartDashboard.putData("Open Claw", getOpenClawCommand());
+    // SmartDashboard.putData("Close Claw", getCloseClawCommand());
+    // SmartDashboard.putData("Set Climber to -90", setClimberNeg90());
   }
 
   @Override

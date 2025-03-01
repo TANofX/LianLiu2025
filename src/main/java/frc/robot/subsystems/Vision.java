@@ -10,12 +10,14 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import static edu.wpi.first.units.Units.Inch;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
@@ -32,16 +34,16 @@ public final class Vision extends AdvancedSubsystem {
     private boolean isStopped = true;
 
     public Vision() {
-        addCamera("swerveL", new Transform3d(
-                Inch.of(13.280346266), // Cad Z
-                Inch.of(-11.580914897), // Cad X
-                Inch.of(8.177878478), // Cad Y
-                new Rotation3d(0, -15, -90)));
-        addCamera("swerveR", new Transform3d(
+        addCamera("port", new Transform3d(
                 Inch.of(13.280346266), // Cad Z
                 Inch.of(11.580914897), // Cad X
                 Inch.of(8.177878478), // Cad Y
                 new Rotation3d(0, -15, 90)));
+        /*addCamera("starboard", new Transform3d(
+                Inch.of(-13.280346266), // Cad Z
+                Inch.of(-11.580914897), // Cad X
+                Inch.of(8.177878478), // Cad Y
+                new Rotation3d(0, -15, -90)));*/
     }
 
     @Override
@@ -58,6 +60,8 @@ public final class Vision extends AdvancedSubsystem {
         if (result.hasTargets()) {
             PhotonTrackedTarget passedTarget = result.getBestTarget();
             Optional<Pose3d> tagPose = Constants.apriltagLayout.getTagPose(passedTarget.getFiducialId());
+            
+            SmartDashboard.putBoolean(cam.prefix+"/tagPresent", tagPose.isPresent());
 
             if (tagPose.isPresent()) {
                 var imageCaptureTime = result.getTimestampSeconds();
@@ -84,6 +88,10 @@ public final class Vision extends AdvancedSubsystem {
                     RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(cam.getSD());
                     RobotContainer.swerve.odometry.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
                 }
+                Pose2d pose = robotPose.toPose2d();
+                SmartDashboard.putNumberArray(cam.prefix+"/robotPose", new double[] {
+                    pose.getX(), pose.getY(), pose.getRotation().getDegrees()
+                });
             }
         }
     }

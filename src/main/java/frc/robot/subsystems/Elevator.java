@@ -111,14 +111,15 @@ public class Elevator extends AdvancedSubsystem {
         // Calculate the input voltage for the elevator simulation. The appliedVoltage
         // is calculated by the SparkFlex simulation.
         // The RobotController battery voltage is simulated in the RoboRioSim class.
+        
         double inputVoltage = elevatorMotorSim.getAppliedOutput() * RobotController.getBatteryVoltage();
-        SmartDashboard.putNumber("Elevator Simulation/Simulated Voltage", inputVoltage);
-        SmartDashboard.putNumber("Elevator Simulation/Motor Position", elevatorMotorSim.getPosition());
-        SmartDashboard.putNumber("Elevator Simulation/Height", this.getElevationMeters());
-        SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Velocity",
-                elevatorPhysicsSim.getVelocityMetersPerSecond());
-        SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Height",
-                elevatorPhysicsSim.getPositionMeters());
+        // SmartDashboard.putNumber("Elevator Simulation/Simulated Voltage", inputVoltage);
+        // SmartDashboard.putNumber("Elevator Simulation/Motor Position", elevatorMotorSim.getPosition());
+        // SmartDashboard.putNumber("Elevator Simulation/Height", this.getElevationMeters());
+        // SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Velocity",
+        //         elevatorPhysicsSim.getVelocityMetersPerSecond());
+        // SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Height",
+        //         elevatorPhysicsSim.getPositionMeters());
 
         // Update the input voltage for the elevator simulation and update the
         // simulation.
