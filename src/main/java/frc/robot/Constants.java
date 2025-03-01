@@ -98,10 +98,6 @@ public final class Constants {
     public static final double STARTING_HEIGHT_METERS = MIN_HEIGHT_METERS
         + (MIN_HEIGHT_METERS + MAX_HEIGHT_METERS) / 2.0;
 
-    public static final double LEVEL1_HEIGHT = 1.25;
-    public static final double LEVEL2_HEIGHT = 0; // Set correct height
-    public static final double LEVEL3_HEIGHT = 0;
-    public static final double LEVEL4_HEIGHT = 0;
     public static final double MAX_ACCELERATION = 24000.0;
     public static final double MAX_VELOCITY = 6700.0;
   };

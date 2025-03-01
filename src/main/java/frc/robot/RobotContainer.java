@@ -3,9 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.CoralHandlerAngleEstimator;
 import frc.robot.commands.ElevatorJoystickControl;
@@ -74,6 +78,7 @@ public class RobotContainer {
     SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
     SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
     SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
+   
     // Register Named Commands for pathplanner
     // ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
     // NamedCommands.registerCommand("ElevatorL4",
@@ -148,12 +153,13 @@ public class RobotContainer {
     driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    coDriver.B().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    coDriver.Y().onTrue(elevator.getElevatorHeightCommand(Units.inchesToMeters(40.0)));
-    coDriver.X().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MAX_HEIGHT_METERS));
     driver.B().onTrue(climber.getPrepareCommand());
     driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-150)));
+
+    coDriver.A().onTrue(level1PositionCommand());
+    coDriver.B().onTrue(level2PositionCommand());
+    coDriver.Y().onTrue(level3PositionCommand());
+    coDriver.X().onTrue(level4PositionCommand());
 
     coDriver.START();
     driver.Y().onTrue(climber.getPrepareCommand());
@@ -198,6 +204,33 @@ public class RobotContainer {
     // driver.START().onTrue(new ); //calibrate elevator
 
     coDriver.START();
+  }
+
+  public Command level1PositionCommand() {
+    return Commands.parallel(
+      elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(0))
+    );
+  }
+  public Command level2PositionCommand() {
+    return Commands.parallel(
+      elevator.getElevatorHeightCommand(Units.inchesToMeters(31.72-24.0)),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(35))
+    );
+  }
+  
+  public Command level3PositionCommand() {
+    return Commands.parallel(
+      elevator.getElevatorHeightCommand(Units.inchesToMeters(47.59-24.0)),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(35))
+    );
+  }
+  
+  public Command level4PositionCommand() {
+    return Commands.parallel(
+      elevator.getElevatorHeightCommand(Units.inchesToMeters(31.72-24.0)),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39.7))
+    );
   }
 
   public static void periodic() {
