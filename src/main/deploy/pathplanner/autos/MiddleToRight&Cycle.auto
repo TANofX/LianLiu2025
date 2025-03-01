@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Place"
+            "name": "Place L4"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Place"
+            "name": "Place L4"
           }
         },
         {
@@ -50,12 +50,6 @@
           "type": "named",
           "data": {
             "name": "Collect"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CollecttoK"
           }
         }
       ]
