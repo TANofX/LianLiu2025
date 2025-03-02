@@ -1,7 +1,5 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +12,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -248,7 +245,7 @@ public final class Constants {
     public static final double OUTTAKE_WHEEL_RADIUS = 0.02;
 
     public static final double CORAL_INTAKE_SPEED = -0.3;
-    public static final double CORAL_OUTTAKE_SPEED = 0.3;
+    public static final double CORAL_OUTTAKE_SPEED = 1.0;
 
     public static final double OUTTAKE_MOTOR_GEARING = 1.0;
     public static final double HORIZONTAL_GEAR_RATIO = 720.0;

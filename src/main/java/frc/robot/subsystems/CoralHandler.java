@@ -221,6 +221,10 @@ public class CoralHandler extends AdvancedSubsystem {
   public void runOuttakeMotor(double outtakeMotorSpeed) {
     outtakeMotor.set(outtakeMotorSpeed);
   }
+  
+  public void runSuckMotor() {
+    outtakeMotor.set(Constants.CoralHandler.CORAL_OUTTAKE_SPEED);
+  }
 
   /**
    * Sets the horizontal positioning of the coral end effector to a specified
@@ -275,7 +279,6 @@ public class CoralHandler extends AdvancedSubsystem {
     verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_4_ANGLE);
   }
  
-
   @Override
   public void periodic() {
     // Values available shown on SmartDashboard
@@ -299,6 +302,13 @@ public class CoralHandler extends AdvancedSubsystem {
           .ignoringDisable(true);
   }
 
+  public Command runFlickSpeedCommand(double speed) {
+    return Commands.run(
+      () -> {
+        outtakeMotor.set(speed);
+      }, this);
+  }
+
   public Command runCoralIntakeCommand() {
     return Commands.sequence(
         Commands.runOnce(
@@ -318,7 +328,10 @@ public class CoralHandler extends AdvancedSubsystem {
         Commands.waitUntil(
             () -> !hasCoral()),
         Commands.runOnce(
-            () -> stopOuttakeMotor(), this));
+            () -> 
+            stopOuttakeMotor()
+            , this), 
+            verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-20)));
   }
 
   public Command setToZeroAngleCommand() {
@@ -342,12 +355,6 @@ public class CoralHandler extends AdvancedSubsystem {
     );
   }
 
-  public Command intakeCommand() {
-    return Commands.sequence(
-      setIntakeAngleCommand(),
-      runCoralIntakeCommand()
-    );
-  }
   public Command setVerticalAngleCommand(Rotation2d vTargetAngle) {
     return verticalWrist.setAngleCommand(vTargetAngle);
   }

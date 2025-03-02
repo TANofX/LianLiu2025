@@ -197,6 +197,12 @@ public class Elevator extends AdvancedSubsystem {
         else elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
+    public double getHeightFrac() {
+        double totalHeight = Constants.Elevator.MAX_HEIGHT_METERS - Constants.Elevator.MIN_HEIGHT_METERS;
+        double percent = getElevationMeters()/totalHeight;
+        return Math.abs(percent);
+    }
+
     // A method to check the Elevators current height
     //negated because of faulty wiring
     public double getElevationMeters() {

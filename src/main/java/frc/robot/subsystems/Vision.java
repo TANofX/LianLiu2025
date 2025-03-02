@@ -59,20 +59,18 @@ public final class Vision extends AdvancedSubsystem {
                 RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(best.cam.getSD());
                 RobotContainer.swerve.odometry.addVisionMeasurement(best.robotPose.toPose2d(), best.imageCaptureTime);
             }
-            Pose2d pose = best.robotPose.toPose2d();
-            SmartDashboard.putNumberArray(best.cam.prefix+"/robotPose", new double[] {
-                pose.getX(), pose.getY(), pose.getRotation().getDegrees()
-            });
         }
     }
 
     private Result processResult(PhotonPipelineResult result, Camera cam) {
         Transform3d cameraToRobot = cam.getPosition();
+        
+        SmartDashboard.putBoolean(cam.prefix+"/tagPresent", result.hasTargets());
+
         if (result.hasTargets()) {
             PhotonTrackedTarget passedTarget = result.getBestTarget();
             Optional<Pose3d> tagPose = Constants.apriltagLayout.getTagPose(passedTarget.getFiducialId());
             
-            SmartDashboard.putBoolean(cam.prefix+"/tagPresent", tagPose.isPresent());
 
             if (tagPose.isPresent()) {
                 var imageCaptureTime = result.getTimestampSeconds();
@@ -95,6 +93,11 @@ public final class Vision extends AdvancedSubsystem {
                     cam.addSD(robotPose);
                 }
                 wasStopped = isStopped;
+                Pose2d pose = robotPose.toPose2d();
+                SmartDashboard.putNumberArray(cam.prefix+"/robotPose", new double[] {
+                    pose.getX(), pose.getY(), pose.getRotation().getDegrees()
+                });
+                SmartDashboard.putNumberArray(cam.prefix+"/sd", cam.getSD().getData());
                 return new Result(cam, robotPose, imageCaptureTime, passedTarget.getPoseAmbiguity());
             }
         }
