@@ -90,7 +90,7 @@ public final class Constants {
       public static final double THRESHOLD = 0.02;
     }
 
-    public static final double METERS_PER_MOTOR_REVOLUTION =  Units.inchesToMeters(1.0 / 8.0) * 1.0083601831021498;
+    public static final double METERS_PER_MOTOR_REVOLUTION =  Units.inchesToMeters(1.0 / 4.0) * 1.0083601831021498;
     public static final double ELEVATOR_MASS = Units.lbsToKilograms(20.0);
     public static final double GEAR_RATIO = 1.0;
     public static final double MIN_HEIGHT_METERS = 0.0;
@@ -346,6 +346,10 @@ public final class Constants {
     public static final double MOTOR_KI = 0; // TODO Configure Climber PID
     public static final double MOTOR_KD = 0.00025;
     public static final double MOTOR_FF = 1.0 / 6000.0;
+    public static final double MOTOR_MAX_KP = 0;
+    public static final double MOTOR_MAX_KI = 0;
+    public static final double MOTOR_MAX_KD = 0;
+    public static final double MOTOR_MAX_FF = 0;
     public static final double MOTOR_MAX_VELOCITY = 1000.0;
     public static final double MOTOR_MAX_ACCEL = 500.0;
     public static final double GEAR_RATIO = .0045977011494;

@@ -40,8 +40,8 @@ public class RobotContainer {
   Constants.CoralHandler.VERTICAL_MOTOR_ID,
   Constants.CoralHandler.HORIZONTAL_ENCODER_ID,
   Constants.CoralHandler.VERTICAL_ENCODER_ID);
-  public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
-      Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
+  // public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
+  //     Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
   public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.RIGHT_ALGAE_MOTOR_ID,
       Constants.AlgaeHandler.RIGHT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.RIGHT_ALGAE_LIMIT_ID);
 
@@ -56,8 +56,8 @@ public class RobotContainer {
     configureButtonBindings();
     LEDs.setDefaultCommand(new Notifications());
     elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
-    SmartDashboard.putData("Left Algae Handler Test",
-    leftAlgaeHandler.getSystemCheckCommand());
+    // SmartDashboard.putData("Left Algae Handler Test",
+    // leftAlgaeHandler.getSystemCheckCommand());
     SmartDashboard.putData("Right Algae Handler Test",
     rightAlgaeHandler.getSystemCheckCommand());
 
@@ -91,7 +91,6 @@ public class RobotContainer {
   
 
   private void configureButtonBindings() {
-    driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
 
     coDriver.START();
     coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
@@ -114,8 +113,8 @@ public class RobotContainer {
       return 0.0;
     }));
 
-    driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
-    driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
+    // driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
+    // driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     coDriver.A().onTrue(elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));

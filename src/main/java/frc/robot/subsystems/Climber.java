@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -88,10 +89,12 @@ public final class Climber extends AdvancedSubsystem {
     // climberMotorConfig.smartCurrentLimit(100,80);
     final ClosedLoopConfig climberMotorPidConfig = climberMotorConfig.closedLoop;
     climberMotorPidConfig.pidf(Constants.Climber.MOTOR_KP, Constants.Climber.MOTOR_KI, Constants.Climber.MOTOR_KD,
-        Constants.Climber.MOTOR_FF);
+        Constants.Climber.MOTOR_FF, ClosedLoopSlot.kSlot0); //position
+        climberMotorPidConfig.pidf(Constants.Climber.MOTOR_MAX_KP, Constants.Climber.MOTOR_MAX_KI, Constants.Climber.MOTOR_MAX_KD,
+        Constants.Climber.MOTOR_MAX_FF, ClosedLoopSlot.kSlot1); //maxmotion
     climberMotorPidConfig.maxMotion.maxVelocity(Constants.Climber.MOTOR_MAX_VELOCITY);
     climberMotorPidConfig.maxMotion.maxAcceleration(Constants.Climber.MOTOR_MAX_ACCEL);
-    climberMotorPidConfig.maxMotion.allowedClosedLoopError(2.0);
+    climberMotorPidConfig.maxMotion.allowedClosedLoopError(2.0); //TODO
     climberMotor.configure(climberMotorConfig, SparkBase.ResetMode.kResetSafeParameters,
         SparkBase.PersistMode.kPersistParameters);
 
@@ -158,7 +161,13 @@ public final class Climber extends AdvancedSubsystem {
     double difference = armRotation - currentAngle.getRotations();
     double motorRotation = difference / Constants.Climber.GEAR_RATIO;
     double actualTarget = motorRotation + climberEncoder.getPosition();
-    climberController.setReference(actualTarget, ControlType.kPosition);
+    
+    if (Math.abs(actualTarget - getCurrentAngle().getDegrees()) > 2) {
+    climberController.setReference(actualTarget, ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot1);
+    }
+    else {
+      climberController.setReference(actualTarget, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    }
   }
 
   /**
