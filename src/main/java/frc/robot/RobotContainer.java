@@ -10,7 +10,6 @@ import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.CoralHandlerAngleEstimator;
 import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
-import frc.robot.commands.Notifications;
 import frc.robot.subsystems.AlgaeHandler;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralHandler;
@@ -30,7 +29,6 @@ public class RobotContainer {
   // Subsystems
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
-  public static final LEDs LEDs = new LEDs();
   public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
   public static final RobotMechanism robotMechanism = new RobotMechanism(() -> swerve.getPose());
   public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.OUTTAKE_MOTOR_ID,
@@ -45,6 +43,7 @@ public class RobotContainer {
 
   public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
+   public static final LEDs LEDs = new LEDs(leftAlgaeHandler, coralHandler);
 
   public RobotContainer() {
     coralHandler.registerSystemCheckWithSmartDashboard();
@@ -52,7 +51,6 @@ public class RobotContainer {
 
     SmartDashboard.putData(swerve.zeroModulesCommand());
     configureButtonBindings();
-    LEDs.setDefaultCommand(new Notifications());
     elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
     SmartDashboard.putData("Left Algae Handler Test",
     leftAlgaeHandler.getSystemCheckCommand());
