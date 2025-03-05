@@ -23,6 +23,8 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.RobotMechanism;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 public class RobotContainer {
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
@@ -33,9 +35,8 @@ public class RobotContainer {
   public static final Swerve swerve = new Swerve();
   public static final LEDs LEDs = new LEDs();
   public static final RobotMechanism robotMechanism = new RobotMechanism(() -> swerve.getPose());
-  public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
-  public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
-      Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
+  // public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
+  //     Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
   public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.RIGHT_ALGAE_MOTOR_ID,
       Constants.AlgaeHandler.RIGHT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.RIGHT_ALGAE_LIMIT_ID);
   public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
@@ -46,6 +47,7 @@ public class RobotContainer {
       Constants.CoralHandler.VERTICAL_MOTOR_ID,
       Constants.CoralHandler.HORIZONTAL_ENCODER_ID,
       Constants.CoralHandler.VERTICAL_ENCODER_ID);
+  public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -55,6 +57,11 @@ public class RobotContainer {
       return elevator.getHeightFrac();
     }));
     LEDs.setDefaultCommand(new Notifications());
+    elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
+    // SmartDashboard.putData("Left Algae Handler Test",
+    // leftAlgaeHandler.getSystemCheckCommand());
+    SmartDashboard.putData("Right Algae Handler Test",
+    rightAlgaeHandler.getSystemCheckCommand());
 
     // SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
     // SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
@@ -120,6 +127,19 @@ public class RobotContainer {
     // NamedCommands.registerCommand("New AutoSpeakerShot",
     // newAutoShootInSpeaker());
     // NamedCommands.registerCommand("", );
+    SmartDashboard.putData("CoralHandler/Horizontal to +10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
+    SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
+    SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
+    SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
+
+// Register Named Commands for pathplanner
+    NamedCommands.registerCommand("Place L1", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
+    NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    NamedCommands.registerCommand("Place L4", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
+    NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
+    NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
+
   }
 
   private void configureButtonBindings() {
@@ -143,8 +163,8 @@ public class RobotContainer {
           return 0.0;
         }));
 
-    driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
-    driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
+    // driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
+    // driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-150)));
