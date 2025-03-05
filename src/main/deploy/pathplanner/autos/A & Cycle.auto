@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "place L1"
+            "name": "Place L4"
           }
         },
         {
@@ -35,12 +35,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "place L1"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "KtoCollect"
@@ -56,6 +50,50 @@
           "type": "path",
           "data": {
             "pathName": "CollecttoL"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "AtoCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CollecttoK"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L1"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": []
           }
         }
       ]

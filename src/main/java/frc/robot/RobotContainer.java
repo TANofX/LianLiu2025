@@ -20,6 +20,8 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.RobotMechanism;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 public class RobotContainer {
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
@@ -74,46 +76,14 @@ public class RobotContainer {
     SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
     SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
     SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
-    // Register Named Commands for pathplanner
-    // ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
-    // NamedCommands.registerCommand("ElevatorL4",
-    // elevator.getElevatorHeightCommand(0));
-    // NamedCommands.registerCommand("ElevatorL1",
-    // elevator.getElevatorHeightCommand(0.00000001));
-    // NamedCommands.registerCommand("ElevatorIntake",
-    // elevator.getElevatorHeightCommand(0.00001));
-    // NamedCommands.registerCommand("Collect", new ______());
 
-    // //Do I need this?
-    // elevator.setDefaultCommand(new ElevatorJoystickControl(driver::getLeftY));
-    // coralHandler.setDefaultCommand(new ManualCoralHandler(coDriver::getLeftY,
-    // coDriver::getLeftX));
-    // SmartDashboard.putData(intake.getIntakePivotTuner());
-    // SmartDashboard.putData(intake.getIntakeTuner());
-    // SmartDashboard.putData("Tune Elevation",
-    // shooterWrist.getElevationTunerCommand());
-    // SmartDashboard.putData("Tune Shooter", shooter.getShooterTunerCommand());
-    // SmartDashboard.putData("Tune Shooter Intake",
-    // shooter.getIntakeTunerCommand());
-    // SmartDashboard.putData("Tune Intake", intake.getIntakeTuner());
-    // SmartDashboard.putData(Commands.runOnce(() -> {
-    // intake.updateRotationOffset();}, intake));
-
-    // SmartDashboard.putData("Tune Elevator Motor",
-    // elevator.getHeightTunerCommand());
-    // SmartDashboard.putData("Elevator Extents", new FindMotorExtents())
-    // SmartDashboard.putData("Robot At Center Blue Ring", Commands.runOnce(() -> {
-    // swerve.resetOdometry(new Pose2d(new Translation2d(2.9, 5.55),
-    // Rotation2d.fromDegrees(0)));
-    // }, swerve));
-    // SmartDashboard.putData("Robot At Red Speaker", new AtRedSubWoofer());
-
-    // Register Named Commands for pathplanner
-    // NamedCommands.registerCommand("ReadyToShootInSpeaker", new ShootInSpeaker());
-    // NamedCommands.registerCommand("SpeakerShot", new Shoot(false));
-    // NamedCommands.registerCommand("New AutoSpeakerShot",
-    // newAutoShootInSpeaker());
-    // NamedCommands.registerCommand("", );
+// Register Named Commands for pathplanner
+    NamedCommands.registerCommand("Place L1", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
+    NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    NamedCommands.registerCommand("Place L4", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
+    NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
+    NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
 
   }
     
@@ -159,6 +129,8 @@ public class RobotContainer {
     driver.Y().onTrue(climber.getPrepareCommand());
     coDriver.START();
     coDriver.RT().onTrue(new CoralHandlerAngleEstimator());
+
+
 
 //
 
