@@ -29,6 +29,7 @@ public class WelfordSD {
      */
     public double getStandardDeviation() {
         if(!changed) return previous;
+        if(count < 50) return previous;
         changed = false;
         return previous = count > 1 ? Math.sqrt(m2 / count) : 0;
     }

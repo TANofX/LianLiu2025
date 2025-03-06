@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -23,16 +22,16 @@ public class CoralHandlerAngleEstimator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO uncomment line below after merge with AutoAiming and fix with needed method
-    if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-    }
-    else if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
-      //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
-    }
-    else {
-      RobotContainer.coralHandler.setIntakeAngle();
-    }
+    // // TODO uncomment line below after merge with AutoAiming and fix with needed method
+    // if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) < 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+    //   //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    // }
+    // else if (((RobotContainer.elevator.getElevationMeters() - Constants.Elevator.LEVEL1_HEIGHT) > 0.05) & RobotContainer.coralHandler.hasCoral() == true) {
+    //   //RobotContainer.coralHandler.setHorizontalAngle(RobotContainer.AutoAiming.);
+    // }
+    // else {
+    //   RobotContainer.coralHandler.setIntakeAngle();
+    // }
   }
 
   // Called once the command ends or is interrupted.

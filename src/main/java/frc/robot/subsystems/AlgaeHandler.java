@@ -75,9 +75,9 @@ public class AlgaeHandler extends AdvancedSubsystem {
   public void simulationPeriodic() {
     // puts stuff on smart dashboard, cool stuff
     double inputVoltage = algaeHandlerMotorSim.getAppliedOutput() * RobotController.getBatteryVoltage();
-    SmartDashboard.putNumber("Algae Handler Simulated Voltage", inputVoltage);
-    SmartDashboard.putNumber("Algae Handler Simulated Motor Position", algaeHandlerMotorSim.getPosition());
-    SmartDashboard.putNumber("Algae Handler Simulated Motor Velocity", algaeHandlerMotorSim.getVelocity());
+    // SmartDashboard.putNumber("Algae Handler Simulated Voltage", inputVoltage);
+    // SmartDashboard.putNumber("Algae Handler Simulated Motor Position", algaeHandlerMotorSim.getPosition());
+    // SmartDashboard.putNumber("Algae Handler Simulated Motor Velocity", algaeHandlerMotorSim.getVelocity());
 
     // updates simulated voltage
     m_algaeHandlerSim.setInputVoltage(inputVoltage);

@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -32,7 +30,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
-import frc.robot.Constants;
 
 public final class CoralHandlerWrist extends AdvancedSubsystem {
     // Creation of needed variables
@@ -125,9 +122,9 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
                 .velocityFF(maxPosFF, ClosedLoopSlot.kSlot1)
                 .iZone(posIZone, ClosedLoopSlot.kSlot0)
                 .iZone(maxPosIZone, ClosedLoopSlot.kSlot1);
-        pidConfig.maxMotion.maxAcceleration(maxAcceleration);
-        pidConfig.maxMotion.maxVelocity(maxVelocity);
-        pidConfig.maxMotion.allowedClosedLoopError(allowedError);
+        pidConfig.maxMotion.maxAcceleration(maxAcceleration, ClosedLoopSlot.kSlot1);
+        pidConfig.maxMotion.maxVelocity(maxVelocity, ClosedLoopSlot.kSlot1);
+        pidConfig.maxMotion.allowedClosedLoopError(allowedError, ClosedLoopSlot.kSlot1);
         motorConfig.apply(pidConfig);
         motor.configure(motorConfig, SparkBase.ResetMode.kResetSafeParameters,
                 SparkBase.PersistMode.kNoPersistParameters);
@@ -223,19 +220,21 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         // armMaxRotation.getDegrees()));
         var targetMotorAngle = targetArmAngle.times(gearRatio);
 
-        System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
+        // System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
 
         // TODO Check if this PID changing method works and change comment after +
         // change angle for when PID controlType changes
-        if ((Math.abs(targetMotorAngle.getDegrees() - getAngle().getDegrees())) > Rotation2d.fromDegrees(1).getDegrees())
-            controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl,
-                    ClosedLoopSlot.kSlot0);
+        // if ((Math.abs(targetMotorAngle.getDegrees() - getAngle().getDegrees())) > Rotation2d.fromDegrees(.5).getDegrees())
+        //     controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kMAXMotionPositionControl,
+        //             ClosedLoopSlot.kSlot1);
 
-        else {
-            controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kPosition,
-                    ClosedLoopSlot.kSlot1);
-        }
-
+        // else {
+        //     controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kPosition,
+        //             ClosedLoopSlot.kSlot0);
+        // }
+        controller.setReference(targetMotorAngle.getRotations(), SparkBase.ControlType.kPosition,
+                ClosedLoopSlot.kSlot0);
+                
         timeSinceLastLog = System.nanoTime();
     }
 
@@ -256,6 +255,9 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         return Rotation2d.fromDegrees(absoluteSignal.getValueAsDouble() * 360);
     }
 
+    public double getAppliedOutput() {
+        return motor.getAppliedOutput();
+    }
     /**
      * Stops the motor / Sets the speed of the motor to 0.
      */
@@ -287,6 +289,14 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
     }
 
     /**
+     * Outputs the absolute encoder simulation angle on SmartDashboard.
+     */
+    public void getAbsoluteEncoderSimAngle() {
+        SmartDashboard.putNumber(name + " Absolute Encoder Sim Angle",
+                motorSim.getAbsoluteEncoderSim().getPosition());
+    }
+
+    /**
      * Sets a target angle for the motor and runs the motor until the motor is close
      * enough to the target angle (smaller than 5degrees). Stops motor once target
      * angle is met.
@@ -296,20 +306,12 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      *         target angle and actual angle.
      */
     public Command setAngleCommand(Rotation2d targetAngle) {
-        SmartDashboard.putNumber(name + "Target Angle in Degrees", targetAngle.getDegrees());
+        // SmartDashboard.putNumber(name + "Target Angle in Degrees", targetAngle.getDegrees());
         return Commands.sequence(
                 Commands.run(() -> { setAngle(targetAngle);
                 }, this).until( () -> {
                     return Math.abs(targetAngle.getDegrees() - getAngle().getDegrees()) < 0.1;
                 })).finallyDo(() -> {stopMotor();});
-    }
-
-    /**
-     * Outputs the absolute encoder simulation angle on SmartDashboard.
-     */
-    public void getAbsoluteEncoderSimAngle() {
-        SmartDashboard.putNumber(name + " Absolute Encoder Sim Angle",
-                motorSim.getAbsoluteEncoderSim().getPosition());
     }
 
     @Override
