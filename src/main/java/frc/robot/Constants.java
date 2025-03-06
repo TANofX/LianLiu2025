@@ -74,15 +74,15 @@ public final class Constants {
     @CanId(CanId.Type.MOTOR)
     public static final int MOTOR_ID = 30;
 
-    public static final double P = 0.05;
+    public static final double P = 0.0005;
     public static final double I = 0.00;
-    public static final double D = 0.025;
-    public static final double FF = 1.0 / (565.0 * 12);
+    public static final double D = 0.0;
+    public static final double FF = 0.0;
 
     public static final class POSITION_HOLD {
       public static final double P = 0.2;
-      public static final double I = 0.001;
-      public static final double D = 0.1;
+      public static final double I = 0.0;
+      public static final double D = 0.05;
       public static final double FF = 0;
       public static final double THRESHOLD = 0.02;
     }
@@ -99,8 +99,8 @@ public final class Constants {
     public static final double LEVEL2_HEIGHT = 0; // Set correct height
     public static final double LEVEL3_HEIGHT = 0;
     public static final double LEVEL4_HEIGHT = 0;
-    public static final double MAX_ACCELERATION = 24000.0;
-    public static final double MAX_VELOCITY = 6700.0;
+    public static final double MAX_ACCELERATION = 18000.0;
+    public static final double MAX_VELOCITY = 12000.0;
   };
 
   public static final class LEDs {
@@ -339,16 +339,16 @@ public final class Constants {
     public static final int PCM_ID = 5;
     public static final int FORWARD_SOLENOID_ID = 14;
     public static final int REVERSE_SOLENOID_ID = 7;
-    public static final double MOTOR_KP = .05;
-    public static final double MOTOR_KI = 0; // TODO Configure Climber PID
+    public static final double MOTOR_KP = 0.05;
+    public static final double MOTOR_KI = 0;
     public static final double MOTOR_KD = 0.00025;
-    public static final double MOTOR_FF = 1.0 / 6000.0;
-    public static final double MOTOR_MAX_KP = 0;
-    public static final double MOTOR_MAX_KI = 0;
-    public static final double MOTOR_MAX_KD = 0;
-    public static final double MOTOR_MAX_FF = 0;
-    public static final double MOTOR_MAX_VELOCITY = 1000.0;
-    public static final double MOTOR_MAX_ACCEL = 500.0;
+    public static final double MOTOR_FF = 0.0;
+    public static final double MOTOR_MAX_KP = 0.05;
+    public static final double MOTOR_MAX_KI = 0.0;
+    public static final double MOTOR_MAX_KD = 0.00025;
+    public static final double MOTOR_MAX_FF = 0.0;
+    public static final double MOTOR_MAX_VELOCITY = 4000.0;
+    public static final double MOTOR_MAX_ACCEL = 6000.0;
     public static final double GEAR_RATIO = .0045977011494;
     public static final double ARM_ANGULAR_MOMENTUM = Units.lbsToKilograms(9.963);
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);

@@ -192,9 +192,10 @@ public class Elevator extends AdvancedSubsystem {
         }
         double rotations = amount / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION;
 
-        if(Math.abs(getElevationMeters() * -1.0 - amount) > Constants.Elevator.POSITION_HOLD.THRESHOLD)
-            elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-        else elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        // if(Math.abs(getElevationMeters() * -1.0 - amount) > Constants.Elevator.POSITION_HOLD.THRESHOLD)
+        //     elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        //else 
+        elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     public double getHeightFrac() {

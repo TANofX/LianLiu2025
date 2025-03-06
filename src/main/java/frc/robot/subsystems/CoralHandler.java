@@ -298,7 +298,7 @@ public class CoralHandler extends AdvancedSubsystem {
           () -> {
               horizontalWrist.updateWristOffset();
               verticalWrist.updateWristOffset();
-          })
+          }, this)
           .ignoringDisable(true);
   }
 
@@ -342,7 +342,7 @@ public class CoralHandler extends AdvancedSubsystem {
   }
 
   public Command setHomeAngleCommand() {
-    return Commands.sequence(
+    return Commands.parallel(
       verticalWrist.setAngleCommand(Rotation2d.fromDegrees(82)),
       horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
     );
