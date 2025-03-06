@@ -81,7 +81,7 @@ public class RobotMechanism {
         Rotation2d coralHandlerVerticalAngle = RobotContainer.coralHandler.getVerticalAngle();
         Rotation2d clamShellAngle = RobotContainer.climber.getCurrentAngle();
 
-        double leftAlgaeHandlerAngle = RobotContainer.leftAlgaeHandler.isAlgaeIntakeUp() ? 0.0 : Math.PI / 180.0 * 55.0;
+       // double leftAlgaeHandlerAngle = RobotContainer.leftAlgaeHandler.isAlgaeIntakeUp() ? 0.0 : Math.PI / 180.0 * 55.0;
         double rightAlgaeHandlerAngle = RobotContainer.rightAlgaeHandler.isAlgaeIntakeUp() ? 0.0
                 : Math.PI / 180.0 * 55.0;
 
@@ -94,7 +94,7 @@ public class RobotMechanism {
                 new Rotation3d(0.0, 0.0, coralHandlerAngle.getRadians()));
         Transform3d coralHandlerStage2 = new Transform3d(0, 0, 0,
                 new Rotation3d(0, coralHandlerVerticalAngle.getRadians(), 0));
-        Transform3d leftAlgaeHandler = new Transform3d(0, 0, 0, new Rotation3d(0, leftAlgaeHandlerAngle, 0));
+        //Transform3d leftAlgaeHandler = new Transform3d(0, 0, 0, new Rotation3d(0, leftAlgaeHandlerAngle, 0));
         Transform3d rightAlgaeHandler = new Transform3d(0, 0, 0, new Rotation3d(0, rightAlgaeHandlerAngle, 0));
         Transform3d climberClamShell = new Transform3d(0, 0, 0, new Rotation3d(0, clamShellAngle.getRadians(), 0));
         Transform3d climberClam2LeftArm = new Transform3d(0, 0, 0, new Rotation3d(0, 0.0, climberArmAngle));
@@ -104,7 +104,7 @@ public class RobotMechanism {
         poses[1] = poses[0].plus(k_ElevatorStage2ToStage3).plus(elevatorTransform);
         poses[2] = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).plus(coralHandlerStage1);
         poses[3] = poses[2].plus(k_CoralHandlerStage1ToStage2).plus(coralHandlerStage2);
-        poses[4] = k_RobotBaseOffset.plus(k_LeftAlgaeHandler).plus(leftAlgaeHandler);
+       // poses[4] = k_RobotBaseOffset.plus(k_LeftAlgaeHandler).plus(leftAlgaeHandler);
         poses[5] = k_RobotBaseOffset.plus(k_RightAlgaeHandler).plus(rightAlgaeHandler);
         poses[6] = k_RobotBaseOffset.plus(k_ClimberClamShell).plus(climberClamShell);
         poses[7] = poses[6].plus(k_ClimberClam2LeftArm).plus(climberClam2LeftArm);

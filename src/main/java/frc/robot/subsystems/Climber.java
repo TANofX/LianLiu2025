@@ -8,8 +8,10 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -18,6 +20,7 @@ import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
@@ -88,10 +91,15 @@ public final class Climber extends AdvancedSubsystem {
     // climberMotorConfig.smartCurrentLimit(100,80);
     final ClosedLoopConfig climberMotorPidConfig = climberMotorConfig.closedLoop;
     climberMotorPidConfig.pidf(Constants.Climber.MOTOR_KP, Constants.Climber.MOTOR_KI, Constants.Climber.MOTOR_KD,
-        Constants.Climber.MOTOR_FF);
-    climberMotorPidConfig.maxMotion.maxVelocity(Constants.Climber.MOTOR_MAX_VELOCITY);
-    climberMotorPidConfig.maxMotion.maxAcceleration(Constants.Climber.MOTOR_MAX_ACCEL);
-    climberMotorPidConfig.maxMotion.allowedClosedLoopError(2.0);
+        Constants.Climber.MOTOR_FF, ClosedLoopSlot.kSlot0); //position
+
+        climberMotorPidConfig.pidf(Constants.Climber.MOTOR_MAX_KP, Constants.Climber.MOTOR_MAX_KI, Constants.Climber.MOTOR_MAX_KD,
+        Constants.Climber.MOTOR_MAX_FF, ClosedLoopSlot.kSlot1); //maxmotion
+
+    climberMotorPidConfig.maxMotion.maxVelocity(Constants.Climber.MOTOR_MAX_VELOCITY, ClosedLoopSlot.kSlot1);
+    climberMotorPidConfig.maxMotion.maxAcceleration(Constants.Climber.MOTOR_MAX_ACCEL, ClosedLoopSlot.kSlot1);
+    climberMotorPidConfig.maxMotion.allowedClosedLoopError(0.1, ClosedLoopSlot.kSlot1); //TODO
+    climberMotorPidConfig.maxMotion.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal, ClosedLoopSlot.kSlot1);
     climberMotor.configure(climberMotorConfig, SparkBase.ResetMode.kResetSafeParameters,
         SparkBase.PersistMode.kPersistParameters);
 
@@ -102,9 +110,6 @@ public final class Climber extends AdvancedSubsystem {
     motorSimulation = new SparkFlexSim(climberMotor, DCMotor.getNeoVortex(1));
     physicsSimulation.wouldHitLowerLimit(-3 * Math.PI / 4);
     physicsSimulation.wouldHitUpperLimit(0.0);
-    SmartDashboard.putData("Open Claw", getOpenClawCommand());
-    SmartDashboard.putData("Close Claw", getCloseClawCommand());
-    SmartDashboard.putData("Set Climber to -90", setClimberNeg90());
   }
 
   @Override
@@ -158,7 +163,15 @@ public final class Climber extends AdvancedSubsystem {
     double difference = armRotation - currentAngle.getRotations();
     double motorRotation = difference / Constants.Climber.GEAR_RATIO;
     double actualTarget = motorRotation + climberEncoder.getPosition();
-    climberController.setReference(actualTarget, ControlType.kPosition);
+    SmartDashboard.putNumber("Climber/actual Target", actualTarget);
+    SmartDashboard.putNumber("Climber/actual position", climberEncoder.getPosition());
+    
+    // if (Math.abs(motorRotation) > 2) {
+    climberController.setReference(actualTarget, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    // }
+    // else {
+    //climberController.setReference(actualTarget, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    // }
   }
 
   /**
@@ -271,7 +284,7 @@ public final class Climber extends AdvancedSubsystem {
   // Prepare the jaw Commands
   public Command getOpenClawCommand() {
     return Commands.runOnce(() -> {
-      if (getCurrentAngle().getDegrees() < -80)
+      if (getCurrentAngle().getDegrees() > -80)
         openClaw();
     }, this);
   }

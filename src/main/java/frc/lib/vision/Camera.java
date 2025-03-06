@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Camera {
     private final PhotonCamera camera;
     private final Transform3d position;
-    private final String prefix;
+    public final String prefix;
 
     private final WelfordSD sdX = new WelfordSD();
     private final WelfordSD sdY = new WelfordSD();

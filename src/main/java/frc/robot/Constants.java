@@ -1,7 +1,5 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +12,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -77,24 +74,24 @@ public final class Constants {
     @CanId(CanId.Type.MOTOR)
     public static final int MOTOR_ID = 30;
 
-    public static final double P = 0.05;
+    public static final double P = 0.0005;
     public static final double I = 0.00;
-    public static final double D = 0.025;
-    public static final double FF = 1.0 / (565.0 * 12);
+    public static final double D = 0.0;
+    public static final double FF = 0.0;
 
     public static final class POSITION_HOLD {
       public static final double P = 0.2;
-      public static final double I = 0.001;
-      public static final double D = 0.1;
+      public static final double I = 0.0;
+      public static final double D = 0.05;
       public static final double FF = 0;
       public static final double THRESHOLD = 0.02;
     }
 
-    public static final double METERS_PER_MOTOR_REVOLUTION =  Units.inchesToMeters(1.0 / 8.0) * 1.0083601831021498;
+    public static final double METERS_PER_MOTOR_REVOLUTION =  Units.inchesToMeters(1.0 / 4.0) * 1.0083601831021498;
     public static final double ELEVATOR_MASS = Units.lbsToKilograms(20.0);
     public static final double GEAR_RATIO = 1.0;
     public static final double MIN_HEIGHT_METERS = 0.0;
-    public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(-112.0);
+    public static final double MAX_HEIGHT_METERS = Units.inchesToMeters(-58.0);
     public static final double STARTING_HEIGHT_METERS = MIN_HEIGHT_METERS
         + (MIN_HEIGHT_METERS + MAX_HEIGHT_METERS) / 2.0;
 
@@ -102,8 +99,8 @@ public final class Constants {
     public static final double LEVEL2_HEIGHT = 0; // Set correct height
     public static final double LEVEL3_HEIGHT = 0;
     public static final double LEVEL4_HEIGHT = 0;
-    public static final double MAX_ACCELERATION = 24000.0;
-    public static final double MAX_VELOCITY = 6700.0;
+    public static final double MAX_ACCELERATION = 18000.0;
+    public static final double MAX_VELOCITY = 12000.0;
   };
 
   public static final class LEDs {
@@ -247,8 +244,8 @@ public final class Constants {
     public static final double OUTTAKE_WHEEL_MASS = Units.lbsToKilograms(0.5);
     public static final double OUTTAKE_WHEEL_RADIUS = 0.02;
 
-    public static final double CORAL_INTAKE_SPEED = 0;
-    public static final double CORAL_OUTTAKE_SPEED = 0;
+    public static final double CORAL_INTAKE_SPEED = -0.3;
+    public static final double CORAL_OUTTAKE_SPEED = 1.0;
 
     public static final double OUTTAKE_MOTOR_GEARING = 1.0;
     public static final double HORIZONTAL_GEAR_RATIO = 720.0;
@@ -257,9 +254,9 @@ public final class Constants {
     public static final double OUTTAKE_JKMETERS_SQUARED = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAKE_WHEEL_RADIUS, 2));
     public static final double OUTTAKE_MOTOR_MIN_VELOCITY = 0.0;
 
-    public static final double HORIZONTAL_MOTOR_POS_P = 1.0;
+    public static final double HORIZONTAL_MOTOR_POS_P = 0.5;
     public static final double HORIZONTAL_MOTOR_POS_I = 0.0;
-    public static final double HORIZONTAL_MOTOR_POS_D = 0.0;
+    public static final double HORIZONTAL_MOTOR_POS_D = 0.1;
     public static final double HORIZONTAL_MOTOR_MAX_POS_P = 0.0005;
     public static final double HORIZONTAL_MOTOR_MAX_POS_I = 0.0;
     public static final double HORIZONTAL_MOTOR_MAX_POS_D = 0.00025;
@@ -267,13 +264,13 @@ public final class Constants {
     public static final double HORIZONTAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / 11004.0;
     public static final double HORIZONTAL_MOTOR_POS_I_ZONE = 0.0;
     public static final double HORIZONTAL_MOTOR_MAX_POS_I_ZONE = 1000.0;
-    public static final double HORIZONTAL_MOTOR_MAX_ACCELERATION = 20000.0; // RPM per Sec
+    public static final double HORIZONTAL_MOTOR_MAX_ACCELERATION = 30000.0; // RPM per Sec
     public static final double HORIZONTAL_MOTOR_MAX_VELOCITY = 10500.0; // RPM
-    public static final double HORIZONTAL_MOTOR_CLOSED_LOPP_ERROR = 10.0;
+    public static final double HORIZONTAL_MOTOR_CLOSED_LOPP_ERROR = 1.0;
 
-    public static final double VERTICAL_MOTOR_POS_P = 1.0;
+    public static final double VERTICAL_MOTOR_POS_P = .5;
     public static final double VERTICAL_MOTOR_POS_I = 0.0;
-    public static final double VERTICAL_MOTOR_POS_D = 0.0;
+    public static final double VERTICAL_MOTOR_POS_D = 0.1;
     public static final double VERTICAL_MOTOR_MAX_POS_P = 0.0005;
     public static final double VERTICAL_MOTOR_MAX_POS_I = 0.0;
     public static final double VERTICAL_MOTOR_MAX_POS_D = 0.00025;
@@ -281,9 +278,9 @@ public final class Constants {
     public static final double VERTICAL_MOTOR_MAX_POS_FEED_FORWARD = 1.0 / 11004.0;
     public static final double VERTICAL_MOTOR_POS_I_ZONE = 0.0;
     public static final double VERTICAL_MOTOR_MAX_POS_I_ZONE = 1000.0;
-    public static final double VERTICAL_MOTOR_MAX_ACCELERATION = 20000.0; // RPM per Sec
+    public static final double VERTICAL_MOTOR_MAX_ACCELERATION = 30000.0; // RPM per Sec
     public static final double VERTICAL_MOTOR_MAX_VELOCITY = 10500.0; // RPM
-    public static final double VERTICAL_MOTOR_CLOSED_LOOP_ERROR = 10.0;
+    public static final double VERTICAL_MOTOR_CLOSED_LOOP_ERROR = 1.0;
 
     public static final double HORIZONTAL_JKMETERS_SQUARED = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
         * Math.pow(CORAL_END_EFFECTOR_LENGTH, 2.0);
@@ -342,13 +339,17 @@ public final class Constants {
     public static final int PCM_ID = 5;
     public static final int FORWARD_SOLENOID_ID = 14;
     public static final int REVERSE_SOLENOID_ID = 7;
-    public static final double MOTOR_KP = .05;
-    public static final double MOTOR_KI = 0; // TODO Configure Climber PID
+    public static final double MOTOR_KP = 0.05;
+    public static final double MOTOR_KI = 0;
     public static final double MOTOR_KD = 0.00025;
-    public static final double MOTOR_FF = 1.0 / 6000.0;
-    public static final double MOTOR_MAX_VELOCITY = 1000.0;
-    public static final double MOTOR_MAX_ACCEL = 500.0;
-    public static final double GEAR_RATIO = .0045977011494;
+    public static final double MOTOR_FF = 0.0;
+    public static final double MOTOR_MAX_KP = 0.05;
+    public static final double MOTOR_MAX_KI = 0.0;
+    public static final double MOTOR_MAX_KD = 0.00025;
+    public static final double MOTOR_MAX_FF = 0.0;
+    public static final double MOTOR_MAX_VELOCITY = 4000.0;
+    public static final double MOTOR_MAX_ACCEL = 6000.0;
+    public static final double GEAR_RATIO = .0045977011494/4.0;
     public static final double ARM_ANGULAR_MOMENTUM = Units.lbsToKilograms(9.963);
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
