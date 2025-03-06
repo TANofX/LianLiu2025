@@ -147,18 +147,16 @@ public class RobotContainer {
     SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
     SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
     SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
-
-// Register Named Commands for pathplanner
-    NamedCommands.registerCommand("Place L1", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    NamedCommands.registerCommand("Place L4", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
-    NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("Zero Coral Wrist", coralHandler.zeroWristCommand());
+    NamedCommands.registerCommand("Place L1", level1AutoPlaceCommand());
+    // NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    // NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    NamedCommands.registerCommand("Place L4", level4AutoPlaceCommand());
+    // NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
+    // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
+    NamedCommands.registerCommand("Collect", intakeCommand());
   }
 
   private void configureButtonBindings() {
@@ -246,6 +244,19 @@ public class RobotContainer {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(78.0-24.0)),
       coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39.7))
+    );
+  }
+
+  public Command level1AutoPlaceCommand() {
+    return Commands.sequence(
+      level1PositionCommand(),
+      coralHandler.runCoralOuttakeCommand()
+    );
+  }
+  public Command level4AutoPlaceCommand() {
+    return Commands.sequence(
+      level4PositionCommand(),
+      coralHandler.runCoralOuttakeCommand()
     );
   }
 

@@ -89,12 +89,6 @@
           "data": {
             "name": "Place L1"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": []
-          }
         }
       ]
     }
