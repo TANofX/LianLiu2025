@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
@@ -40,6 +42,8 @@ public class CoralHandler extends AdvancedSubsystem {
 
   private final CoralHandlerWrist horizontalWrist;
   private final CoralHandlerWrist verticalWrist;
+
+  private int isIntaking = 0;
 
   // Creation of Flywheel Simulation for the simulation of the outtakeMotor
   private final FlywheelSim coralHandlerOuttakePhysicsSim = new FlywheelSim(
@@ -171,8 +175,13 @@ public class CoralHandler extends AdvancedSubsystem {
    * Stops motor for the coral end effector intake/outtake motor. Sets motor speed
    * to zero.
    */
+  public int getIntaking(){
+    return isIntaking;
+  }
+
   public void stopOuttakeMotor() {
     outtakeMotor.stopMotor();
+    isIntaking = 0;
   }
 
   /**
@@ -196,6 +205,7 @@ public class CoralHandler extends AdvancedSubsystem {
    */
   public void stopMotors() {
     outtakeMotor.stopMotor();
+    isIntaking = 0;
     stopHorizontalMotor();
     stopVerticalMotor();
   }
@@ -218,6 +228,17 @@ public class CoralHandler extends AdvancedSubsystem {
    */
   public void runOuttakeMotor(double outtakeMotorSpeed) {
     outtakeMotor.set(outtakeMotorSpeed);
+    if(outtakeMotorSpeed > 0){
+      isIntaking = 1;
+    }else if(outtakeMotorSpeed < 0){
+      isIntaking = -1;
+    }else{
+      isIntaking = 0;
+    }
+  }
+  
+  public void runSuckMotor() {
+    outtakeMotor.set(Constants.CoralHandler.CORAL_OUTTAKE_SPEED);
   }
 
   /**
@@ -273,7 +294,6 @@ public class CoralHandler extends AdvancedSubsystem {
     verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_4_ANGLE);
   }
  
-
   @Override
   public void periodic() {
     // Values available shown on SmartDashboard
@@ -284,6 +304,8 @@ public class CoralHandler extends AdvancedSubsystem {
     SmartDashboard.putNumber("CoralHandler/Vertical Wrist Absolute Angle (Deg.)", verticalWrist.getAbsoluteAngle().getDegrees());
     SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Motor Position (Rot.)", horizontalWrist.getMotorRotations().getRotations());
     SmartDashboard.putNumber("CoralHandler/Vertical Wrist Motor Position (Rot.)", verticalWrist.getMotorRotations().getRotations());
+    SmartDashboard.putNumber("CoralHandler/Horizontal Applied Output", horizontalWrist.getAppliedOutput());
+    SmartDashboard.putNumber("CoralHandler/Vertical Applied Output", verticalWrist.getAppliedOutput());
   }
 
   public Command zeroWristCommand() {
@@ -291,8 +313,15 @@ public class CoralHandler extends AdvancedSubsystem {
           () -> {
               horizontalWrist.updateWristOffset();
               verticalWrist.updateWristOffset();
-          })
+          }, this)
           .ignoringDisable(true);
+  }
+
+  public Command runFlickSpeedCommand(double speed) {
+    return Commands.run(
+      () -> {
+        outtakeMotor.set(speed);
+      }, this);
   }
 
   public Command runCoralIntakeCommand() {
@@ -300,20 +329,45 @@ public class CoralHandler extends AdvancedSubsystem {
         Commands.runOnce(
             () -> runOuttakeMotor(Constants.CoralHandler.CORAL_INTAKE_SPEED), this),
         Commands.waitUntil(
-            () -> hasCoral()),
-        Commands.runOnce(
-            () -> stopOuttakeMotor(), this));
+            () -> hasCoral())).finallyDo( () -> {
+              stopOuttakeMotor();
+            }
+            );
   }
 
   public Command runCoralOuttakeCommand() {
     return Commands.sequence(
         Commands.runOnce(
             () -> runOuttakeMotor(Constants.CoralHandler.CORAL_OUTTAKE_SPEED), this),
+        Commands.waitSeconds(.5),
         Commands.waitUntil(
             () -> !hasCoral()),
-        Commands.waitSeconds(.5),
         Commands.runOnce(
-            () -> stopOuttakeMotor(), this));
+            () -> 
+            stopOuttakeMotor()
+            , this), 
+            verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-20)));
+  }
+
+  public Command setToZeroAngleCommand() {
+    return Commands.parallel(
+        verticalWrist.setAngleCommand(Rotation2d.fromDegrees(0)),
+        horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(0))
+    );
+  }
+
+  public Command setHomeAngleCommand() {
+    return Commands.parallel(
+      verticalWrist.setAngleCommand(Rotation2d.fromDegrees(82)),
+      horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
+    );
+  }
+
+  public Command setIntakeAngleCommand() {
+    return Commands.parallel(
+      verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-30)),
+      horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
+    );
   }
 
   public Command setVerticalAngleCommand(Rotation2d vTargetAngle) {

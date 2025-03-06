@@ -95,8 +95,8 @@ public class Elevator extends AdvancedSubsystem {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Elevator/Elevator Motor Velocity", elevatorEncoder.getVelocity());
-        SmartDashboard.putNumber("Elevator/Elevator Position", getElevationMeters());
+    SmartDashboard.putNumber("Elevator/Elevator Motor Velocity", elevatorEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator/Elevator Position", getElevationMeters());
     SmartDashboard.putBoolean("Elevator/calibrated", calibrated);
     SmartDashboard.putBoolean("Elevator/BottomLimitPressed", elevatorMotor.getReverseLimitSwitch().isPressed());
     SmartDashboard.putBoolean("Elevator/UpperLimitPressed",elevatorMotor.getForwardLimitSwitch().isPressed());
@@ -111,14 +111,15 @@ public class Elevator extends AdvancedSubsystem {
         // Calculate the input voltage for the elevator simulation. The appliedVoltage
         // is calculated by the SparkFlex simulation.
         // The RobotController battery voltage is simulated in the RoboRioSim class.
+        
         double inputVoltage = elevatorMotorSim.getAppliedOutput() * RobotController.getBatteryVoltage();
-        SmartDashboard.putNumber("Elevator Simulation/Simulated Voltage", inputVoltage);
-        SmartDashboard.putNumber("Elevator Simulation/Motor Position", elevatorMotorSim.getPosition());
-        SmartDashboard.putNumber("Elevator Simulation/Height", this.getElevationMeters());
-        SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Velocity",
-                elevatorPhysicsSim.getVelocityMetersPerSecond());
-        SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Height",
-                elevatorPhysicsSim.getPositionMeters());
+        // SmartDashboard.putNumber("Elevator Simulation/Simulated Voltage", inputVoltage);
+        // SmartDashboard.putNumber("Elevator Simulation/Motor Position", elevatorMotorSim.getPosition());
+        // SmartDashboard.putNumber("Elevator Simulation/Height", this.getElevationMeters());
+        // SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Velocity",
+        //         elevatorPhysicsSim.getVelocityMetersPerSecond());
+        // SmartDashboard.putNumber("Elevator Simulation/Simulated Elevator Height",
+        //         elevatorPhysicsSim.getPositionMeters());
 
         // Update the input voltage for the elevator simulation and update the
         // simulation.
@@ -191,9 +192,16 @@ public class Elevator extends AdvancedSubsystem {
         }
         double rotations = amount / Constants.Elevator.METERS_PER_MOTOR_REVOLUTION;
 
-        if(Math.abs(getElevationMeters() * -1.0 - amount) > Constants.Elevator.POSITION_HOLD.THRESHOLD)
-            elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-        else elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        // if(Math.abs(getElevationMeters() * -1.0 - amount) > Constants.Elevator.POSITION_HOLD.THRESHOLD)
+        //     elevatorController.setReference(rotations, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        //else 
+        elevatorController.setReference(rotations, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    }
+
+    public double getHeightFrac() {
+        double totalHeight = Constants.Elevator.MAX_HEIGHT_METERS - Constants.Elevator.MIN_HEIGHT_METERS;
+        double percent = getElevationMeters()/totalHeight;
+        return Math.abs(percent);
     }
 
     // A method to check the Elevators current height

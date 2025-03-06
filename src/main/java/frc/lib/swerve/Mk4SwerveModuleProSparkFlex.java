@@ -23,8 +23,6 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.lib.pid.TunablePID;
-import frc.lib.pid.TunableSparkPIDController;
 import frc.lib.subsystem.AdvancedSubsystem;
 
 /**
@@ -100,9 +98,6 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
 
   private SwerveModuleState targetState = new SwerveModuleState();
 
-  private final TunablePID steerTunable;
-  private final TunablePID driveTunable;
-
   /**
    * Create a Mk4 swerve module
    *
@@ -173,9 +168,6 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
     // new LinearSystemSim<>(LinearSystemId.identifyPositionSystem(ROTATION_KV,
     // ROTATION_KA));
 
-    steerTunable = new TunableSparkPIDController(rotationMotor, ClosedLoopSlot.kSlot1);
-    driveTunable = new TunableSparkPIDController(driveMotor, ClosedLoopSlot.kSlot0);
-
     registerHardware("Drive Motor", driveMotor);
     registerHardware("Rotation Motor", rotationMotor);
     registerHardware("Rotation Encoder", rotationEncoder);
@@ -202,15 +194,7 @@ public class Mk4SwerveModuleProSparkFlex extends AdvancedSubsystem {
         rotationAbsoluteSignal,
         rotationAbsoluteVelSignal);
   }
-
-  public TunablePID getSteerTunablePID() {
-    return steerTunable;
-  }
-
-  public TunablePID getDriveTunablePID() {
-    return driveTunable;
-  }
-
+  
   @Override
   public void simulationPeriodic() {
     // driveSimState.setSupplyVoltage(RobotController.getBatteryVoltage());

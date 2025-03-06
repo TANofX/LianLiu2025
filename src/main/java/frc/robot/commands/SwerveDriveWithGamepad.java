@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -15,18 +16,25 @@ public class SwerveDriveWithGamepad extends Command {
   private final SlewRateLimiter xVelLimiter;
   private final SlewRateLimiter yVelLimiter;
   private final SlewRateLimiter angularVelLimiter;
+  private DoubleSupplier heightFraction;
+  private static double speedSet = 1;
 
-  private static double maxSpeedForChild = 1;
 
   public SwerveDriveWithGamepad(boolean aimAtGamePiece) {
     this.xVelLimiter = new SlewRateLimiter(Constants.Swerve.TELEOP_MAX_ACCELERATION);
     this.yVelLimiter = new SlewRateLimiter(Constants.Swerve.TELEOP_MAX_ACCELERATION);
     this.angularVelLimiter = new SlewRateLimiter(Constants.Swerve.TELEOP_MAX_ANGULAR_ACCELERATION);
+    heightFraction = () -> {
+      return 0.0;
+    };
+
     addRequirements(RobotContainer.swerve);
+
   }
 
-  public SwerveDriveWithGamepad() {
+  public SwerveDriveWithGamepad(DoubleSupplier heightFrac) {
     this(false);
+    heightFraction = heightFrac;
   }
 
   @Override
@@ -41,12 +49,14 @@ public class SwerveDriveWithGamepad extends Command {
     this.yVelLimiter.reset(0);
     this.angularVelLimiter.reset(0);
 
-    SmartDashboard.putNumber("Speed Dial", maxSpeedForChild);
+    SmartDashboard.putNumber("Speed Dial", speedSet);
   }
 
   @Override
   public void execute() {
-    maxSpeedForChild = SmartDashboard.getNumber("Speed Dial", 0);
+    speedSet = SmartDashboard.getNumber("Speed Dial", 0);
+    double maxSpeedForChild = speedSet * (0.25 + 0.75 * (1 - heightFraction.getAsDouble()));
+
     double x = -RobotContainer.driver.getLeftY() * maxSpeedForChild;
     x = Math.copySign(x * x, x);
     double y = -RobotContainer.driver.getLeftX()* maxSpeedForChild;
