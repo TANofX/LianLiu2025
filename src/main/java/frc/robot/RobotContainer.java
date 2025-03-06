@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
@@ -48,6 +49,7 @@ public class RobotContainer {
   public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
   public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
+
 
   public RobotContainer() {
     configureButtonBindings();
@@ -91,8 +93,7 @@ public class RobotContainer {
     registerNamedCommands();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Mode", autoChooser);
-  }
-  
+
     // Coral Handler SmartDashboard Commands
     SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
     SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
@@ -154,6 +155,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Place L4", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
     NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
     NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
+  }
 
   private void registerNamedCommands() {
     NamedCommands.registerCommand("Zero Coral Wrist", coralHandler.zeroWristCommand());
@@ -185,7 +187,7 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-110)));
+    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-135)));
     driver.Y().onTrue(climber.getPrepareCommand());
     
     coDriver.A().onTrue(level1PositionCommand());
