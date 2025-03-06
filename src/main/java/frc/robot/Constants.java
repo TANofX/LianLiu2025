@@ -7,6 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
@@ -123,10 +125,10 @@ public final class Constants {
     }
 
     public static final class PathFollowing {
-      // public static final PIDConstants TRANSLATION_CONSTANTS = new
-      // PIDConstants(5.0, 0.0, 0.0);
-      // public static final PIDConstants ROTATION_CONSTANTS = new PIDConstants(2.0,
-      // 0.0, 0.0);
+      public static final PIDConstants TRANSLATION_CONSTANTS = 
+        new PIDConstants(2.0, 0.0, 0.2);
+      public static final PIDConstants ROTATION_CONSTANTS = 
+        new PIDConstants(2.0,0.0, 0.2);
     }
 
     public static final class FrontLeftModule {

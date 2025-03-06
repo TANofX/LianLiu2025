@@ -4,6 +4,10 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.sim.Pigeon2SimState;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -16,6 +20,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -123,38 +128,32 @@ public final class Swerve extends AdvancedSubsystem {
     SmartDashboard.putData("Field", field2d);
     SmartDashboard.putData("Trim Modules", zeroModulesCommand());
 
-    // Configure auto builder
-    // AutoBuilder.configureHolonomic(
-    // this::getPose, // Robot pose supplier
-    // this::resetOdometry, // Method to reset odometry (will be called if your auto
-    // has a starting pose)
-    // this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    // this::driveRobotRelative, // Method that will drive the robot given ROBOT
-    // RELATIVE ChassisSpeeds
-    // new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
-    // likely live in your Constants class
-    // new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    // new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-    // 4.5, // Max module speed, in m/s
-    // 0.43, // Drive base radius in meters. Distance from robot center to furthest
-    // module.
-    // new ReplanningConfig() // Default path replanning config. See the API for the
-    // options here
-    // ),
-    // () -> {
-    // // Boolean supplier that controls when the path will be mirrored for the red
-    // alliance
-    // // This will flip the path being followed to the red side of the field.
-    // // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    try {
+      RobotConfig config = RobotConfig.fromGUISettings();
 
-    // var alliance = DriverStation.getAlliance();
-    // if (alliance.isPresent()) {
-    // return alliance.get() == DriverStation.Alliance.Red;
-    // }
-    // return false;
-    // },
-    // (Subsystem) this // Reference to this subsystem to set requirements
-    // );
+      AutoBuilder.configure(
+          this::getPose,
+          this::resetOdometry,
+          this::getCurrentSpeeds,
+          this::driveRobotRelative,
+          new PPHolonomicDriveController(Constants.Swerve.PathFollowing.TRANSLATION_CONSTANTS,
+              Constants.Swerve.PathFollowing.ROTATION_CONSTANTS),
+          config,
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red
+            // alliance.  This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          modules);
+    } catch (Exception e) {
+      DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+    }
     SmartDashboard.putData("Check Swerve", systemCheckCommand());
   }
 
