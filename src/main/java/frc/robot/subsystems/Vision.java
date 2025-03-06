@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -27,6 +26,7 @@ import frc.robot.util.RobotPoseLookup;
 public final class Vision extends AdvancedSubsystem {
     private final ArrayList<Camera> cameras = new ArrayList<>();
     private final Field2d aprilField = new Field2d();
+    private final Camera objCamera = new Camera("object", new Transform3d());
 
     private boolean wasStopped = true;
     private boolean isStopped = true;
@@ -60,8 +60,15 @@ public final class Vision extends AdvancedSubsystem {
                 RobotContainer.swerve.odometry.addVisionMeasurement(best.robotPose.toPose2d(), best.imageCaptureTime);
             }
         }
+        List<PhotonPipelineResult> objResults = objCamera.getResults();
+        double angle = intakeAngle(objResults);
     }
 
+    private double intakeAngle(PhotonPipelineResult result) {
+        PhotonTrackedTarget bestResult = result.getBestTarget();
+        double targetAngle = bestResult.getYaw();
+        return targetAngle;
+    }
     private Result processResult(PhotonPipelineResult result, Camera cam) {
         Transform3d cameraToRobot = cam.getPosition();
         
