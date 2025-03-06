@@ -3,11 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
@@ -26,27 +29,24 @@ import java.security.CodeSigner;
 import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
+  private final SendableChooser<Command> autoChooser;
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
   public static final XboxControllerWrapper coDriver = new XboxControllerWrapper(1, 0.1);
-
-  // // Subsystems
+  
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
   public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
   public static final RobotMechanism robotMechanism = new RobotMechanism(() -> swerve.getPose());
-  // public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
-  //     Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
-  public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.RIGHT_ALGAE_MOTOR_ID,
-      Constants.AlgaeHandler.RIGHT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.RIGHT_ALGAE_LIMIT_ID);
-  public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
-      Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
-  public static final CoralHandler coralHandler = new CoralHandler(
-      Constants.CoralHandler.OUTTAKE_MOTOR_ID,
+  public static final CoralHandler coralHandler = new CoralHandler(Constants.CoralHandler.OUTTAKE_MOTOR_ID,
       Constants.CoralHandler.HORIZONTAL_MOTOR_ID,
       Constants.CoralHandler.VERTICAL_MOTOR_ID,
       Constants.CoralHandler.HORIZONTAL_ENCODER_ID,
       Constants.CoralHandler.VERTICAL_ENCODER_ID);
+  public static final AlgaeHandler rightAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.RIGHT_ALGAE_MOTOR_ID,
+      Constants.AlgaeHandler.RIGHT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.RIGHT_ALGAE_LIMIT_ID);
+  public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
+      Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
   public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
 
   public RobotContainer() {
@@ -60,7 +60,7 @@ public class RobotContainer {
     // SmartDashboard.putData("Left Algae Handler Test",
     // leftAlgaeHandler.getSystemCheckCommand());
     SmartDashboard.putData("Right Algae Handler Test",
-    rightAlgaeHandler.getSystemCheckCommand());
+        rightAlgaeHandler.getSystemCheckCommand());
 
     // SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
     // SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
@@ -78,8 +78,21 @@ public class RobotContainer {
     SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
     SmartDashboard.putData("Climber/Open Claw", climber.getOpenClawCommand());
     SmartDashboard.putData("Climber/Close Claw", climber.getCloseClawCommand());
-        
+    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
+    SmartDashboard.putData("CoralHandler/Horizontal to +10degrees",
+        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
+    SmartDashboard.putData("CoralHandler/Vertical to +10degrees",
+        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
+    SmartDashboard.putData("CoralHandler/Horizontal to -10degrees",
+        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
+    SmartDashboard.putData("CoralHandler/Vertical to +-10degrees",
+        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
 
+    registerNamedCommands();
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Mode", autoChooser);
+  }
+  
     // Coral Handler SmartDashboard Commands
     SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
     SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
@@ -142,6 +155,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
     NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
 
+  private void registerNamedCommands() {
+    NamedCommands.registerCommand("Zero Coral Wrist", coralHandler.zeroWristCommand());
   }
 
   private void configureButtonBindings() {
@@ -167,11 +182,12 @@ public class RobotContainer {
 
     // driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
     // driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
+    
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-110)));
     driver.Y().onTrue(climber.getPrepareCommand());
-
+    
     coDriver.A().onTrue(level1PositionCommand());
     coDriver.X().onTrue(level2PositionCommand());
     coDriver.B().onTrue(level3PositionCommand());
