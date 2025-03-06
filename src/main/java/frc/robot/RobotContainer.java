@@ -78,6 +78,9 @@ public class RobotContainer {
     SmartDashboard.putData("Climber/Calibrate Climber", climber.getCalibrateCommand(false));
     SmartDashboard.putData("Climber/Reverse Calibrate Command", climber.getCalibrateCommand(true));
     SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
+    SmartDashboard.putData("Climber/Open Claw", climber.getOpenClawCommand());
+    SmartDashboard.putData("Climber/Close Claw", climber.getCloseClawCommand());
+        
 
     // Coral Handler SmartDashboard Commands
     SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());

@@ -284,7 +284,7 @@ public final class Climber extends AdvancedSubsystem {
   // Prepare the jaw Commands
   public Command getOpenClawCommand() {
     return Commands.runOnce(() -> {
-      if (getCurrentAngle().getDegrees() < -80)
+      if (getCurrentAngle().getDegrees() > -80)
         openClaw();
     }, this);
   }
