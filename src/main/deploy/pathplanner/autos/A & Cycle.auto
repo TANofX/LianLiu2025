@@ -17,42 +17,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "AtoCollect"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Collect"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CollecttoK"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "KtoCollect"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Collect"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CollecttoL"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -87,13 +51,45 @@
         {
           "type": "named",
           "data": {
-            "name": "Place L1"
+            "name": "Place L4"
           }
         },
         {
           "type": "parallel",
           "data": {
-            "commands": []
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "KtoCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CollecttoL"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L4"
           }
         }
       ]
