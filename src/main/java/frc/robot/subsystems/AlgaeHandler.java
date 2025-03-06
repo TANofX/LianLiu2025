@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 //All my imports ;D
 package frc.robot.subsystems;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -33,6 +32,7 @@ public class AlgaeHandler extends AdvancedSubsystem {
   private final SparkMax algaeMotor;
   private final Solenoid algaePiston;
   private final DigitalInput algaeLimitSwitch;
+  private int isIntaking = 0;
 
   private final SparkMaxSim algaeHandlerMotorSim;
 
@@ -104,22 +104,25 @@ public class AlgaeHandler extends AdvancedSubsystem {
     algaePiston.set(false);
   }
 
-  public void stopAlgaeMotor() {
-    // Algae motor is stopped
-    algaeMotor.stopMotor();
-  }
+    public void stopAlgaeMotor() {
+      //Algae motor is stopped
+      algaeMotor.stopMotor();
+      isIntaking = 0;
+    }
 
   public void runAlgaeMotor() {
     // velocity value is a place holder because I didn't know what I was doing :D do
     // we need math for spins per motor revolution??
     // algaeMotorController.setReference(577.26, ControlType.kVelocity);
     algaeMotor.set(-.5);
+    isIntaking = 1;
   }
 
   public void reverseAlgaeMotor() {
     // velocity value is a place holder :D
     // algaeMotorController.setReference(-577.26, ControlType.kVelocity);
     algaeMotor.set(1);
+    isIntaking = -1;
   }
 
   public boolean hasAlgae() {
@@ -261,5 +264,8 @@ public class AlgaeHandler extends AdvancedSubsystem {
               }
             })
     );
+  }
+  public int getIntaking() {
+    return isIntaking;
   }
 }

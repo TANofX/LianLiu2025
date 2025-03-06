@@ -43,6 +43,8 @@ public class CoralHandler extends AdvancedSubsystem {
   private final CoralHandlerWrist horizontalWrist;
   private final CoralHandlerWrist verticalWrist;
 
+  private int isIntaking = 0;
+
   // Creation of Flywheel Simulation for the simulation of the outtakeMotor
   private final FlywheelSim coralHandlerOuttakePhysicsSim = new FlywheelSim(
       LinearSystemId.createFlywheelSystem(DCMotor.getNeoVortex(1), 
@@ -173,8 +175,13 @@ public class CoralHandler extends AdvancedSubsystem {
    * Stops motor for the coral end effector intake/outtake motor. Sets motor speed
    * to zero.
    */
+  public int getIntaking(){
+    return isIntaking;
+  }
+
   public void stopOuttakeMotor() {
     outtakeMotor.stopMotor();
+    isIntaking = 0;
   }
 
   /**
@@ -198,6 +205,7 @@ public class CoralHandler extends AdvancedSubsystem {
    */
   public void stopMotors() {
     outtakeMotor.stopMotor();
+    isIntaking = 0;
     stopHorizontalMotor();
     stopVerticalMotor();
   }
@@ -220,6 +228,13 @@ public class CoralHandler extends AdvancedSubsystem {
    */
   public void runOuttakeMotor(double outtakeMotorSpeed) {
     outtakeMotor.set(outtakeMotorSpeed);
+    if(outtakeMotorSpeed > 0){
+      isIntaking = 1;
+    }else if(outtakeMotorSpeed < 0){
+      isIntaking = -1;
+    }else{
+      isIntaking = 0;
+    }
   }
   
   public void runSuckMotor() {

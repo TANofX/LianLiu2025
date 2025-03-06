@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
-import frc.robot.commands.Notifications;
 import frc.robot.commands.SwerveDriveWithGamepad;
 import frc.robot.subsystems.AlgaeHandler;
 import frc.robot.subsystems.Climber;
@@ -33,8 +32,8 @@ public class RobotContainer {
 
   // // Subsystems
   public static final Vision vision = new Vision();
-  public static final Swerve swerve = new Swerve();
-  public static final LEDs LEDs = new LEDs();
+  public static final Swerve swerve = new Swerve();// new Swerve();
+  public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
   public static final RobotMechanism robotMechanism = new RobotMechanism(() -> swerve.getPose());
   // public static final AlgaeHandler leftAlgaeHandler = new AlgaeHandler(Constants.AlgaeHandler.LEFT_ALGAE_MOTOR_ID,
   //     Constants.AlgaeHandler.LEFT_ALGAE_SOLENOID_ID, Constants.AlgaeHandler.LEFT_ALGAE_LIMIT_ID);
@@ -48,7 +47,7 @@ public class RobotContainer {
       Constants.CoralHandler.VERTICAL_MOTOR_ID,
       Constants.CoralHandler.HORIZONTAL_ENCODER_ID,
       Constants.CoralHandler.VERTICAL_ENCODER_ID);
-  public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
+  public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -57,7 +56,6 @@ public class RobotContainer {
     RobotContainer.swerve.setDefaultCommand(new SwerveDriveWithGamepad(() -> {
       return elevator.getHeightFrac();
     }));
-    LEDs.setDefaultCommand(new Notifications());
     elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
     // SmartDashboard.putData("Left Algae Handler Test",
     // leftAlgaeHandler.getSystemCheckCommand());
