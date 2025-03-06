@@ -349,7 +349,7 @@ public final class Constants {
     public static final double MOTOR_MAX_FF = 0.0;
     public static final double MOTOR_MAX_VELOCITY = 4000.0;
     public static final double MOTOR_MAX_ACCEL = 6000.0;
-    public static final double GEAR_RATIO = .0045977011494;
+    public static final double GEAR_RATIO = .0045977011494/4.0;
     public static final double ARM_ANGULAR_MOMENTUM = Units.lbsToKilograms(9.963);
     public static final double LENGTH_METERS = Units.inchesToMeters(4.785);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(-156.0);
