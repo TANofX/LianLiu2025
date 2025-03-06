@@ -169,7 +169,7 @@ public class RobotContainer {
     // driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-147)));
+    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-110)));
     driver.Y().onTrue(climber.getPrepareCommand());
 
     coDriver.A().onTrue(level1PositionCommand());
