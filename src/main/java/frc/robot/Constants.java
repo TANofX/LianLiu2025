@@ -1,7 +1,5 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,12 +7,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -126,10 +125,10 @@ public final class Constants {
     }
 
     public static final class PathFollowing {
-      // public static final PIDConstants TRANSLATION_CONSTANTS = new
-      // PIDConstants(5.0, 0.0, 0.0);
-      // public static final PIDConstants ROTATION_CONSTANTS = new PIDConstants(2.0,
-      // 0.0, 0.0);
+      public static final PIDConstants TRANSLATION_CONSTANTS = 
+        new PIDConstants(2.0, 0.0, 0.2);
+      public static final PIDConstants ROTATION_CONSTANTS = 
+        new PIDConstants(2.0,0.0, 0.2);
     }
 
     public static final class FrontLeftModule {
