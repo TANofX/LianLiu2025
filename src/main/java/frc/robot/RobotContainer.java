@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.input.controllers.XboxControllerWrapper;
 import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
@@ -48,6 +49,7 @@ public class RobotContainer {
   public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
   public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
+
 
   public RobotContainer() {
     configureButtonBindings();
@@ -91,8 +93,7 @@ public class RobotContainer {
     registerNamedCommands();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Mode", autoChooser);
-  }
-  
+
     // Coral Handler SmartDashboard Commands
     SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
     SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
@@ -146,17 +147,16 @@ public class RobotContainer {
     SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
     SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
     SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
-
-// Register Named Commands for pathplanner
-    NamedCommands.registerCommand("Place L1", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    NamedCommands.registerCommand("Place L4", elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS));
-    NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
-    NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
+  }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("Zero Coral Wrist", coralHandler.zeroWristCommand());
+    NamedCommands.registerCommand("Place L1", level1AutoPlaceCommand());
+    // NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    // NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
+    NamedCommands.registerCommand("Place L4", level4AutoPlaceCommand());
+    // NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
+    // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
+    NamedCommands.registerCommand("Collect", intakeCommand());
   }
 
   private void configureButtonBindings() {
@@ -185,7 +185,7 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-147)));
+    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-135)));
     driver.Y().onTrue(climber.getPrepareCommand());
     
     coDriver.A().onTrue(level1PositionCommand());
@@ -244,6 +244,19 @@ public class RobotContainer {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(78.0-24.0)),
       coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39.7))
+    );
+  }
+
+  public Command level1AutoPlaceCommand() {
+    return Commands.sequence(
+      level1PositionCommand(),
+      coralHandler.runCoralOuttakeCommand()
+    );
+  }
+  public Command level4AutoPlaceCommand() {
+    return Commands.sequence(
+      level4PositionCommand(),
+      coralHandler.runCoralOuttakeCommand()
     );
   }
 
