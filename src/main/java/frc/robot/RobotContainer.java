@@ -31,6 +31,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
+  private Command autoCommand;
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
   public static final XboxControllerWrapper coDriver = new XboxControllerWrapper(1, 0.1);
@@ -127,22 +128,6 @@ public class RobotContainer {
     SmartDashboard.putData("Elevator/Move Elevator Down", elevator.getSlowElevatorDownCommand());
     SmartDashboard.putData("Elevator/Elevator 1.35", elevator.getElevatorHeightCommand(0.0));
 
-    // Register Named Commands for pathplanner ??
-    // ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
-    // NamedCommands.registerCommand("ElevatorL4",
-    // elevator.getElevatorHeightCommand(0));
-    // NamedCommands.registerCommand("ElevatorL1",
-    // elevator.getElevatorHeightCommand(0.00000001));
-    // NamedCommands.registerCommand("ElevatorIntake",
-    // elevator.getElevatorHeightCommand(0.00001));
-    // NamedCommands.registerCommand("Collect", new ______());
-
-    // Register Named Commands for pathplanner examples
-    // NamedCommands.registerCommand("ReadyToShootInSpeaker", new ShootInSpeaker());
-    // NamedCommands.registerCommand("SpeakerShot", new Shoot(false));
-    // NamedCommands.registerCommand("New AutoSpeakerShot",
-    // newAutoShootInSpeaker());
-    // NamedCommands.registerCommand("", );
     SmartDashboard.putData("CoralHandler/Horizontal to +10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
     SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
     SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
@@ -157,6 +142,14 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
     // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
     NamedCommands.registerCommand("Collect", intakeCommand());
+    NamedCommands.registerCommand("Place", Commands.none());
+  }
+  public void initalizeAutos() {
+    autoCommand = autoChooser.getSelected();
+    RobotContainer.swerve.removeDefaultCommand();
+    if (autoCommand != null) {
+      autoCommand.schedule();
+    }
   }
 
   private void configureButtonBindings() {

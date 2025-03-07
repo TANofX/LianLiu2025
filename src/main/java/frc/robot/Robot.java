@@ -41,13 +41,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-
-    RobotContainer.swerve.removeDefaultCommand();
-
-    
-    if (autoCommand != null) {
-      autoCommand.schedule();
-    }
+    m_robotContainer.initalizeAutos();
   }
 
   @Override
