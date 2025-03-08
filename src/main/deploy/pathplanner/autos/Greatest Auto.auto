@@ -9,6 +9,18 @@
           "data": {
             "pathName": "MiddleStarttoH"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Complete Place"
+          }
         }
       ]
     }

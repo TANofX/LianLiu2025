@@ -107,6 +107,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.inverted(motorInvert);
         motorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+        motorConfig.smartCurrentLimit(39, 39);
 
         // Configure the PID controls of motor
         ClosedLoopConfig pidConfig = motorConfig.closedLoop;

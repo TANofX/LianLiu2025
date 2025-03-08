@@ -13,13 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Place"
+            "name": "Place L4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CloseReefRightCollect"
+            "pathName": "HToRCollect"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Place"
+            "name": "Place L4"
           }
         },
         {
@@ -56,6 +56,12 @@
           "type": "path",
           "data": {
             "pathName": "CollecttoL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L4"
           }
         }
       ]

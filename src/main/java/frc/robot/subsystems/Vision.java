@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -27,6 +28,7 @@ import frc.robot.util.RobotPoseLookup;
 public final class Vision extends AdvancedSubsystem {
     private final ArrayList<Camera> cameras = new ArrayList<>();
     private final Field2d aprilField = new Field2d();
+    
 
     private boolean wasStopped = true;
     private boolean isStopped = true;
@@ -34,14 +36,15 @@ public final class Vision extends AdvancedSubsystem {
     public Vision() {
         addCamera("port", new Transform3d(
                 Inch.of(-13.280346266), // Cad Z
-                Inch.of(11.580914897), // Cad X
-                Inch.of(8.177878478), // Cad Y
-                new Rotation3d(0, -15, 90)));
-        addCamera("starboard", new Transform3d(
-                Inch.of(-13.280346266), // Cad Z
                 Inch.of(-11.580914897), // Cad X
                 Inch.of(8.177878478), // Cad Y
-                new Rotation3d(0, -15, -90)));
+                new Rotation3d(0, (-15 * Math.PI) /180.0, (-90 * Math.PI)/180.0)));
+        addCamera("starboard", new Transform3d(
+                Inch.of(-13.280346266), // Cad Z
+                Inch.of(11.580914897), // Cad X
+                Inch.of(8.177878478), // Cad Y
+                new Rotation3d(0, (-15 * Math.PI) /180.0, (90 * Math.PI)/180.0)));
+                
     }
 
     @Override

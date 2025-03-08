@@ -30,6 +30,7 @@ import java.security.CodeSigner;
 
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
+  private Command autoCommand;
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
   public static final XboxControllerWrapper coDriver = new XboxControllerWrapper(1, 0.1);
@@ -92,6 +93,8 @@ public class RobotContainer {
         coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
 
     registerNamedCommands();
+
+  
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -128,22 +131,6 @@ public class RobotContainer {
     SmartDashboard.putData("Elevator/Move Elevator Down", elevator.getSlowElevatorDownCommand());
     SmartDashboard.putData("Elevator/Elevator 1.35", elevator.getElevatorHeightCommand(0.0));
 
-    // Register Named Commands for pathplanner ??
-    // ADD THESE COMMANDS ONCE WE DEVELOP THEM MORE:
-    // NamedCommands.registerCommand("ElevatorL4",
-    // elevator.getElevatorHeightCommand(0));
-    // NamedCommands.registerCommand("ElevatorL1",
-    // elevator.getElevatorHeightCommand(0.00000001));
-    // NamedCommands.registerCommand("ElevatorIntake",
-    // elevator.getElevatorHeightCommand(0.00001));
-    // NamedCommands.registerCommand("Collect", new ______());
-
-    // Register Named Commands for pathplanner examples
-    // NamedCommands.registerCommand("ReadyToShootInSpeaker", new ShootInSpeaker());
-    // NamedCommands.registerCommand("SpeakerShot", new Shoot(false));
-    // NamedCommands.registerCommand("New AutoSpeakerShot",
-    // newAutoShootInSpeaker());
-    // NamedCommands.registerCommand("", );
     SmartDashboard.putData("CoralHandler/Horizontal to +10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
     SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
     SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
@@ -158,6 +145,16 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
     // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
     NamedCommands.registerCommand("Collect", intakeCommand());
+    NamedCommands.registerCommand("Place", Commands.none());
+    NamedCommands.registerCommand(("Complete Place"), completePlaceCommand());
+  }
+  public void initalizeAutos() {
+    autoCommand = Commands.sequence(elevator.getCalibrationCommand(), autoChooser.getSelected());
+
+    RobotContainer.swerve.removeDefaultCommand();
+    if (autoCommand != null) {
+      autoCommand.schedule();
+    }
   }
 
   private void configureButtonBindings() {
@@ -186,7 +183,7 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-135)));
+    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-137)));
     driver.Y().onTrue(climber.getPrepareCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
@@ -246,7 +243,7 @@ public class RobotContainer {
   
   public Command level4PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(78.0-24.0)),
+      elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
       coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39.7))
     );
   }
@@ -262,6 +259,19 @@ public class RobotContainer {
       level4PositionCommand(),
       coralHandler.runCoralOuttakeCommand()
     );
+  }
+  public Command completePlaceCommand() {
+    Rotation2d horizontalAngle = coralHandler.getHorizontalAngle();
+    Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*45));
+    return Commands.sequence(
+      coralHandler.setHorizontalAngleCommand(loweringAngle),
+      elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
+      coralHandler.setIntakeAngleCommand()
+    );
+  }
+  
+  public void initalizeTele() {
+    swerve.setDefaultCommand(new SwerveDriveWithGamepad(elevator::getHeightFrac));
   }
 
   public static void periodic() {
