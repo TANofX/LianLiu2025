@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Complete Place"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -55,6 +61,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Complete Place"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -90,6 +102,12 @@
           "type": "named",
           "data": {
             "name": "Place L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Complete Place"
           }
         }
       ]
