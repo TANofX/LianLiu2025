@@ -17,6 +17,7 @@ import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
 import frc.robot.commands.SwerveDriveWithGamepad;
 import frc.robot.subsystems.AlgaeHandler;
+import frc.robot.subsystems.AutoAiming;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralHandler;
 import frc.robot.subsystems.Elevator;
@@ -27,14 +28,13 @@ import frc.robot.util.RobotMechanism;
 
 import java.security.CodeSigner;
 
-import com.pathplanner.lib.auto.NamedCommands;
-
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   // Controllers
   public static final XboxControllerWrapper driver = new XboxControllerWrapper(0, 0.1);
   public static final XboxControllerWrapper coDriver = new XboxControllerWrapper(1, 0.1);
   
+
   public static final Vision vision = new Vision();
   public static final Swerve swerve = new Swerve();// new Swerve();
   public static final Elevator elevator = new Elevator(Constants.Elevator.MOTOR_ID);
@@ -49,7 +49,8 @@ public class RobotContainer {
   public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
   public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
-
+  public static final AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler());
+  
 
   public RobotContainer() {
     configureButtonBindings();
@@ -187,7 +188,10 @@ public class RobotContainer {
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-135)));
     driver.Y().onTrue(climber.getPrepareCommand());
-    
+    //I am worried about setting it to a wrong angle and it breaking the robot
+    //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
+    //driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));
+
     coDriver.A().onTrue(level1PositionCommand());
     coDriver.X().onTrue(level2PositionCommand());
     coDriver.B().onTrue(level3PositionCommand());

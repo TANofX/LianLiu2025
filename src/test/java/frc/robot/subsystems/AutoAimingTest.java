@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /** Add your docs here. */
 public class AutoAimingTest {
@@ -15,10 +17,10 @@ public class AutoAimingTest {
     public void testZeros() throws Exception {
         AutoAiming autoAim = new AutoAiming(()->{return new Pose3d(0.0,0.0,100.0,new Rotation3d());});
 
-        Rotation2d hAngle = autoAim.horizontalRotationToCoral();
+        Translation2d hAngle = autoAim.horizontalRotationToCoral();
         Rotation2d vAngle = autoAim.verticalRotationToCoral();
         Pose2d coralBranch = autoAim.chooseBranch(new Pose2d());
-        System.out.println("horizontal angle " + hAngle);
+        System.out.println("horizontal angle " + hAngle.getAngle());
         System.out.println("vertical angle " +vAngle);
         System.out.println(coralBranch);
     }
