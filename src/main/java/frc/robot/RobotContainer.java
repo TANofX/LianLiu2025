@@ -92,6 +92,8 @@ public class RobotContainer {
         coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
 
     registerNamedCommands();
+
+  
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -143,9 +145,11 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
     NamedCommands.registerCommand("Collect", intakeCommand());
     NamedCommands.registerCommand("Place", Commands.none());
+    NamedCommands.registerCommand(("Complete Place"), completePlaceCommand());
   }
   public void initalizeAutos() {
-    autoCommand = autoChooser.getSelected();
+    autoCommand = Commands.sequence(elevator.getCalibrationCommand(), autoChooser.getSelected());
+
     RobotContainer.swerve.removeDefaultCommand();
     if (autoCommand != null) {
       autoCommand.schedule();
@@ -178,7 +182,7 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-135)));
+    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-137)));
     driver.Y().onTrue(climber.getPrepareCommand());
     
     coDriver.A().onTrue(level1PositionCommand());
@@ -235,7 +239,7 @@ public class RobotContainer {
   
   public Command level4PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(78.0-24.0)),
+      elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
       coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39.7))
     );
   }
@@ -250,6 +254,13 @@ public class RobotContainer {
     return Commands.sequence(
       level4PositionCommand(),
       coralHandler.runCoralOuttakeCommand()
+    );
+  }
+  public Command completePlaceCommand() {
+    return Commands.sequence(
+      coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-86)),
+      elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
+      coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(92))
     );
   }
 

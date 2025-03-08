@@ -167,10 +167,10 @@ public final class Climber extends AdvancedSubsystem {
     SmartDashboard.putNumber("Climber/actual position", climberEncoder.getPosition());
     
     // if (Math.abs(motorRotation) > 2) {
-    climberController.setReference(actualTarget, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    //climberController.setReference(actualTarget, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     // }
     // else {
-    //climberController.setReference(actualTarget, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    climberController.setReference(actualTarget, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     // }
   }
 
