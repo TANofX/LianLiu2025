@@ -12,14 +12,19 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance; //may not need both?
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
   private final Supplier<Pose3d> coralHandlerSupplier;
+  private final StructPublisher<Translation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
 
   public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
@@ -42,9 +47,9 @@ public class AutoAiming extends SubsystemBase {
   //put in two pose2ds (from translation2ds), and turn these into transform 2ds, 
   //turn this into translation 2ds, and turn this into rotation 2ds
   
-  public Rotation2d horizontalRotationToCoral (){
+  public Translation2d horizontalRotationToCoral (){
     Translation2d changeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().minus(chooseBranch(coralHandlerSupplier.get().toPose2d()).getTranslation());
-    return changeNeeded.getAngle();
+    return changeNeeded;
   }
 //NOT DONEEE
 public Rotation2d verticalRotationToCoral (){
@@ -67,5 +72,9 @@ public Rotation2d verticalRotationToCoral (){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    Translation2d temp = horizontalRotationToCoral();
+    publisher.set(temp);
   }
 }
+
+//go in straight line while raising elevator to test if we can raise elevator while driving
