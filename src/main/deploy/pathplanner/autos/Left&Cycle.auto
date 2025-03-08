@@ -17,21 +17,85 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "EtoCollect"
+            "name": "Complete Place"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "EtoCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CollectToD"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Collect"
+            "name": "Place L4"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "CollectToD"
+            "name": "Complete Place"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "DToCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CollectToC"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -41,27 +105,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "DToCollect"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Collect"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CollectToC"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Place L4"
+            "name": "Complete Place"
           }
         }
       ]
