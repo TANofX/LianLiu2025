@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftStartCloseLeftReef"
+            "pathName": "LeftStartToE"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Place L1"
+            "name": "Place L4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CloseLeftReefLeftCollect"
+            "pathName": "EtoCollect"
           }
         },
         {
@@ -31,25 +31,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftCollectFarLeftReef"
+            "pathName": "CollectToD"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Place L1"
+            "name": "Place L4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FarLeftReefLeftCollect"
+            "pathName": "DToCollect"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CollectToC"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L4"
           }
         }
       ]

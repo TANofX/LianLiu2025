@@ -257,11 +257,17 @@ public class RobotContainer {
     );
   }
   public Command completePlaceCommand() {
+    Rotation2d horizontalAngle = coralHandler.getHorizontalAngle();
+    Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*45));
     return Commands.sequence(
-      coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-86)),
+      coralHandler.setHorizontalAngleCommand(loweringAngle),
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
-      coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(92))
+      coralHandler.setIntakeAngleCommand()
     );
+  }
+  
+  public void initalizeTele() {
+    swerve.setDefaultCommand(new SwerveDriveWithGamepad(elevator::getHeightFrac));
   }
 
   public static void periodic() {
