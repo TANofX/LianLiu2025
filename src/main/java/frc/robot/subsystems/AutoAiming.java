@@ -72,3 +72,13 @@ public Rotation2d verticalRotationToCoral (){
 }
 
 //go in straight line while raising elevator to test if we can raise elevator while driving
+
+//coral handler pose: .3, .81,
+//robot pos: 5.63, 6.03
+
+
+
+//coral handler pose: same
+//robot pos: 5.54, 5.96
+
+
