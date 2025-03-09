@@ -162,18 +162,18 @@ public class RobotContainer {
     coralHandler.setDefaultCommand(
         new ManualCoralHandler(() -> {
           if (coDriver.DUp().getAsBoolean()) {
-            return 0.5;
+            return -0.75;
           }
           if (coDriver.DDown().getAsBoolean()) {
-            return -0.5;
+            return 0.75;
           }
           return 0.0;
         }, () -> {
           if (coDriver.DRight().getAsBoolean()) {
-            return -0.5;
+            return -0.75;
           }
           if (coDriver.DLeft().getAsBoolean()) {
-            return 0.5;
+            return 0.75;
           }
           return 0.0;
         }));
@@ -183,7 +183,7 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-137)));
+    driver.A().onTrue(climbCommand());
     driver.Y().onTrue(climber.getPrepareCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
@@ -237,14 +237,21 @@ public class RobotContainer {
   public Command level3PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(51.59-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(25))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(30))
     );
   }
   
   public Command level4PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39.7))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(35))
+    );
+  }
+
+  public Command climbCommand() {
+    return Commands.parallel(
+      climber.climbCommand(Rotation2d.fromDegrees(-137)),
+      coralHandler.setToZeroAngleCommand()
     );
   }
 
@@ -254,12 +261,14 @@ public class RobotContainer {
       coralHandler.runCoralOuttakeCommand()
     );
   }
+
   public Command level4AutoPlaceCommand() {
     return Commands.sequence(
       level4PositionCommand(),
       coralHandler.runCoralOuttakeCommand()
     );
   }
+
   public Command completePlaceCommand() {
     Rotation2d horizontalAngle = coralHandler.getHorizontalAngle();
     Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*45));
