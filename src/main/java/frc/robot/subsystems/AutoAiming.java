@@ -25,6 +25,8 @@ public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
   private final Supplier<Pose3d> coralHandlerSupplier;
   private final StructPublisher<Translation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
+  private final StructPublisher<Translation2d> publisher2 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
+  private final StructPublisher<Translation2d> publisher3 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
   
   public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
@@ -32,22 +34,21 @@ public class AutoAiming extends SubsystemBase {
 
 
 //Method to return the position of the branch closest to it.
-  public Pose2d chooseBranch (Pose2d robotPose){
-    return robotPose.nearest( Constants.CoralPlacement.coordinatesCoral);
+  public Translation2d chooseBranch (Translation2d robotPose){
+    return robotPose.nearest(Constants.CoralPlacement.coordinatesCoral);
   }
   //Need to create two different methods to determine the verticle rotation and horizontal rotation
   //put in two pose2ds (from translation2ds), and turn these into transform 2ds, 
   //turn this into translation 2ds, and turn this into rotation 2ds
   
   public Translation2d horizontalRotationToCoral (){
-    Translation2d changeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().minus(chooseBranch(coralHandlerSupplier.get().toPose2d()).getTranslation());
-    System.out.println("Auto Aiming: coral handler pose: " + coralHandlerSupplier.get() + "      ");
-    System.out.println("Auto Aiming: coral pose: " + chooseBranch(coralHandlerSupplier.get().toPose2d()));
+    Translation2d changeNeeded = chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()).minus(coralHandlerSupplier.get().getTranslation().toTranslation2d());
+    
     return changeNeeded;
   }
 //NOT DONEEE
 public Rotation2d verticalRotationToCoral (){
-  double horizontalChangeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().getDistance(chooseBranch(coralHandlerSupplier.get().toPose2d()).getTranslation());
+  double horizontalChangeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().getDistance(chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()));
   
   double closest = 100000.0;
   for(int i = 0; i<Constants.CoralPlacement.heightsCoral.size(); i++){
@@ -57,7 +58,6 @@ public Rotation2d verticalRotationToCoral (){
   }
   
   Translation2d sideViewCoral = new Translation2d(horizontalChangeNeeded, closest - coralHandlerSupplier.get().getZ());
-  System.out.println(sideViewCoral);
   return sideViewCoral.getAngle();
 }
 
@@ -68,17 +68,13 @@ public Rotation2d verticalRotationToCoral (){
     // This method will be called once per scheduler run
     Translation2d temp = horizontalRotationToCoral();
     publisher.set(temp);
+    publisher2.set(chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()));
+    publisher3.set(coralHandlerSupplier.get().toPose2d().getTranslation());
+    
+  
   }
 }
 
 //go in straight line while raising elevator to test if we can raise elevator while driving
-
-//coral handler pose: .3, .81,
-//robot pos: 5.63, 6.03
-
-
-
-//coral handler pose: same
-//robot pos: 5.54, 5.96
 
 
