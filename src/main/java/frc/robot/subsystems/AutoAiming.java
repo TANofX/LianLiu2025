@@ -33,15 +33,7 @@ public class AutoAiming extends SubsystemBase {
 
 //Method to return the position of the branch closest to it.
   public Pose2d chooseBranch (Pose2d robotPose){
-    Alliance alliance = DriverStation.getAlliance().orElseGet(() -> Alliance.Blue);
-    //determines which reef is ours
-    List<Pose2d> coordinates;
-    if (alliance == Alliance.Red) {
-        coordinates = Constants.CoralPlacement.coordinatesCoralRed;
-    } else {
-        coordinates = Constants.CoralPlacement.coordinatesCoralBlue;
-    }
-    return robotPose.nearest(coordinates);
+    return robotPose.nearest( Constants.CoralPlacement.coordinatesCoral);
   }
   //Need to create two different methods to determine the verticle rotation and horizontal rotation
   //put in two pose2ds (from translation2ds), and turn these into transform 2ds, 
