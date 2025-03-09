@@ -41,6 +41,7 @@ public class AutoAiming extends SubsystemBase {
   
   public Translation2d horizontalRotationToCoral (){
     Translation2d changeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().minus(chooseBranch(coralHandlerSupplier.get().toPose2d()).getTranslation());
+    System.out.println("coral handler pose: " + coralHandlerSupplier.get() + "      ");
     return changeNeeded;
   }
 //NOT DONEEE
