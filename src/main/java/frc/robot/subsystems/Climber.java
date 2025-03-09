@@ -408,4 +408,8 @@ public final class Climber extends AdvancedSubsystem {
               climberMotor.stopMotor();
             }, this));
   }
+
+public boolean isClimberAtAngle() {
+  return Math.abs(this.climberTargetAngle.getDegrees() - this.getCurrentAngle().getDegrees()) <= 2.0;
+}
 }

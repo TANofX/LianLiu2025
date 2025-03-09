@@ -20,8 +20,8 @@ public class AutoAimingTest {
         Translation2d hAngle = autoAim.horizontalRotationToCoral();
         Rotation2d vAngle = autoAim.verticalRotationToCoral();
         Pose2d coralBranch = autoAim.chooseBranch(new Pose2d());
-        System.out.println("horizontal angle " + hAngle.getAngle());
-        System.out.println("vertical angle " +vAngle);
-        System.out.println(coralBranch);
+        //System.out.println("horizontal angle " + hAngle.getAngle());
+        //System.out.println("vertical angle " +vAngle);
+        //System.out.println(coralBranch);
     }
 }

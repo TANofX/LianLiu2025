@@ -224,34 +224,37 @@ public class RobotContainer {
    public Command level1PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(0.5)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(0))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(15)),
+      coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(83.0 * Math.signum(coralHandler.getHorizontalAngle().getDegrees())))
     );
   }
   public Command level2PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(33.72-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(25))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(30))
     );
   }
   
   public Command level3PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(51.59-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(30))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(34))
     );
   }
   
   public Command level4PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(35))
+      elevator.getElevatorHeightCommand(1.4),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(39))
     );
   }
 
   public Command climbCommand() {
     return Commands.parallel(
       climber.climbCommand(Rotation2d.fromDegrees(-137)),
-      coralHandler.setToZeroAngleCommand()
+      Commands.sequence(
+      Commands.waitSeconds(3.0),
+      coralHandler.setToZeroAngleCommand())
     );
   }
 

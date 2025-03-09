@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 
 /** Add your docs here. */
 public class RobotMechanism {
@@ -31,6 +32,8 @@ public class RobotMechanism {
     MechanismLigament2d m_elevatorExtension;
     StructArrayPublisher<Pose3d> m_poses = NetworkTableInstance.getDefault()
             .getStructArrayTopic("Robot/Component/Poses", Pose3d.struct).publish();
+    StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault()
+            .getStructTopic("RobotMechanism/EndEffectorPose", Pose3d.struct).publish();
     Pose3d[] poses = new Pose3d[9];
     Supplier<Pose2d> robotPoseSupplier;
 
@@ -114,17 +117,18 @@ public class RobotMechanism {
 
     // method that finds the position
     public Pose3d getFieldPositionOfCoralHandler() {
-        // turns Rotation2d into Rotation3d
-        System.out.println("robot pose rotation: " + robotPoseSupplier.get().getRotation());
-        System.out.println("robot pose: " + robotPoseSupplier.get());
 
-        Rotation3d rotation = new Rotation3d(robotPoseSupplier.get().getRotation());
+        Pose3d robotPose = new Pose3d(robotPoseSupplier.get());
+
         Translation3d baseToCoralHandler = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).getTranslation();
 
-        // this should now include any rotation of the drive base. This works because
-        // the pose3d constructor that uses both translation and rotation3d should
-        // rotate the axis so that it matches the rotation, and then construct the
-        // translation onto that new axis.
-        return new Pose3d(baseToCoralHandler, rotation);
+        Transform3d baseToCoralHandlerTransform = new Transform3d(baseToCoralHandler, robotPose.getRotation());
+
+        robotPose = robotPose.transformBy(baseToCoralHandlerTransform);
+        
+        publisher.set(robotPose);
+
+        return robotPose;
+        //works perfectly: tested
     }
 }
