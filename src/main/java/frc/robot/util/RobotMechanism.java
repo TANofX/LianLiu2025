@@ -115,6 +115,9 @@ public class RobotMechanism {
     // method that finds the position
     public Pose3d getFieldPositionOfCoralHandler() {
         // turns Rotation2d into Rotation3d
+        System.out.println("robot pose rotation: " + robotPoseSupplier.get().getRotation());
+        System.out.println("robot pose: " + robotPoseSupplier.get());
+
         Rotation3d rotation = new Rotation3d(robotPoseSupplier.get().getRotation());
         Translation3d baseToCoralHandler = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).getTranslation();
 
