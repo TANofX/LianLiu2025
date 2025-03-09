@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class AutoAimingTest {
     @Test
     public void testZeros() throws Exception {
-        AutoAiming autoAim = new AutoAiming(()->{return new Pose3d(0.0,0.0,100.0,new Rotation3d());});
+        AutoAiming autoAim = new AutoAiming(()->{return new Pose3d(10.0,10.0,00.0,new Rotation3d());});
 
         Translation2d hAngle = autoAim.horizontalRotationToCoral();
         Rotation2d vAngle = autoAim.verticalRotationToCoral();

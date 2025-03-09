@@ -25,7 +25,7 @@ public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
   private final Supplier<Pose3d> coralHandlerSupplier;
   private final StructPublisher<Translation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
-
+  
   public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
   }
