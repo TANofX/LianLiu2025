@@ -25,9 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
   private final Supplier<Pose3d> coralHandlerSupplier;
-  private final StructPublisher<Translation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
-  private final StructPublisher<Translation2d> publisher2 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
-  private final StructPublisher<Translation2d> publisher3 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
+  private final StructPublisher<Rotation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Rotation2d.struct).publish();
   
   public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
@@ -83,9 +81,7 @@ public Rotation2d verticalRotationToCoral (){
   public void periodic() {
     // This method will be called once per scheduler run
     Rotation2d temp = horizontalRotationToCoral();
-    publisher.set(new Translation2d(1, temp));
-    publisher2.set(chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()));
-    publisher3.set(coralHandlerSupplier.get().toPose2d().getTranslation());
+    publisher.set(temp);
     
   }
 }
