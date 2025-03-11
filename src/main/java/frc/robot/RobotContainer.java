@@ -187,7 +187,7 @@ public class RobotContainer {
     driver.LT().onTrue(climber.getPrepareCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
-    driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));
+    //driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));
 
     coDriver.A().onTrue(level1PositionCommand());
     coDriver.X().onTrue(level2PositionCommand());
