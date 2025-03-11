@@ -337,13 +337,13 @@ public final class Constants {
     public static final int PCM_ID = 5;
     public static final int FORWARD_SOLENOID_ID = 14;
     public static final int REVERSE_SOLENOID_ID = 7;
-    public static final double MOTOR_KP = 0.05;
+    public static final double MOTOR_KP = 0.025;
     public static final double MOTOR_KI = 0;
-    public static final double MOTOR_KD = 0.00025;
+    public static final double MOTOR_KD = 0.005;
     public static final double MOTOR_FF = 0.0;
     public static final double MOTOR_MAX_KP = 0.05;
     public static final double MOTOR_MAX_KI = 0.0;
-    public static final double MOTOR_MAX_KD = 0.00025;
+    public static final double MOTOR_MAX_KD = 0.0025;
     public static final double MOTOR_MAX_FF = 0.0;
     public static final double MOTOR_MAX_VELOCITY = 5000.0;
     public static final double MOTOR_MAX_ACCEL = 6000.0;

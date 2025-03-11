@@ -3,6 +3,8 @@ package frc.lib.vision;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.Matrix;
@@ -13,6 +15,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 /**
  * Simple class that stores Camera along with the position(aka cameraToRobot)
@@ -22,6 +25,7 @@ public class Camera {
     private final PhotonCamera camera;
     private final Transform3d position;
     public final String prefix;
+    private final PhotonPoseEstimator poseEstimator;
 
     private final WelfordSD sdX = new WelfordSD();
     private final WelfordSD sdY = new WelfordSD();
@@ -36,7 +40,8 @@ public class Camera {
     public Camera(String name, Transform3d pos) {
         prefix = "Vision/AprilTag/" + name;
         camera = new PhotonCamera(name);
-        position = pos;
+        position = pos; //why documentation no match :(
+        poseEstimator = new PhotonPoseEstimator(Constants.apriltagLayout, PoseStrategy.AVERAGE_BEST_TARGETS, position);
     }
 
     /**
