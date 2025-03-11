@@ -183,8 +183,8 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.A().onTrue(climbCommand());
-    driver.Y().onTrue(climber.getPrepareCommand());
+    driver.LB().onTrue(climbCommand());
+    driver.LT().onTrue(climber.getPrepareCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
     //driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));
@@ -237,14 +237,14 @@ public class RobotContainer {
   public Command level3PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(51.59-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(30))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(38))
     );
   }
   
   public Command level4PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(35))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(40))
     );
   }
 
