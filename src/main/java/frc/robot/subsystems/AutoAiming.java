@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import frc.robot.Constants;
@@ -35,17 +36,32 @@ public class AutoAiming extends SubsystemBase {
 
 //Method to return the position of the branch closest to it.
   public Translation2d chooseBranch (Translation2d robotPose){
-    return robotPose.nearest(Constants.CoralPlacement.coordinatesCoral);
+    double closest = 10000000000000.0;
+    int ind = -1;
+    System.out.println("robot Pose according to autoaim " + robotPose);
+    for(int i = 0; i<Constants.CoralPlacement.coordinatesCoral.size()-0; i++){
+      
+      if(Constants.CoralPlacement.coordinatesCoral.get(i).getDistance(robotPose) < closest){
+        closest = Constants.CoralPlacement.coordinatesCoral.get(i).getDistance(robotPose);
+        ind = i;
+      }
+    }
+    return Constants.CoralPlacement.coordinatesCoral.get(ind);
   }
   //Need to create two different methods to determine the verticle rotation and horizontal rotation
   //put in two pose2ds (from translation2ds), and turn these into transform 2ds, 
   //turn this into translation 2ds, and turn this into rotation 2ds
   
-  public Translation2d horizontalRotationToCoral (){
-    Translation2d changeNeeded = chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()).minus(coralHandlerSupplier.get().getTranslation().toTranslation2d());
-    
-    return changeNeeded;
+  public Rotation2d horizontalRotationToCoral (){
+    Translation2d robotPose = coralHandlerSupplier.get().toPose2d().getTranslation();
+    System.out.println("robot Pose according to horzrot.tocoral  " + robotPose);
+    Translation2d changeNeeded = chooseBranch(robotPose).minus(robotPose);
+
+    return new Rotation2d(Units.degreesToRadians(changeNeeded.getAngle().getDegrees()-90));
   }
+
+
+
 //NOT DONEEE
 public Rotation2d verticalRotationToCoral (){
   double horizontalChangeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().getDistance(chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()));
@@ -66,12 +82,11 @@ public Rotation2d verticalRotationToCoral (){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Translation2d temp = horizontalRotationToCoral();
-    publisher.set(temp);
+    Rotation2d temp = horizontalRotationToCoral();
+    publisher.set(new Translation2d(1, temp));
     publisher2.set(chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()));
     publisher3.set(coralHandlerSupplier.get().toPose2d().getTranslation());
     
-  
   }
 }
 

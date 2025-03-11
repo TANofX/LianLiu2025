@@ -195,11 +195,12 @@ public final class Constants {
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(504.39), Units.inchesToMeters(128.65)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(523.90), Units.inchesToMeters(128.65)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(535.08), Units.inchesToMeters(135.15)));
+      
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(146.052), Units.inchesToMeters(164.97)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(146.052), Units.inchesToMeters(152.03)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(155.43), Units.inchesToMeters(135.15)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(166.65), Units.inchesToMeters(128.65)));
-      coordinatesCoral.add(new Translation2d(Units.inchesToMeters(136.51), Units.inchesToMeters(128.65)));
+      coordinatesCoral.add(new Translation2d(Units.inchesToMeters(186.51), Units.inchesToMeters(128.65)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(197.69), Units.inchesToMeters(135.15)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(207.48), Units.inchesToMeters(152.03)));
       coordinatesCoral.add(new Translation2d(Units.inchesToMeters(207.48), Units.inchesToMeters(164.97)));

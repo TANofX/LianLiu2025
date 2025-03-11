@@ -10,18 +10,25 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.util.RobotMechanism;
 
 /** Add your docs here. */
 public class AutoAimingTest {
     @Test
     public void testZeros() throws Exception {
-        AutoAiming autoAim = new AutoAiming(()->{return new Pose3d(10.0,10.0,00.0,new Rotation3d());});
+        Rotation2d r = new Rotation2d();
 
-        Translation2d hAngle = autoAim.horizontalRotationToCoral();
-        Rotation2d vAngle = autoAim.verticalRotationToCoral();
-        Pose2d coralBranch = autoAim.chooseBranch(new Pose2d());
-        System.out.println("horizontal angle " + hAngle.getAngle());
-        System.out.println("vertical angle " +vAngle);
-        System.out.println(coralBranch);
+        Pose2d robotPose = new Pose2d(3.95,0, r);
+        RobotMechanism robotMechanism = new RobotMechanism(() -> robotPose);
+        AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler());
+        
+        Rotation2d hAngle = autoAimer.horizontalRotationToCoral();
+
+        System.out.println();
+        System.out.println("Robot Pose === " + robotPose.getTranslation());
+        System.out.println("end of coral handler === " + robotMechanism.getFieldPositionOfCoralHandler());
+        System.out.println("translation needed === " + hAngle);
+        System.out.println("horizontal angle === " + (hAngle));
+
     }
 }
