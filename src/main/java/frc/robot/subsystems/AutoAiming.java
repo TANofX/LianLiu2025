@@ -85,7 +85,7 @@ public Rotation2d verticalRotationToCoral (){
   double horizontalChangeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().getDistance(chooseBranch(coralHandlerSupplier.get().toPose2d().getTranslation()));
   
   double closest = 100000.0;
-  for(int i = 0; i<stants.CoralPlacement.heightsCoral.size(); i++){
+  for(int i = 0; i<Constants.CoralPlacement.heightsCoral.size(); i++){
     if(Constants.CoralPlacement.heightsCoral.get(i) < closest){
       closest = Constants.CoralPlacement.heightsCoral.get(i);
     }
