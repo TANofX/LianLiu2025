@@ -308,6 +308,19 @@ public class CoralHandler extends AdvancedSubsystem {
     SmartDashboard.putNumber("CoralHandler/Vertical Applied Output", verticalWrist.getAppliedOutput());
   }
 
+  public Command holdCoralCommand() {
+    return Commands.run(
+      () -> {
+      runOuttakeMotor(-.1);});
+  }
+
+  public Command holdRightCommand() {
+    return Commands.sequence(
+    setVerticalAngleCommand(Rotation2d.fromDegrees(38)),  
+    setHorizontalAngleCommand(Rotation2d.fromDegrees(-80))
+    );
+  }
+  
   public Command zeroWristCommand() {
   return Commands.runOnce(
           () -> {

@@ -147,6 +147,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Collect", intakeCommand());
     NamedCommands.registerCommand("Place", Commands.none());
     NamedCommands.registerCommand(("Complete Place"), completePlaceCommand());
+    NamedCommands.registerCommand("CoralRight", coralHandler.holdRightCommand());
+    NamedCommands.registerCommand("HoldCoral", coralHandler.holdCoralCommand());
   }
   public void initalizeAutos() {
     autoCommand = Commands.sequence(elevator.getCalibrationCommand(), autoChooser.getSelected());
@@ -200,7 +202,7 @@ public class RobotContainer {
     coDriver.BACK().whileTrue(coralHandler.runCoralIntakeCommand());
     coDriver.START().whileTrue(flickAlgaeCommand());
     coDriver.LB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(92)));
-    coDriver.RB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-86)));
+    coDriver.RB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-80)));
   }
 
   public Command flickAlgaeCommand() {

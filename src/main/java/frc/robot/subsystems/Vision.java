@@ -56,11 +56,11 @@ public final class Vision extends AdvancedSubsystem {
             List<PhotonPipelineResult> tagResults = cam.getResults();
             for (PhotonPipelineResult result : tagResults) {
                 Result r = processResult(result, cam);
-                if((!best.found) || r.found && r.ambiguity < best.ambiguity) best = r;
+                if(((!best.found) || r.found) && (r.ambiguity < best.ambiguity)) best = r;
             }
         }
         if(best.found) {
-            if (best.ambiguity < 0.10) {
+            if (best.ambiguity < 0.01) {
                 RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(best.cam.getSD());
                 RobotContainer.swerve.odometry.addVisionMeasurement(best.robotPose.toPose2d(), best.imageCaptureTime);
             }
@@ -130,7 +130,7 @@ class Result {
         found = false;
         cam = null;
         robotPose = null;
-        ambiguity = 0;
+        ambiguity = 2;
         imageCaptureTime = 0;
     }
     public Result(Camera c, Pose3d r, double i, double a) {
