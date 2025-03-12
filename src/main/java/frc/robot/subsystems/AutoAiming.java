@@ -25,7 +25,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
   private final Supplier<Pose3d> coralHandlerSupplier;
-  private final StructPublisher<Rotation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Rotation2d.struct).publish();
+  private final StructPublisher<Rotation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Rotation2d.struct).publish(); 
+  private final StructPublisher<Translation2d> publisher2 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
+  private final StructPublisher<Translation2d> publisher3 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
   
   public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
@@ -36,7 +38,6 @@ public class AutoAiming extends SubsystemBase {
   public Translation2d chooseBranch (Translation2d robotPose){
     double closest = 10000000000000.0;
     int ind = -1;
-    System.out.println("robot Pose according to autoaim " + robotPose);
     for(int i = 0; i<Constants.CoralPlacement.coordinatesCoral.size()-0; i++){
       
       if(Constants.CoralPlacement.coordinatesCoral.get(i).getDistance(robotPose) < closest){
@@ -52,10 +53,28 @@ public class AutoAiming extends SubsystemBase {
   
   public Rotation2d horizontalRotationToCoral (){
     Translation2d robotPose = coralHandlerSupplier.get().toPose2d().getTranslation();
-    System.out.println("robot Pose according to horzrot.tocoral  " + robotPose);
     Translation2d changeNeeded = chooseBranch(robotPose).minus(robotPose);
+    Rotation2d robotRotation = coralHandlerSupplier.get().getRotation().toRotation2d();
 
-    return new Rotation2d(Units.degreesToRadians(changeNeeded.getAngle().getDegrees()-90));
+//IN DEGREES NOT RADIANS!!!!
+    Rotation2d initialAngle = new Rotation2d((robotRotation.getDegrees() - changeNeeded.getAngle().getDegrees()));
+    Rotation2d finalAngle;
+    
+
+    /*
+    if ((initialAngle.getDegrees() < 80) && (initialAngle.getDegrees() > (-80))){
+      finalAngle = changeNeeded.getAngle();
+    }else if(initialAngle.getDegrees() > 280){
+      finalAngle = new Rotation2d(initialAngle.getDegrees()-360);
+    }else if(initialAngle.getDegrees() < -280){
+      finalAngle = new Rotation2d(initialAngle.getDegrees()+360);
+    }else{
+      finalAngle = new Rotation2d();
+    }
+    */
+    finalAngle = initialAngle;
+
+    return finalAngle;
   }
 
 
