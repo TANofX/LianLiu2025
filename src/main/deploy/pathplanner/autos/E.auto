@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "LeftStartToE"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HoldCoral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftStartToE"
+                }
+              }
+            ]
           }
         },
         {
@@ -25,7 +38,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

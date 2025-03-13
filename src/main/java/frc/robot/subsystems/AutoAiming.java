@@ -41,8 +41,8 @@ public class AutoAiming extends SubsystemBase {
   
   public Translation2d horizontalRotationToCoral (){
     Translation2d changeNeeded = coralHandlerSupplier.get().getTranslation().toTranslation2d().minus(chooseBranch(coralHandlerSupplier.get().toPose2d()).getTranslation());
-    System.out.println("Auto Aiming: coral handler pose: " + coralHandlerSupplier.get() + "      ");
-    System.out.println("Auto Aiming: coral pose: " + chooseBranch(coralHandlerSupplier.get().toPose2d()));
+    // System.out.println("Auto Aiming: coral handler pose: " + coralHandlerSupplier.get() + "      ");
+    // System.out.println("Auto Aiming: coral pose: " + chooseBranch(coralHandlerSupplier.get().toPose2d()));
     return changeNeeded;
   }
 //NOT DONEEE
@@ -57,7 +57,7 @@ public Rotation2d verticalRotationToCoral (){
   }
   
   Translation2d sideViewCoral = new Translation2d(horizontalChangeNeeded, closest - coralHandlerSupplier.get().getZ());
-  System.out.println(sideViewCoral);
+  // System.out.println(sideViewCoral);
   return sideViewCoral.getAngle();
 }
 

@@ -138,8 +138,9 @@ public final class Constants {
       public static final int ROTATION_MOTOR_ID = 10;
       @CanId(CanId.Type.ENCODER)
       public static final int ROTATION_ENCODER_ID = 10;
-      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(10.125),
-          Units.inchesToMeters(12.375));
+      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(12.375),
+        Units.inchesToMeters(10.125)
+          );
     }
 
     public static final class FrontRightModule {
@@ -149,8 +150,8 @@ public final class Constants {
       public static final int ROTATION_MOTOR_ID = 13;
       @CanId(CanId.Type.ENCODER)
       public static final int ROTATION_ENCODER_ID = 13;
-      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(10.125),
-          -Units.inchesToMeters(12.375));
+      public static Translation2d moduleOffset = new Translation2d(Units.inchesToMeters(12.375),
+          -Units.inchesToMeters(10.125));
     }
 
     public static final class BackLeftModule {
@@ -160,8 +161,8 @@ public final class Constants {
       public static final int ROTATION_MOTOR_ID = 11;
       @CanId(CanId.Type.ENCODER)
       public static final int ROTATION_ENCODER_ID = 11;
-      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(10.125),
-          Units.inchesToMeters(12.375));
+      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(12.375),
+        Units.inchesToMeters(10.125));
     }
 
     public static final class BackRightModule {
@@ -171,8 +172,8 @@ public final class Constants {
       public static final int ROTATION_MOTOR_ID = 12;
       @CanId(CanId.Type.ENCODER)
       public static final int ROTATION_ENCODER_ID = 12;
-      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(10.125),
-          -Units.inchesToMeters(12.375));
+      public static Translation2d moduleOffset = new Translation2d(-Units.inchesToMeters(12.375),
+          -Units.inchesToMeters(10.125));
     }
   }
 

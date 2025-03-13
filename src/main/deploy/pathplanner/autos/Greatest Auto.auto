@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "MiddleStarttoH"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HoldCoral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MiddleStarttoH"
+                }
+              }
+            ]
           }
         },
         {
