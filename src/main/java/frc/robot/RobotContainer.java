@@ -87,6 +87,7 @@ public class RobotContainer {
     SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
     SmartDashboard.putData("Climber/Open Claw", climber.getOpenClawCommand());
     SmartDashboard.putData("Climber/Close Claw", climber.getCloseClawCommand());
+    SmartDashboard.putData("Climber/Stow Position", climber.climbCommand(Rotation2d.fromDegrees(-137)));
 
     //Coral Handler SmartDashboard Commands
     SmartDashboard.putData("CoralHandler/Zero Coral Wrist", coralHandler.zeroWristCommand());
