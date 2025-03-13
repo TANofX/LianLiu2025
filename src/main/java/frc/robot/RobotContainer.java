@@ -26,8 +26,6 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.RobotMechanism;
 
-import java.security.CodeSigner;
-
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   private Command autoCommand;
@@ -55,23 +53,30 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
+    registerNamedCommands();
+    
     coralHandler.registerSystemCheckWithSmartDashboard();
+    elevator.registerSystemCheckWithSmartDashboard();
+    rightAlgaeHandler.registerSystemCheckWithSmartDashboard();
+    climber.registerSystemCheckWithSmartDashboard();
+    swerve.registerSystemCheckWithSmartDashboard();
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Mode", autoChooser);
+    
     SmartDashboard.putData(swerve.zeroModulesCommand());
     RobotContainer.swerve.setDefaultCommand(new SwerveDriveWithGamepad(() -> {
       return elevator.getHeightFrac();
     }));
     elevator.setDefaultCommand(new ElevatorJoystickControl(coDriver::getLeftY));
-    // SmartDashboard.putData("Left Algae Handler Test",
-    // leftAlgaeHandler.getSystemCheckCommand());
-    SmartDashboard.putData("Right Algae Handler Test",
-        rightAlgaeHandler.getSystemCheckCommand());
 
-    // SmartDashboard.putData("Elevator Test", elevator.getSystemCheckCommand());
-    // SmartDashboard.putData("Left Algae Handler Test", leftAlgaeHandler.getSystemCheckCommand());
-    // SmartDashboard.putData("Right Algae Handler Test", rightAlgaeHandler.getSystemCheckCommand());
-    //CameraServer.startAutomaticCapture().setResolution(200, 150);
+    //System Check Commands
+    SmartDashboard.putData("Elevator System Check", elevator.getSystemCheckCommand());
+    SmartDashboard.putData("Right Algae Handler System Check", rightAlgaeHandler.getSystemCheckCommand());
+    SmartDashboard.putData("CoralHandler System Check", coralHandler.getSystemCheckCommand());
+    SmartDashboard.putData("Swerve System Check", swerve.getSystemCheckCommand());
 
-    // // Climber SmartDashboard Commands
+    //Climber SmartDashboard Commands
     SmartDashboard.putData("Climber/Prepare Climber", climber.getPrepareCommand());
     SmartDashboard.putData("Climber/Climb Climber", climber.climbCommand(Rotation2d.fromDegrees(-140)));
     SmartDashboard.putData("Climber/Run Claw Motor", climber.runClimberMotorCommand());
@@ -82,29 +87,13 @@ public class RobotContainer {
     SmartDashboard.putData("Climber/Set-90", climber.setClimberNeg90());
     SmartDashboard.putData("Climber/Open Claw", climber.getOpenClawCommand());
     SmartDashboard.putData("Climber/Close Claw", climber.getCloseClawCommand());
-    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
-    SmartDashboard.putData("CoralHandler/Horizontal to +10degrees",
-        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
-    SmartDashboard.putData("CoralHandler/Vertical to +10degrees",
-        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
-    SmartDashboard.putData("CoralHandler/Horizontal to -10degrees",
-        coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
-    SmartDashboard.putData("CoralHandler/Vertical to +-10degrees",
-        coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
 
-    registerNamedCommands();
-
-  
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Mode", autoChooser);
-
-    // Coral Handler SmartDashboard Commands
+    //Coral Handler SmartDashboard Commands
+    SmartDashboard.putData("CoralHandler/Zero Coral Wrist", coralHandler.zeroWristCommand());
     SmartDashboard.putData("CoralHandler/Horizontal Run Positive", coralHandler.runHorizontalMotorPositiveCommand());
     SmartDashboard.putData("CoralHandler/Horizontal Run Negative", coralHandler.runHorizontalMotorNegativeCommand());
     SmartDashboard.putData("CoralHandler/Vertical Run Positive", coralHandler.runVerticalMotorPositiveCommand());
     SmartDashboard.putData("CoralHandler/Vertial Run Negative", coralHandler.runVerticalMotorNegativeCommand());
-    SmartDashboard.putData("Calibrate/Zero Coral Wrist", coralHandler.zeroWristCommand());
-
     SmartDashboard.putData("CoralHandler/Horizontal to +45degrees",
         coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
     SmartDashboard.putData("CoralHandler/Vertical to +20degrees",
@@ -130,23 +119,16 @@ public class RobotContainer {
     SmartDashboard.putData("Elevator/Move Elevator UP", elevator.getSlowElevatorUpCommand());
     SmartDashboard.putData("Elevator/Move Elevator Down", elevator.getSlowElevatorDownCommand());
     SmartDashboard.putData("Elevator/Elevator 1.35", elevator.getElevatorHeightCommand(0.0));
-
-    SmartDashboard.putData("CoralHandler/Horizontal to +10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(45)));
-    SmartDashboard.putData("CoralHandler/Vertical to +10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(20)));
-    SmartDashboard.putData("CoralHandler/Horizontal to -10degrees", coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-45)));
-    SmartDashboard.putData("CoralHandler/Vertical to +-10degrees", coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-20)));
   }
 
   private void registerNamedCommands() {
     NamedCommands.registerCommand("Place L1", level1AutoPlaceCommand());
-    // NamedCommands.registerCommand("Place L2", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
-    // NamedCommands.registerCommand("Place L3", elevator.getElevatorHeightCommand(Units.inchesToMeters(20.0)));
     NamedCommands.registerCommand("Place L4", level4AutoPlaceCommand());
     // NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
     // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
     NamedCommands.registerCommand("Collect", intakeCommand());
     NamedCommands.registerCommand("Place", Commands.none());
-    NamedCommands.registerCommand(("Complete Place"), completePlaceCommand());
+    NamedCommands.registerCommand("Complete Place", completePlaceCommand());
     NamedCommands.registerCommand("CoralRight", coralHandler.holdRightCommand());
     NamedCommands.registerCommand("HoldCoral", coralHandler.holdCoralCommand());
   }
@@ -179,9 +161,6 @@ public class RobotContainer {
           }
           return 0.0;
         }));
-
-    // driver.LT().whileTrue(leftAlgaeHandler.getAlgaeIntakeCommand());
-    // driver.LB().onTrue(leftAlgaeHandler.shootAlgaeCommand());
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());

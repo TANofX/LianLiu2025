@@ -47,6 +47,7 @@ public class AlgaeHandler extends AdvancedSubsystem {
 
   /** Creates a new AlgaeHandler. */
   public AlgaeHandler(int algaeMotorCANID, int algaeSolenoidID, int algaeLimitID) {
+    super("AlgaeHandler" + algaeMotorCANID);
     // creating motor/solenoid/switches/controllers
     algaeMotor = new SparkMax(algaeMotorCANID, MotorType.kBrushless);
     algaePiston = new Solenoid(PneumaticsModuleType.REVPH, algaeSolenoidID);

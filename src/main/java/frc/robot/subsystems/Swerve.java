@@ -61,6 +61,7 @@ public final class Swerve extends AdvancedSubsystem {
       .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
 
   public Swerve() {
+    super("Swerve");
     poseLookup = new RobotPoseLookup<>();
 
     imu = new Pigeon2(Constants.Swerve.IMU_ID, Constants.CARNIVORE_BUS_NAME);
