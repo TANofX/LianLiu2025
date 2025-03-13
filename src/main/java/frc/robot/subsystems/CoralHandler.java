@@ -431,4 +431,12 @@ public class CoralHandler extends AdvancedSubsystem {
               }
             }, this));
   }
+
+  public boolean isHorizontalAtSetpoint() {
+    return horizontalWrist.isAtTargetAngle();
+  }
+
+  public boolean isVerticalAtSetpoint() {
+    return verticalWrist.isAtTargetAngle();
+  }
 }

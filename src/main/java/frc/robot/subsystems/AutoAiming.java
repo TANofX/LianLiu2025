@@ -61,19 +61,25 @@ public class AutoAiming extends SubsystemBase {
     Rotation2d initialAngle = new Rotation2d(-(robotRotation.getDegrees() - changeNeeded.getAngle().getDegrees()));
     Rotation2d finalAngle;
     
-
-    
-    if ((initialAngle.getDegrees() < 80) && (initialAngle.getDegrees() > (-80))){
-      finalAngle = changeNeeded.getAngle();
-    }else if(initialAngle.getDegrees() > 280){
+    if (initialAngle.getDegrees() > 180.0){
       finalAngle = new Rotation2d(initialAngle.getDegrees()-360);
-    }else if(initialAngle.getDegrees() < -280){
+    }else if (initialAngle.getDegrees() < -180.0){
       finalAngle = new Rotation2d(initialAngle.getDegrees()+360);
-    }else{
-      finalAngle = RobotContainer.coralHandler.getHorizontalAngle();
+    } else {
+      finalAngle = initialAngle;
     }
+    
+    // if ((initialAngle.getDegrees() < 80) && (initialAngle.getDegrees() > (-80))){
+    //   finalAngle = changeNeeded.getAngle();
+    // }else if(initialAngle.getDegrees() > 280){
+    //   finalAngle = new Rotation2d(initialAngle.getDegrees()-360);
+    // }else if(initialAngle.getDegrees() < -280){
+    //   finalAngle = new Rotation2d(initialAngle.getDegrees()+360);
+    // }else{
+    //   finalAngle = RobotContainer.coralHandler.getHorizontalAngle();
+    // }
   
-    finalAngle = initialAngle;
+    // finalAngle = initialAngle;
 
     return finalAngle;
   }
