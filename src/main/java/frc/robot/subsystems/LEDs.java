@@ -141,15 +141,15 @@ public class LEDs extends AdvancedSubsystem {
          if (coralHandler.hasCoral()) {
             whitePattern.applyTo(coralSegmentA);
             whitePattern.applyTo(coralSegmentB);
-            System.out.println("LED acknowledge collected Coral");
+            // System.out.println("LED acknowledge collected Coral");
         } else if (coralHandler.getIntaking() == 1) {
             whiteWave.applyTo(coralSegmentA);
             whiteWave.applyTo(coralSegmentB);
-            System.out.println("LED acknowledge intaking Coral");
+            // System.out.println("LED acknowledge intaking Coral");
         } else if (coralHandler.getIntaking() == -1) {
             whiteOWave.applyTo(coralSegmentA);
             whiteOWave.applyTo(coralSegmentB);
-            System.out.println("LED acknowledge outaking Coral");
+            // System.out.println("LED acknowledge outaking Coral");
         } else {
             standby.applyTo(coralSegmentA);
             standby.applyTo(coralSegmentB);
@@ -159,15 +159,15 @@ public class LEDs extends AdvancedSubsystem {
        if (algaeHandler.hasAlgae()) {
            greenPattern.applyTo(algaeSegmentA);
            greenPattern.applyTo(algaeSegmentB);
-           System.out.println("LED acknowledge collected Algae");
+        //    System.out.println("LED acknowledge collected Algae");
        }else if (algaeHandler.getIntaking() == 1){
            greenWave.applyTo(algaeSegmentA);
            greenWave.applyTo(algaeSegmentB);
-           System.out.println("LED acknowledge intaking Algae");
+        //    System.out.println("LED acknowledge intaking Algae");
        } else if (algaeHandler.getIntaking() == -1){
                greenOWave.applyTo(algaeSegmentA);
                greenOWave.applyTo(algaeSegmentB);
-               System.out.println("LED acknowledge outaking Algae");
+            //    System.out.println("LED acknowledge outaking Algae");
        } else {
            standby.applyTo(algaeSegmentA);
            standby.applyTo(algaeSegmentB);

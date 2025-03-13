@@ -5,9 +5,35 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "RightStarttoJ"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HoldCoral"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CoralRight"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "RightStarttoJ"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

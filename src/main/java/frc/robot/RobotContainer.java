@@ -26,8 +26,6 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.RobotMechanism;
 
-import java.security.CodeSigner;
-
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   private Command autoCommand;
@@ -147,6 +145,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Collect", intakeCommand());
     NamedCommands.registerCommand("Place", Commands.none());
     NamedCommands.registerCommand(("Complete Place"), completePlaceCommand());
+    NamedCommands.registerCommand("CoralRight", coralHandler.holdRightCommand());
+    NamedCommands.registerCommand("HoldCoral", coralHandler.holdCoralCommand());
   }
   public void initalizeAutos() {
     autoCommand = Commands.sequence(elevator.getCalibrationCommand(), autoChooser.getSelected());
@@ -183,7 +183,7 @@ public class RobotContainer {
     
     driver.RT().whileTrue(rightAlgaeHandler.getAlgaeIntakeCommand());
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
-    driver.LB().onTrue(climber.climbCommand(Rotation2d.fromDegrees(-135)));
+    driver.LB().onTrue(climbCommand());
     driver.LT().onTrue(climber.getPrepareCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
@@ -200,7 +200,7 @@ public class RobotContainer {
     coDriver.BACK().whileTrue(coralHandler.runCoralIntakeCommand());
     coDriver.START().whileTrue(flickAlgaeCommand());
     coDriver.LB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(92)));
-    coDriver.RB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-86)));
+    coDriver.RB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-80)));
   }
 
   public Command flickAlgaeCommand() {
@@ -237,14 +237,14 @@ public class RobotContainer {
   public Command level3PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(51.59-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(30))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(38))
     );
   }
   
   public Command level4PositionCommand() {
     return Commands.parallel(
       elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(35))
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(40))
     );
   }
 
