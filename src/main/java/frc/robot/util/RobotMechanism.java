@@ -115,16 +115,14 @@ public class RobotMechanism {
     // method that finds the position
     public Pose3d getFieldPositionOfCoralHandler() {
         // turns Rotation2d into Rotation3d
-        // System.out.println("robot pose rotation: " + robotPoseSupplier.get().getRotation());
-        // System.out.println("robot pose: " + robotPoseSupplier.get());
+        Pose3d robotPose = new Pose3d(robotPoseSupplier.get());
 
-        Rotation3d rotation = new Rotation3d(robotPoseSupplier.get().getRotation());
         Translation3d baseToCoralHandler = poses[1].plus(k_ElevatorStage3ToCoralHandlerStage1).getTranslation();
+        
+        
+        Transform3d baseToCoralHandlerTransform = new Transform3d(baseToCoralHandler, new Rotation3d());
+        
 
-        // this should now include any rotation of the drive base. This works because
-        // the pose3d constructor that uses both translation and rotation3d should
-        // rotate the axis so that it matches the rotation, and then construct the
-        // translation onto that new axis.
-        return new Pose3d(baseToCoralHandler, rotation);
+        return robotPose.plus(baseToCoralHandlerTransform);
     }
 }

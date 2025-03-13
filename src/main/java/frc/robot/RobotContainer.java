@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.input.controllers.XboxControllerWrapper;
+import frc.robot.commands.AutoAimCoralHandler;
 import frc.robot.commands.ElevatorJoystickControl;
 import frc.robot.commands.ManualCoralHandler;
 import frc.robot.commands.SwerveDriveWithGamepad;
@@ -25,8 +26,6 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.RobotMechanism;
-
-import java.security.CodeSigner;
 
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
@@ -189,7 +188,7 @@ public class RobotContainer {
     driver.LT().onTrue(climber.getPrepareCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
-    //driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));
+    driver.X().whileTrue(new AutoAimCoralHandler());
 
     coDriver.A().onTrue(level1PositionCommand());
     coDriver.X().onTrue(level2PositionCommand());

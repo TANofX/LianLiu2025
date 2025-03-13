@@ -48,6 +48,8 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
     private final SingleJointedArmSim coralHandlerPhysicsSim;
 
     private final CANcoderConfiguration encoderConfig;
+
+    private Rotation2d targetMotorAngle;
     
     // Creation of needed parameters for the Coral Handler Wrist
     public CoralHandlerWrist(
@@ -219,7 +221,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         // targetArmAngle = Rotation2d.fromDegrees(
         // MathUtil.clamp(targetArmAngle.getDegrees(), armMinRotation.getDegrees(),
         // armMaxRotation.getDegrees()));
-        var targetMotorAngle = targetArmAngle.times(gearRatio);
+        targetMotorAngle = targetArmAngle.times(gearRatio);
 
         // System.out.printf("[%s] set arm target to %.0f degrees%n", name, targetArmAngle.getDegrees());
 
@@ -264,6 +266,15 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      */
     public void stopMotor() {
         motor.stopMotor();
+    }
+
+    /**
+     * Boolean function that returns true if the current motor angle matches the targetMotorAngle
+     */
+    public boolean isAtTargetAngle() {
+        Rotation2d currentMotorAngle = Rotation2d.fromRotations(motor.getEncoder().getPosition());
+
+        return targetMotorAngle.equals(currentMotorAngle);
     }
 
     /**
