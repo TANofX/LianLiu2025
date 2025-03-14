@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkFlexSim;
@@ -308,6 +306,16 @@ public class CoralHandler extends AdvancedSubsystem {
     SmartDashboard.putNumber("CoralHandler/Vertical Applied Output", verticalWrist.getAppliedOutput());
   }
 
+  // r = negative
+  public Command determineDirectionCommand() {
+    return Commands.either(
+      setHorizontalAngleCommand(Rotation2d.fromDegrees(92)),
+      setHorizontalAngleCommand(Rotation2d.fromDegrees(-80)),
+      () -> {
+        return getHorizontalAngle().getDegrees() >= 0;
+      });
+      }
+
   public Command holdCoralCommand() {
     return Commands.run(
       () -> {
@@ -417,7 +425,7 @@ public class CoralHandler extends AdvancedSubsystem {
         Commands.waitSeconds(1.0),
         Commands.runOnce(
             () -> {
-              if ((outtakeEncoder.getVelocity()) < Constants.CoralHandler.OUTTAKE_MOTOR_MIN_VELOCITY) {
+              if (Math.abs(outtakeEncoder.getVelocity()) < Constants.CoralHandler.OUTTAKE_MOTOR_MIN_VELOCITY) {
                 addFault("[System Check] Outtake Coral Motor too slow (forward direction)", false, true);
               }
             }, this),
@@ -426,9 +434,10 @@ public class CoralHandler extends AdvancedSubsystem {
         Commands.waitSeconds(1.0),
         Commands.runOnce(
             () -> {
-              if ((outtakeEncoder.getVelocity()) < -Constants.CoralHandler.OUTTAKE_MOTOR_MIN_VELOCITY) {
+              if (Math.abs(outtakeEncoder.getVelocity()) < Constants.CoralHandler.OUTTAKE_MOTOR_MIN_VELOCITY) {
                 addFault("[System Check] Outtake Coral Motor too slow (backwards direction)", false, true);
               }
-            }, this));
+            }, this),
+        Commands.runOnce(() -> stopMotors()));
   }
 }
