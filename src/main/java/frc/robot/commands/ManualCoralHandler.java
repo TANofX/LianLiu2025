@@ -31,8 +31,10 @@ public class ManualCoralHandler extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + vertController.getAsDouble()));
-    RobotContainer.coralHandler.setHorizontalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getHorizontalAngle().getDegrees() +  hortController.getAsDouble()));
+    // RobotContainer.coralHandler.setVerticalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getVerticalAngle().getDegrees() + vertController.getAsDouble()));
+    // RobotContainer.coralHandler.setHorizontalAngle(Rotation2d.fromDegrees(RobotContainer.coralHandler.getHorizontalAngle().getDegrees() +  hortController.getAsDouble()));
+    RobotContainer.coralHandler.runHorizontalWrist(hortController.getAsDouble());
+    RobotContainer.coralHandler.runVerticalWrist(vertController.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

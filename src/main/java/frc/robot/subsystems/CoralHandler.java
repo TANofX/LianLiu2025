@@ -177,6 +177,14 @@ public class CoralHandler extends AdvancedSubsystem {
     return isIntaking;
   }
 
+  public void runHorizontalWrist(double speed) {
+    horizontalWrist.runCoralWrist(speed);
+  }
+
+  public void runVerticalWrist(double speed) {
+    verticalWrist.runCoralWrist(speed);
+  }
+
   public void stopOuttakeMotor() {
     outtakeMotor.stopMotor();
     isIntaking = 0;
@@ -371,24 +379,35 @@ public class CoralHandler extends AdvancedSubsystem {
   }
 
   public Command setToZeroAngleCommand() {
-    return Commands.parallel(
+    Command zeroAngle = Commands.parallel(
         verticalWrist.setAngleCommand(Rotation2d.fromDegrees(0)),
         horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(0))
     );
+    zeroAngle.addRequirements(this);
+
+    return zeroAngle;
   }
 
   public Command setHomeAngleCommand() {
-    return Commands.parallel(
+    Command homeAngle = Commands.parallel(
       verticalWrist.setAngleCommand(Rotation2d.fromDegrees(82)),
       horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
     );
+
+    homeAngle.addRequirements(this);
+
+    return homeAngle;
   }
 
   public Command setIntakeAngleCommand() {
-    return Commands.parallel(
+    Command intakeAngle = Commands.parallel(
       verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-30)),
       horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
     );
+
+    intakeAngle.addRequirements(this);
+
+    return intakeAngle;
   }
 
   public Command setVerticalAngleCommand(Rotation2d vTargetAngle) {
