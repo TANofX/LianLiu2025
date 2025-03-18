@@ -62,6 +62,7 @@ public final class Climber extends AdvancedSubsystem {
   /** Creates a new Climber. */
   public Climber(final int MOTOR_CANID, final int pcmid, final int FORWARDSOLENOID, int REVERSESOLENOID,
       int ENCODER_CANID) {
+    super("Climber");
     climberPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, FORWARDSOLENOID, REVERSESOLENOID);
     climberMotor = new SparkFlex(MOTOR_CANID, MotorType.kBrushless);
     climberAbsoluteEncoder = new CANcoder(ENCODER_CANID);

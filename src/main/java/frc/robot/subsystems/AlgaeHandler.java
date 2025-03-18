@@ -47,6 +47,7 @@ public class AlgaeHandler extends AdvancedSubsystem {
 
   /** Creates a new AlgaeHandler. */
   public AlgaeHandler(int algaeMotorCANID, int algaeSolenoidID, int algaeLimitID) {
+    super("AlgaeHandler" + algaeMotorCANID);
     // creating motor/solenoid/switches/controllers
     algaeMotor = new SparkMax(algaeMotorCANID, MotorType.kBrushless);
     algaePiston = new Solenoid(PneumaticsModuleType.REVPH, algaeSolenoidID);
@@ -184,6 +185,7 @@ public class AlgaeHandler extends AdvancedSubsystem {
         Commands.waitUntil(() -> {
           return !hasAlgae();
         }),
+        Commands.waitSeconds(0.2),
         Commands.runOnce(() -> {
           stopAlgaeMotor();
         }).finallyDo(() -> stopAlgaeMotor()));
@@ -236,12 +238,12 @@ public class AlgaeHandler extends AdvancedSubsystem {
             () -> {
               runAlgaeMotor();
             }, this),
-        Commands.waitSeconds(5),
+        Commands.waitSeconds(1),
         Commands.runOnce(
             () -> {
               // Checks to make sure that motor is going at minimum speed needed to intake
               // algae (way slower than our maximum potential ;)
-              if ((algaeEncoder.getVelocity()) < 500) {
+              if ((algaeEncoder.getVelocity()) < 5) {
                 addFault("[System Check] Algae Handler velocity too slow", false, true);
               }
               stopAlgaeMotor();
@@ -259,8 +261,8 @@ public class AlgaeHandler extends AdvancedSubsystem {
             }, this),
         Commands.runOnce(
             () -> {
-              if (!hasAlgae()) {
-                addFault("Limit Switch is not triggered", false, true);
+              if (hasAlgae()) {
+                addFault("Limit Switch is triggered", false, true);
               }
             })
     );

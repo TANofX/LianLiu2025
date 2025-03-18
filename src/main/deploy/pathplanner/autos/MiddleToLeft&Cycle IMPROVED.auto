@@ -19,7 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HToRightCollect"
+            "pathName": "HToLCollectPart1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HtoLCollectPart2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -37,13 +49,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Place L1"
+            "name": "Place L4"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "DToCollect"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
