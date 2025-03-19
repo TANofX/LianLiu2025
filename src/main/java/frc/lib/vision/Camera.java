@@ -1,7 +1,10 @@
 package frc.lib.vision;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
+import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -41,7 +44,7 @@ public class Camera {
         prefix = "Vision/AprilTag/" + name;
         camera = new PhotonCamera(name);
         position = pos; //why documentation no match :(
-        poseEstimator = new PhotonPoseEstimator(Constants.apriltagLayout, PoseStrategy.AVERAGE_BEST_TARGETS, position);
+        poseEstimator = new PhotonPoseEstimator(Constants.apriltagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, position);
     }
 
     /**
@@ -100,5 +103,15 @@ public class Camera {
         SmartDashboard.putBoolean(prefix + "/online", camera.isConnected());
         SmartDashboard.putNumber(prefix + "/results", results.size());
         return results;
+    }
+
+    public Optional<EstimatedRobotPose> getPoseEstimate() {
+        Optional<EstimatedRobotPose> output = Optional.empty();
+
+        for (PhotonPipelineResult result: camera.getAllUnreadResults()) {
+            output = poseEstimator.update(result);
+        }
+
+        return output;
     }
 }

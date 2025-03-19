@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -40,29 +42,42 @@ public final class Vision extends AdvancedSubsystem {
                 Units.inchesToMeters(-13.280346266), // Cad Z
                 Units.inchesToMeters(-11.580914897), // Cad X
                 Units.inchesToMeters(8.177878478), // Cad Y
-                new Rotation3d(0, (-15 * Math.PI) /180.0, (-90 * Math.PI)/180.0)));
+                new Rotation3d(0, (-15 * Math.PI) /180.0, (90 * Math.PI)/180.0)));
         addCamera("starboard", new Transform3d(
                 Units.inchesToMeters(-13.280346266), // Cad Z
                 Units.inchesToMeters(11.580914897), // Cad X
                 Units.inchesToMeters(8.177878478), // Cad Y
-                new Rotation3d(0, (-15 * Math.PI) /180.0, (90 * Math.PI)/180.0)));
+                new Rotation3d(0, (-15 * Math.PI) /180.0, (-90 * Math.PI)/180.0)));
+        addCamera("Arducam_OV9281_USB_Camera", new Transform3d(
+                Units.inchesToMeters(4.734322834),
+                Units.inchesToMeters(-6.233641834),
+                Units.inchesToMeters(30.718469),
+                new Rotation3d(0, Units.degreesToRadians(45.0), Units.degreesToRadians(90))));
                 
     }
 
     @Override
     public void periodic() {
-        Result best = new Result();
-        for (Camera cam : cameras) {
-            List<PhotonPipelineResult> tagResults = cam.getResults();
-            for (PhotonPipelineResult result : tagResults) {
-                Result r = processResult(result, cam);
-                if(((!best.found) || r.found) && (r.ambiguity < best.ambiguity)) best = r;
-            }
-        }
-        if(best.found) {
-            if (best.ambiguity < 0.01) {
-                RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(best.cam.getSD());
-                RobotContainer.swerve.odometry.addVisionMeasurement(best.robotPose.toPose2d(), best.imageCaptureTime);
+        // Result best = new Result();
+        // for (Camera cam : cameras) {
+        //     List<PhotonPipelineResult> tagResults = cam.getResults();
+        //     for (PhotonPipelineResult result : tagResults) {
+        //         Result r = processResult(result, cam);
+        //         if(((!best.found) || r.found) && (r.ambiguity < best.ambiguity)) best = r;
+        //     }
+        // }
+        // if(best.found) {
+        //     if (best.ambiguity < 0.01) {
+        //         RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(best.cam.getSD());
+        //         RobotContainer.swerve.odometry.addVisionMeasurement(best.robotPose.toPose2d(), best.imageCaptureTime);
+        //     }
+        // }
+        for (Camera cam: cameras) {
+            Optional<EstimatedRobotPose> robotPose = cam.getPoseEstimate();
+
+            if (robotPose.isPresent()) {
+                RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 0.5));
+                RobotContainer.swerve.odometry.addVisionMeasurement(robotPose.get().estimatedPose.toPose2d(), robotPose.get().timestampSeconds);
             }
         }
     }
@@ -78,12 +93,20 @@ public final class Vision extends AdvancedSubsystem {
             
 
             if (tagPose.isPresent()) {
+                SmartDashboard.putNumberArray(cam.prefix+"/cameraPose", new double[] {
+                    cam.getPosition().getX(), cam.getPosition().getY(), cam.getPosition().getZ(), 
+                    cam.getPosition().getRotation().getX(), cam.getPosition().getY(), cam.getPosition().getZ()
+                });
                 var imageCaptureTime = result.getTimestampSeconds();
                 Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(
                         passedTarget.getBestCameraToTarget(),
                         tagPose.get(),
                         cameraToRobot);
 
+                SmartDashboard.putNumberArray(cam.prefix+"/RobotPose3D", new double[] {
+                    robotPose.getX(), robotPose.getY(), robotPose.getZ(),
+                    robotPose.getRotation().getX(), robotPose.getRotation().getY(), robotPose.getRotation().getZ()
+                });
                 RobotPoseLookup<Pose3d> AprilTagLookup = new RobotPoseLookup<>();
                 AprilTagLookup.addPose(robotPose);
                 aprilField.setRobotPose(robotPose.toPose2d());
