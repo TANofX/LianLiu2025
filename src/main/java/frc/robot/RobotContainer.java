@@ -167,6 +167,7 @@ public class RobotContainer {
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     driver.LB().onTrue(climbCommand());
     driver.LT().onTrue(climber.getPrepareCommand());
+    driver.A().onTrue(swerve.pathFindingCommand());
     //I am worried about setting it to a wrong angle and it breaking the robot
     //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
     //driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));

@@ -7,6 +7,7 @@ import com.ctre.phoenix6.sim.Pigeon2SimState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
@@ -59,6 +60,7 @@ public final class Swerve extends AdvancedSubsystem {
       .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
   private final StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
+  private final PathConstraints pathConstraints = new PathConstraints(null, null, null, null); //TODO Set PathConstraints
 
   public Swerve() {
     super("Swerve");
@@ -165,6 +167,8 @@ public final class Swerve extends AdvancedSubsystem {
 
     Pose2d currentPose = odometry.update(getYaw(), getPositions());
     double correctTimeMS = (Timer.getFPGATimestamp() - startTime) * 1000;
+    Pose2d pathTargetPose = currentPose.nearest(Constants.AutoPath.reefCoords);
+
     SmartDashboard.putNumber("Swerve/OdomRuntime", correctTimeMS);
     field2d.setRobotPose(currentPose);
     poseLookup.addPose(currentPose);
@@ -439,6 +443,13 @@ public final class Swerve extends AdvancedSubsystem {
     for (Mk4SwerveModuleProSparkFlex module : modules) {
       module.lockModule();
     }
+  }
+
+  public Command pathFindingCommand() {
+    return Commands.runOnce(
+      () -> {
+        AutoBuilder.pathfindToPose(getPose().nearest(Constants.AutoPath.reefCoords), pathConstraints);
+      }, modules);
   }
 
   /**

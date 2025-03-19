@@ -4,12 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.Elevator;
-import frc.robot.commands.SwerveDriveWithGamepad;
 
 public class Robot extends TimedRobot {
   private Command autoCommand;
@@ -20,6 +19,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    Pathfinding.setPathfinder(new LocalADStar());
     System.out.println("Robot Init Called");
     m_robotContainer = new RobotContainer();
     //Autos.init();

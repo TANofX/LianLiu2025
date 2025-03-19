@@ -209,7 +209,7 @@ public final class Constants {
       coordinatesCoral.add(new Pose2d(Units.inchesToMeters(166.65), Units.inchesToMeters(188.32), Rotation2d.fromDegrees(300)));
       coordinatesCoral.add(new Pose2d(Units.inchesToMeters(155.43), Units.inchesToMeters(181.89), Rotation2d.fromDegrees(300)));
     }
-
+    
     public static ArrayList<Double> heightsCoral = new ArrayList<Double>();
     static {
     //ordered in line from A-L
@@ -220,6 +220,17 @@ public final class Constants {
     heightsCoral.add(31.72);
     }
   }
+  public static final class AutoPath {
+    public final static ArrayList<Pose2d> reefCoords = new ArrayList<>();
+    static {
+      reefCoords.add(null);
+      reefCoords.add(null);
+      reefCoords.add(null);
+      reefCoords.add(null);
+      reefCoords.add(null);
+    }
+  }
+  
   public static final class CoralHandler {
     // TODO figure out all actual constants
     public static final double METER_PER_MOTOR_REVOLUTION = 0.0;
