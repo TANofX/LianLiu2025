@@ -83,7 +83,7 @@ public class CoralHandler extends AdvancedSubsystem {
             Constants.CoralHandler.CORAL_END_EFFECTOR_LENGTH,
             Constants.CoralHandler.HORIZONTAL_STARTING_ANGLE_IN_RADIANS,
             false,
-            SensorDirectionValue.Clockwise_Positive,
+            SensorDirectionValue.CounterClockwise_Positive,
             Constants.CoralHandler.HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE,
             Constants.CoralHandler.HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE,
             Constants.CoralHandler.HORIZONTAL_ROTATION_DEGREES_PER_ROTATION
