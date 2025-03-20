@@ -1,6 +1,5 @@
 package frc.lib.vision;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +16,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -34,6 +35,8 @@ public class Camera {
     private final WelfordSD sdY = new WelfordSD();
     private final WelfordSD sdTheta = new WelfordSD();
 
+    StructPublisher<Pose3d> m_pose_estimate;
+
     /**
      * Create a new Camera object
      * 
@@ -45,6 +48,7 @@ public class Camera {
         camera = new PhotonCamera(name);
         position = pos; //why documentation no match :(
         poseEstimator = new PhotonPoseEstimator(Constants.apriltagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, position);
+        m_pose_estimate = NetworkTableInstance.getDefault().getStructTopic(prefix + "/estimatedPose", Pose3d.struct).publish();
     }
 
     /**
@@ -111,7 +115,11 @@ public class Camera {
         for (PhotonPipelineResult result: camera.getAllUnreadResults()) {
             output = poseEstimator.update(result);
         }
-
+        
+        if (output.isPresent()) {
+            m_pose_estimate.set(output.get().estimatedPose);
+        }
+        
         return output;
     }
 }
