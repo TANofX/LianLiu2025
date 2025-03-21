@@ -43,17 +43,21 @@ public final class Vision extends AdvancedSubsystem {
                 Units.inchesToMeters(11.580914897), // Cad X
                 Units.inchesToMeters(8.177878478), // Cad Y
                 new Rotation3d(0, (-15 * Math.PI) /180.0, (90 * Math.PI)/180.0)));
-        addCamera("starboard", new Transform3d(
-                Units.inchesToMeters(-13.280346266), // Cad Z
-                Units.inchesToMeters(-11.580914897), // Cad X
-                Units.inchesToMeters(8.177878478), // Cad Y
-                new Rotation3d(0, (-15 * Math.PI) /180.0, (-90 * Math.PI)/180.0)));
-        addCamera("Arducam_OV9281_USB_Camera", new Transform3d(
+        // addCamera("starboard", new Transform3d(
+        //         Units.inchesToMeters(-13.280346266), // Cad Z
+        //         Units.inchesToMeters(-11.580914897), // Cad X
+        //         Units.inchesToMeters(8.177878478), // Cad Y
+        //         new Rotation3d(0, (-15 * Math.PI) /180.0, (-90 * Math.PI)/180.0)));
+        addCamera("elevator", new Transform3d(
                 Units.inchesToMeters(4.734322834),
                 Units.inchesToMeters(6.233641834),
                 Units.inchesToMeters(30.718469),
                 new Rotation3d(0, Units.degreesToRadians(45.0), Units.degreesToRadians(90))));
-                
+        addCamera("tilty", new Transform3d(
+            Units.inchesToMeters(7.776),
+            Units.inchesToMeters(7.156),
+            Units.inchesToMeters(30.895),
+            new Rotation3d(0, Units.degreesToRadians(45.0), Units.degreesToRadians(60))));
     }
 
     @Override
@@ -73,12 +77,12 @@ public final class Vision extends AdvancedSubsystem {
         //     }
         // }
         for (Camera cam: cameras) {
-            Optional<EstimatedRobotPose> robotPose = cam.getPoseEstimate();
-
-            if (robotPose.isPresent()) {
-                RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 0.05));
-                RobotContainer.swerve.odometry.addVisionMeasurement(robotPose.get().estimatedPose.toPose2d(), robotPose.get().timestampSeconds);
-            }
+            // Optional<EstimatedRobotPose> robotPose = cam.getPoseEstimate();
+            cam.updateOdometry(RobotContainer.swerve.odometry);
+            // if (robotPose.isPresent()) {
+            //     RobotContainer.swerve.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 0.05));
+            //     RobotContainer.swerve.odometry.addVisionMeasurement(robotPose.get().estimatedPose.toPose2d(), robotPose.get().timestampSeconds);
+            // }
         }
     }
 

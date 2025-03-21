@@ -33,25 +33,18 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "EtoCollect"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CollectToD"
-                      }
-                    }
-                  ]
+                  "pathName": "EtoCollect"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CollectToD"
           }
         },
         {
@@ -77,25 +70,18 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "DToCollect"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CollectToC"
-                      }
-                    }
-                  ]
+                  "pathName": "DToCollect"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CollectToC"
           }
         },
         {

@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto Tuning Path"
+                  "pathName": "MiddleStarttoH"
                 }
               }
             ]
@@ -39,6 +39,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Working Autos",
   "choreoAuto": false
 }

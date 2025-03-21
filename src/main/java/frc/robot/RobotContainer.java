@@ -197,7 +197,7 @@ public class RobotContainer {
 
   public Command intakeCommand() {
     return Commands.parallel(
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-27)),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-35)),
       coralHandler.runCoralIntakeCommand(),
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
       coralHandler.determineDirectionCommand()
@@ -226,8 +226,8 @@ public class RobotContainer {
   
   public Command level4PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(36))
+      elevator.getElevatorHeightCommand(1.4),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(37))
     );
   }
 
@@ -248,6 +248,7 @@ public class RobotContainer {
   public Command level4AutoPlaceCommand() {
     return Commands.sequence(
       level4PositionCommand(),
+      Commands.waitSeconds(1.0),
       coralHandler.runCoralOuttakeCommand()
     );
   }

@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto Tuning Path"
+            "pathName": "RightStarttoK"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Complete Place"
           }
         }
       ]
     }
   },
   "resetOdom": false,
-  "folder": null,
+  "folder": "Working Autos",
   "choreoAuto": false
 }

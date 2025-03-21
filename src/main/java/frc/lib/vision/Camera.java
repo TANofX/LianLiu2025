@@ -11,6 +11,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -41,14 +42,16 @@ public class Camera {
      * Create a new Camera object
      * 
      * @param name The PhotonCamera name
-     * @param pos The position of the camera
+     * @param pos  The position of the camera
      */
     public Camera(String name, Transform3d pos) {
         prefix = "Vision/AprilTag/" + name;
         camera = new PhotonCamera(name);
-        position = pos; //why documentation no match :(
-        poseEstimator = new PhotonPoseEstimator(Constants.apriltagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, position);
-        m_pose_estimate = NetworkTableInstance.getDefault().getStructTopic(prefix + "/estimatedPose", Pose3d.struct).publish();
+        position = pos; // why documentation no match :(
+        poseEstimator = new PhotonPoseEstimator(Constants.apriltagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                position);
+        m_pose_estimate = NetworkTableInstance.getDefault().getStructTopic(prefix + "/estimatedPose", Pose3d.struct)
+                .publish();
     }
 
     /**
@@ -109,17 +112,19 @@ public class Camera {
         return results;
     }
 
-    public Optional<EstimatedRobotPose> getPoseEstimate() {
-        Optional<EstimatedRobotPose> output = Optional.empty();
+    public void updateOdometry(SwerveDrivePoseEstimator odometry) {
 
-        for (PhotonPipelineResult result: camera.getAllUnreadResults()) {
-            output = poseEstimator.update(result);
+        for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
+            Optional<EstimatedRobotPose> output = poseEstimator.update(result);
+            if (output.isPresent()) {
+                m_pose_estimate.set(output.get().estimatedPose);
+                double ambiguity = result.getBestTarget().getPoseAmbiguity();
+                double tagDistance = result.getBestTarget().bestCameraToTarget.getTranslation().getNorm();
+
+                if ((ambiguity < 0.05) && (tagDistance < 3.0)) {
+                    odometry.addVisionMeasurement(output.get().estimatedPose.toPose2d(), output.get().timestampSeconds);
+                }
+            }
         }
-        
-        if (output.isPresent()) {
-            m_pose_estimate.set(output.get().estimatedPose);
-        }
-        
-        return output;
     }
 }

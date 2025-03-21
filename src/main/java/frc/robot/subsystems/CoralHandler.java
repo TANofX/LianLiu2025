@@ -303,7 +303,7 @@ public class CoralHandler extends AdvancedSubsystem {
   @Override
   public void periodic() {
     // Values available shown on SmartDashboard
-    SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
+    SmartDashboard.putBoolean("CoralHandler/Has Coral", hasCoral());
     SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Relative Angle (Deg.)", horizontalWrist.getAngle().getDegrees());
     SmartDashboard.putNumber("CoralHandler/Vertical Wrist Relative Angle (Deg.)", verticalWrist.getAngle().getDegrees());
     SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Absolute Angle (Deg.)", horizontalWrist.getAbsoluteAngle().getDegrees());
@@ -391,7 +391,7 @@ public class CoralHandler extends AdvancedSubsystem {
   public Command setHomeAngleCommand() {
     Command homeAngle = Commands.parallel(
       verticalWrist.setAngleCommand(Rotation2d.fromDegrees(82)),
-      horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
+      horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(89))
     );
 
     homeAngle.addRequirements(this);
