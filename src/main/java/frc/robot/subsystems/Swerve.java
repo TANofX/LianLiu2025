@@ -60,7 +60,7 @@ public final class Swerve extends AdvancedSubsystem {
       .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
   private final StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
-  private final PathConstraints pathConstraints = new PathConstraints(null, null, null, null); //TODO Set PathConstraints
+  private final PathConstraints pathConstraints = new PathConstraints(3.0, 3.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   public Swerve() {
     super("Swerve");
