@@ -35,7 +35,7 @@ import frc.robot.util.RobotPoseLookup;
 public final class Swerve extends AdvancedSubsystem {
   protected final SwerveDrivePoseEstimator odometry;
   public final SwerveDriveKinematics kinematics;
-
+  
   protected final Mk4SwerveModuleProSparkFlex[] modules;
 
   protected final Pigeon2 imu;
@@ -446,11 +446,28 @@ public final class Swerve extends AdvancedSubsystem {
   }
 
   public Command pathFindingCommand() {
+    //are we supposed to "sequence" command or do the "run once"
     return Commands.runOnce(
       () -> {
+        //do not need a "removedefaultcommand" from swerve bc we want to be able to take back control 
         AutoBuilder.pathfindToPose(getPose().nearest(Constants.AutoPath.reefCoords), pathConstraints);
       }, modules);
+      //in the other thing, we create an autocommand, but we probably don't need to hear and this is all we need?
+      //yes, because we don't neccessarily need to sequence the elevator thing. 
   }
+
+  /* THE OTHER CODE WHERE WE SET AUTOS
+  public void initalizeAutos() {
+    autoCommand = Commands.sequence(elevator.getCalibrationCommand(), autoChooser.getSelected());
+
+    RobotContainer.swerve.removeDefaultCommand();
+    if (autoCommand != null) {
+      autoCommand.schedule();
+    }
+  } 
+    */
+
+
 
   /**
    * Command used to trim all the modules' absolute encoders
