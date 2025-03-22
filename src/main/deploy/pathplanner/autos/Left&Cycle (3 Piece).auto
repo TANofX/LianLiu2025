@@ -33,22 +33,28 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "EtoCollect"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CollectToD"
-                      }
-                    }
-                  ]
+                  "pathName": "EtoCollect"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CollectToD"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Level Prep"
                 }
               }
             ]
@@ -77,22 +83,28 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "DToCollect"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CollectToC"
-                      }
-                    }
-                  ]
+                  "pathName": "DToCollect"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CollectToC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Level Prep"
                 }
               }
             ]
@@ -113,7 +125,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }
