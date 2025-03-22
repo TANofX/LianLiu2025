@@ -126,7 +126,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Place L4", level4AutoPlaceCommand());
     NamedCommands.registerCommand("Collect", intakeCommand());
     NamedCommands.registerCommand("Complete Place", completePlaceCommand());
-    NamedCommands.registerCommand("Hold Coral", coralHandler.holdCoralCommand());
+    NamedCommands.registerCommand("HoldCoral", coralHandler.holdCoralCommand());
     NamedCommands.registerCommand("Level Prep", levelPrepCommand());
   }
   public void initalizeAutos() {
@@ -195,7 +195,7 @@ public class RobotContainer {
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
       coralHandler.determineDirectionCommand()
     );
-  }
+  }   
 
    public Command level1PositionCommand() {
     return Commands.parallel(
@@ -247,18 +247,19 @@ public class RobotContainer {
       elevator.getElevatorHeightCommand(Constants.Elevator.LEVEL4_HEIGHT),
       coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_LEVEL4_ANGLE),
       coralHandler.setHorizontalAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE),
-      Commands.waitSeconds(0.5),
+      Commands.waitSeconds(0.2),
       coralHandler.runCoralOuttakeCommand()
     );
   }
 
   public Command completePlaceCommand() {
     Rotation2d horizontalAngle = coralHandler.getHorizontalAngle();
-    Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*10));
+    Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*20));
     return Commands.sequence(
-      coralHandler.setHorizontalAngleCommand(loweringAngle),
-      elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
-      coralHandler.setIntakeAngleCommand()
+      Commands.parallel(
+        coralHandler.setHorizontalAngleCommand(loweringAngle),
+        elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS)
+      )
     );
   }
   
@@ -269,4 +270,4 @@ public class RobotContainer {
   public static void periodic() {
     robotMechanism.update();
   }
-}
+} 

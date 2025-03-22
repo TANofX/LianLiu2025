@@ -244,7 +244,7 @@ public final class Constants {
     public static final double OUTTAKE_WHEEL_MASS = Units.lbsToKilograms(0.5);
     public static final double OUTTAKE_WHEEL_RADIUS = 0.02;
 
-    public static final double CORAL_INTAKE_SPEED = -0.5;
+    public static final double CORAL_INTAKE_SPEED = -0.25;
     public static final double CORAL_OUTTAKE_SPEED = 0.75;
 
     public static final double OUTTAKE_MOTOR_GEARING = 1.0;

@@ -359,7 +359,7 @@ public class CoralHandler extends AdvancedSubsystem {
             () -> 
             stopOuttakeMotor()
             , this), 
-            verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-20)));
+            verticalWrist.setAngleCommand(Rotation2d.fromDegrees(15)));
   }
 
   public Command setToZeroAngleCommand() {
