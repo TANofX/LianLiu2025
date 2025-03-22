@@ -11,26 +11,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "HoldCoral"
+                  "name": "Hold Coral"
                 }
               },
               {
-                "type": "parallel",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CoralRight"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "RightStarttoJ"
-                      }
-                    }
-                  ]
+                  "pathName": "RightStarttoJ"
                 }
               }
             ]

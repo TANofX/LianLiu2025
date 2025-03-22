@@ -21,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 /**
  * Simple class that stores Camera along with the position(aka cameraToRobot)
@@ -117,11 +118,12 @@ public class Camera {
         for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
             Optional<EstimatedRobotPose> output = poseEstimator.update(result);
             if (output.isPresent()) {
-                m_pose_estimate.set(output.get().estimatedPose);
                 double ambiguity = result.getBestTarget().getPoseAmbiguity();
                 double tagDistance = result.getBestTarget().bestCameraToTarget.getTranslation().getNorm();
 
                 if ((ambiguity < 0.05) && (tagDistance < 3.0)) {
+                    m_pose_estimate.set(output.get().estimatedPose);
+                    odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 0.05));
                     odometry.addVisionMeasurement(output.get().estimatedPose.toPose2d(), output.get().timestampSeconds);
                 }
             }

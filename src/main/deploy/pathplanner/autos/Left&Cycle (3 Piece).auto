@@ -42,9 +42,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "CollectToD"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CollectToD"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Level Prep"
+                }
+              }
+            ]
           }
         },
         {
@@ -79,9 +92,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "CollectToC"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CollectToC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Level Prep"
+                }
+              }
+            ]
           }
         },
         {
@@ -99,7 +125,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }
