@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
@@ -27,11 +28,12 @@ public class AutoAimCoralHandler extends Command {
     // Get the horizontal angle from the AutoAiming subsystem in the RobotContainer
     // and set a local variable to that value
     Rotation2d horizontalAngle = RobotContainer.autoAimer.horizontalRotationToCoral();
+    SmartDashboard.putNumber("AutoAim/TargetAngle", horizontalAngle.getDegrees());
 
     Rotation2d currentAngle = Rotation2d.fromDegrees(MathUtil.clamp(horizontalAngle.getDegrees(), -80.0, 83.0));
 
     // Set the horizontal angle of the CoralHandler subsystem in the RobotContainer
-    RobotContainer.coralHandler.setHorizontalAngleCommand(currentAngle);
+    RobotContainer.coralHandler.setHorizontalAngle(currentAngle);
   }
 
   // Called once the command ends or is interrupted.

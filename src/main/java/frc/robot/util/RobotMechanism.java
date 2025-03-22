@@ -122,6 +122,11 @@ public class RobotMechanism {
         
         Transform3d baseToCoralHandlerTransform = new Transform3d(baseToCoralHandler, new Rotation3d());
         
+        SmartDashboard.putNumber("Robot Base X", robotPose.getTranslation().getX());
+        SmartDashboard.putNumber("Robot Base Y", robotPose.getTranslation().getY());
+
+        SmartDashboard.putNumber("End of CoralHandler X", robotPose.plus(baseToCoralHandlerTransform).getTranslation().getX());
+        SmartDashboard.putNumber("End of CoralHandler Y", robotPose.plus(baseToCoralHandlerTransform).getTranslation().getY());
 
         return robotPose.plus(baseToCoralHandlerTransform);
     }
