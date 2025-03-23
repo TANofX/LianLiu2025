@@ -459,4 +459,12 @@ public class CoralHandler extends AdvancedSubsystem {
             }, this),
         Commands.runOnce(() -> stopMotors()));
   }
+
+  public boolean isHorizontalAtSetpoint() {
+    return horizontalWrist.isAtTargetAngle();
+  }
+
+  public boolean isVerticalAtSetpoint() {
+    return verticalWrist.isAtTargetAngle();
+  }
 }
