@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Hold Coral"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -38,7 +32,7 @@
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": "Working Autos",
   "choreoAuto": false
 }
