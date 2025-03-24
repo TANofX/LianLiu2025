@@ -6,6 +6,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralHandler;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.ReefTargeting;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.RobotMechanism;
@@ -49,6 +51,7 @@ public class RobotContainer {
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
   public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
   public static final AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler());
+  public static final ReefTargeting reefTargeting = new ReefTargeting(() -> swerve.getPose());
   
 
   public RobotContainer() {
@@ -167,9 +170,20 @@ public class RobotContainer {
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     driver.LB().onTrue(climbCommand());
     driver.LT().onTrue(climber.getPrepareCommand());
-    //I am worried about setting it to a wrong angle and it breaking the robot
-    //We may need to make sure we are updating the autoaiming? it requires a robotmechanism command as input
-    //driver.X().whileTrue(coralHandler.setHorizontalAngleCommand(autoAimer.horizontalRotationToCoral()));
+    driver.X().onTrue(Commands.runOnce(
+      () -> {
+        reefTargeting.setTargetAprilTag();
+        Pose2d targetPose = reefTargeting.getLeftCoralTargetPose();
+        swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+      }
+    ));
+    driver.B().onTrue(Commands.runOnce(
+      () -> {
+        reefTargeting.setTargetAprilTag();
+        Pose2d targetPose = reefTargeting.getRightCoralTargetPose();
+        swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+      }
+    ));
 
     coDriver.A().onTrue(level1PositionCommand());
     coDriver.X().onTrue(level2PositionCommand());

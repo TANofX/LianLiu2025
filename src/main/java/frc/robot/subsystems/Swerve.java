@@ -1,12 +1,22 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.sim.Pigeon2SimState;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
@@ -59,6 +69,8 @@ public final class Swerve extends AdvancedSubsystem {
       .getStructArrayTopic("/Swerve/TargetStates", SwerveModuleState.struct).publish();
   private final StructPublisher<Rotation2d> gyroPublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/Swerve/Gyro", Rotation2d.struct).publish();
+
+  private RobotConfig config;
 
   public Swerve() {
     super("Swerve");
@@ -130,7 +142,7 @@ public final class Swerve extends AdvancedSubsystem {
     SmartDashboard.putData("Trim Modules", zeroModulesCommand());
 
     try {
-      RobotConfig config = RobotConfig.fromGUISettings();
+      config = RobotConfig.fromGUISettings();
 
       AutoBuilder.configure(
           this::getPose,
@@ -157,6 +169,27 @@ public final class Swerve extends AdvancedSubsystem {
     }
     SmartDashboard.putData("Check Swerve", systemCheckCommand());
   }
+
+  public Command goToPoseCommand(Pose2d targetPose, Rotation2d approachAngle) {
+    Rotation2d targetRotation = targetPose.getRotation();
+    Pose2d targetPoseWithApproach = new Pose2d(targetPose.getTranslation(), approachAngle);
+    Rotation2d departureAngle = targetPose.getTranslation().minus(this.getPose().getTranslation()).getAngle();
+    Pose2d departurePose = new Pose2d(this.getPose().getTranslation(), departureAngle);
+
+    List<Pose2d> poses = new ArrayList<>();
+    poses.add(departurePose);
+    poses.add(targetPoseWithApproach);
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(poses);
+
+    PathPlannerPath path = new PathPlannerPath(waypoints, 
+                                                new PathConstraints(4.0, 1.0, 2 * Math.PI, 4 * Math.PI),
+                                                new IdealStartingState(0.0, this.getPose().getRotation()), 
+                                                new GoalEndState(0.0, targetRotation));
+
+    return AutoBuilder.followPath(path);
+//     return new FollowPathCommand(path, this::getPose, this::getCurrentSpeeds, this::driveRobotRelativeWithFF, new PPHolonomicDriveController(Constants.Swerve.PathFollowing.TRANSLATION_CONSTANTS,
+//     Constants.Swerve.PathFollowing.ROTATION_CONSTANTS), config, null, this);
+ }
 
   @Override
   public void periodic() {
@@ -298,6 +331,14 @@ public final class Swerve extends AdvancedSubsystem {
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
+    SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(speeds);
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Mk4SwerveModuleProSparkFlex.DRIVE_MAX_VEL);
+
+    setModuleStates(targetStates);
+  }
+
+  public void driveRobotRelativeWithFF(ChassisSpeeds speeds, DriveFeedforwards ff) {
     SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(speeds);
 
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Mk4SwerveModuleProSparkFlex.DRIVE_MAX_VEL);
