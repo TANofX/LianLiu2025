@@ -322,7 +322,7 @@ public final class Constants {
     public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(-30);
     public static final Rotation2d VERTICAL_LEVEL1_ANGLE = Rotation2d.fromDegrees(0);
     public static final Rotation2d VERTICAL_LEVEL2_ANGLE = Rotation2d.fromDegrees(29);
-    public static final Rotation2d VERTICAL_LEVEL3_ANGLE = Rotation2d.fromDegrees(33);
+    public static final Rotation2d VERTICAL_LEVEL3_ANGLE = Rotation2d.fromDegrees(35);
     public static final Rotation2d VERTICAL_LEVEL4_ANGLE = Rotation2d.fromDegrees(41);
     public static final Rotation2d VERTICAL_AUTO_PREP_ANGLE = Rotation2d.fromDegrees(58.0);
   }
