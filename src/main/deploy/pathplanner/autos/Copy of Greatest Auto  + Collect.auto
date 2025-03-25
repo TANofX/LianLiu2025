@@ -30,19 +30,13 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "HLongPathToLCollect"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HLongLCollectPart2"
+                  "pathName": "HToLCollectPart1"
                 }
               },
               {
@@ -53,11 +47,17 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HtoLCollectPart2"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Working Autos",
   "choreoAuto": false
 }

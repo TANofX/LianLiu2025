@@ -11,7 +11,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "HoldCoral"
+                  "name": "Hold Coral"
                 }
               },
               {
@@ -39,6 +39,6 @@
     }
   },
   "resetOdom": false,
-  "folder": null,
+  "folder": "Working Autos",
   "choreoAuto": false
 }
