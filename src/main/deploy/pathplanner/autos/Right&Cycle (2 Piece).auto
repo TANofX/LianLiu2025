@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftStartToE"
+            "pathName": "RightStarttoJ"
           }
         },
         {
@@ -35,7 +35,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EtoCollect"
+                  "pathName": "JtoCollect"
                 }
               }
             ]
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CollectToD"
+                  "pathName": "CollecttoK"
                 }
               },
               {
@@ -61,71 +61,28 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Place L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Complete Place"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "DToCollect"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CollectToC"
+                  "name": "Place L4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Level Prep"
+                  "name": "Complete Place"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Place L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Complete Place"
           }
         }
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": null,
   "choreoAuto": false
 }

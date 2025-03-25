@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -112,8 +111,8 @@ public class RobotContainer {
         coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(95)));
     SmartDashboard.putData("CoralHandler/Set Angles to Home", coralHandler.setHomeAngleCommand());
     SmartDashboard.putData("CoralHandler/Set Angles to Zero", coralHandler.setToZeroAngleCommand());
-    SmartDashboard.putData("CoralHandler/Run Inake Wheel", coralHandler.runCoralIntakeCommand());
-    SmartDashboard.putData("CoralHandler/Run Extake Wheel", coralHandler.runCoralOuttakeCommand());
+    SmartDashboard.putData("CoralHandler/Run Motor Positive (Intake/Outtake Motor)", coralHandler.runOuttakeMotorCommand(0.75));
+    SmartDashboard.putData("CoralHandler/Run Motor Negative (Intake/Outtake Motor)", coralHandler.runOuttakeMotorCommand(-0.75));
 
     // Elevator SmartDashboard Values
     SmartDashboard.putData("Elevator/Calibrate Elevator", elevator.getCalibrationCommand());
@@ -128,13 +127,10 @@ public class RobotContainer {
   private void registerNamedCommands() {
     NamedCommands.registerCommand("Place L1", level1AutoPlaceCommand());
     NamedCommands.registerCommand("Place L4", level4AutoPlaceCommand());
-    // NamedCommands.registerCommand("Intake", coralHandler.runCoralIntakeCommand());
-    // NamedCommands.registerCommand("Outtake", coralHandler.runCoralOuttakeCommand());
     NamedCommands.registerCommand("Collect", intakeCommand());
-    NamedCommands.registerCommand("Place", Commands.none());
     NamedCommands.registerCommand("Complete Place", completePlaceCommand());
-    NamedCommands.registerCommand("CoralRight", coralHandler.holdRightCommand());
     NamedCommands.registerCommand("HoldCoral", coralHandler.holdCoralCommand());
+    NamedCommands.registerCommand("Level Prep", levelPrepCommand());
   }
   public void initalizeAutos() {
     autoCommand = Commands.sequence(elevator.getCalibrationCommand(), autoChooser.getSelected());
@@ -196,8 +192,8 @@ public class RobotContainer {
     coDriver.RT().onTrue(coralHandler.runCoralOuttakeCommand());
     coDriver.BACK().whileTrue(coralHandler.runCoralIntakeCommand());
     coDriver.START().whileTrue(flickAlgaeCommand());
-    coDriver.LB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(92)));
-    coDriver.RB().onTrue(coralHandler.setHorizontalAngleCommand(Rotation2d.fromDegrees(-80)));
+    coDriver.LB().onTrue(coralHandler.setHorizontalAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE));
+    coDriver.RB().onTrue(coralHandler.setHorizontalAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_RIGHT_ANGLE));
   }
 
   public Command flickAlgaeCommand() {
@@ -212,37 +208,37 @@ public class RobotContainer {
 
   public Command intakeCommand() {
     return Commands.parallel(
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-27)),
+      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-35)),
       coralHandler.runCoralIntakeCommand(),
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
       coralHandler.determineDirectionCommand()
     );
-  }
+  }   
 
    public Command level1PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(0.5)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(0))
+      elevator.getElevatorHeightCommand(Constants.Elevator.LEVEL1_HEIGHT),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_LEVEL1_ANGLE)
     );
   }
   public Command level2PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(33.72-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(29))
+      elevator.getElevatorHeightCommand(Constants.Elevator.LEVEL2_HEIGHT),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_LEVEL2_ANGLE)
     );
   }
   
   public Command level3PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(51.59-24.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(33))
+      elevator.getElevatorHeightCommand(Constants.Elevator.LEVEL3_HEIGHT),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_LEVEL3_ANGLE)
     );
   }
   
   public Command level4PositionCommand() {
     return Commands.parallel(
-      elevator.getElevatorHeightCommand(Units.inchesToMeters(54.0)),
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(36))
+      elevator.getElevatorHeightCommand(Constants.Elevator.LEVEL4_HEIGHT),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_LEVEL4_ANGLE)
     );
   }
 
@@ -260,20 +256,28 @@ public class RobotContainer {
     );
   }
 
+  public Command levelPrepCommand() {
+    return coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_AUTO_PREP_ANGLE);
+  }
+
   public Command level4AutoPlaceCommand() {
     return Commands.sequence(
-      level4PositionCommand(),
+      elevator.getElevatorHeightCommand(Constants.Elevator.LEVEL4_HEIGHT),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_LEVEL4_ANGLE),
+      coralHandler.setHorizontalAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE),
+      Commands.waitSeconds(0.2),
       coralHandler.runCoralOuttakeCommand()
     );
   }
 
   public Command completePlaceCommand() {
     Rotation2d horizontalAngle = coralHandler.getHorizontalAngle();
-    Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*45));
+    Rotation2d loweringAngle = horizontalAngle.minus(Rotation2d.fromDegrees(Math.signum(horizontalAngle.getDegrees())*20));
     return Commands.sequence(
-      coralHandler.setHorizontalAngleCommand(loweringAngle),
-      elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
-      coralHandler.setIntakeAngleCommand()
+      Commands.parallel(
+        coralHandler.setHorizontalAngleCommand(loweringAngle),
+        elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS)
+      )
     );
   }
   
@@ -284,4 +288,4 @@ public class RobotContainer {
   public static void periodic() {
     robotMechanism.update();
   }
-}
+} 

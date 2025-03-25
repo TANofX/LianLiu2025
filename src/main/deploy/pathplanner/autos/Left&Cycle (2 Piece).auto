@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftStartToE"
+            "pathName": "Short LeftStartToE"
           }
         },
         {
@@ -89,37 +89,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CollectToC"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Level Prep"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Place L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Complete Place"
           }
         }
       ]

@@ -83,7 +83,7 @@ public class CoralHandler extends AdvancedSubsystem {
             Constants.CoralHandler.CORAL_END_EFFECTOR_LENGTH,
             Constants.CoralHandler.HORIZONTAL_STARTING_ANGLE_IN_RADIANS,
             false,
-            SensorDirectionValue.Clockwise_Positive,
+            SensorDirectionValue.CounterClockwise_Positive,
             Constants.CoralHandler.HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE,
             Constants.CoralHandler.HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE,
             Constants.CoralHandler.HORIZONTAL_ROTATION_DEGREES_PER_ROTATION
@@ -126,7 +126,7 @@ public class CoralHandler extends AdvancedSubsystem {
 
     outtakeEncoder = outtakeMotor.getEncoder();
     // TODO Forward or reverse limit switch?
-    coralLimitSwitch = outtakeMotor.getForwardLimitSwitch(); 
+    coralLimitSwitch = outtakeMotor.getReverseLimitSwitch(); 
     // Using SparkFlexConfig to create needed parameters for the outtakeMotor
     SparkFlexConfig outtakeConfig = new SparkFlexConfig();
     outtakeConfig.inverted(false);
@@ -243,10 +243,6 @@ public class CoralHandler extends AdvancedSubsystem {
     }
   }
   
-  public void runSuckMotor() {
-    outtakeMotor.set(Constants.CoralHandler.CORAL_OUTTAKE_SPEED);
-  }
-
   /**
    * Sets the horizontal positioning of the coral end effector to a specified
    * angle.
@@ -275,35 +271,11 @@ public class CoralHandler extends AdvancedSubsystem {
   public Rotation2d getHorizontalAngle() {
     return horizontalWrist.getAngle();
   }
-  public void setIntakeAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_INTAKE_ANGLE);
-    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE);
-  }
-
-   // //TODO Change how this works using auto adjustments
-  // public void setLevelOneAngle() {
-  //   horizontalWrist.setAngle(Constants.CoralHandler.horizontalLevel1Angle);
-  //   verticalWrist.setAngle(Constants.CoralHandler.verticalLevel1Angle);
-  // }
-
-  public void setLevelTwoAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_LEVEL_2_ANGLE);
-    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_2_ANGLE);
-  }
-
-  public void setLevelThreeAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_LEVEL_3_ANGLE);
-    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_3_ANGLE);
-  }
-  public void setLevelFourAngle() {
-    horizontalWrist.setAngle(Constants.CoralHandler.HORIZONTAL_LEVEL_4_ANGLE);
-    verticalWrist.setAngle(Constants.CoralHandler.VERTICAL_LEVEL_4_ANGLE);
-  }
- 
+  
   @Override
   public void periodic() {
     // Values available shown on SmartDashboard
-    SmartDashboard.getBoolean("CoralHandler/Has Coral", false);
+    SmartDashboard.putBoolean("CoralHandler/Has Coral", hasCoral());
     SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Relative Angle (Deg.)", horizontalWrist.getAngle().getDegrees());
     SmartDashboard.putNumber("CoralHandler/Vertical Wrist Relative Angle (Deg.)", verticalWrist.getAngle().getDegrees());
     SmartDashboard.putNumber("CoralHandler/Horizontal Wrist Absolute Angle (Deg.)", horizontalWrist.getAbsoluteAngle().getDegrees());
@@ -315,10 +287,21 @@ public class CoralHandler extends AdvancedSubsystem {
   }
 
   // r = negative
+  public Command runOuttakeMotorCommand(double speed) {
+    return Commands.run(
+        () -> {
+          runOuttakeMotor(speed);
+        }
+      ).finallyDo(
+        () -> {
+          stopOuttakeMotor();
+        }
+      );
+  }
   public Command determineDirectionCommand() {
     return Commands.either(
-      setHorizontalAngleCommand(Rotation2d.fromDegrees(92)),
-      setHorizontalAngleCommand(Rotation2d.fromDegrees(-80)),
+      setHorizontalAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE),
+      setHorizontalAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_RIGHT_ANGLE),
       () -> {
         return getHorizontalAngle().getDegrees() >= 0;
       });
@@ -327,7 +310,8 @@ public class CoralHandler extends AdvancedSubsystem {
   public Command holdCoralCommand() {
     return Commands.run(
       () -> {
-      runOuttakeMotor(-.1);});
+      runOuttakeMotor(-.1);
+    });
   }
 
   public Command holdRightCommand() {
@@ -375,7 +359,7 @@ public class CoralHandler extends AdvancedSubsystem {
             () -> 
             stopOuttakeMotor()
             , this), 
-            verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-20)));
+            verticalWrist.setAngleCommand(Rotation2d.fromDegrees(15)));
   }
 
   public Command setToZeroAngleCommand() {
@@ -390,9 +374,8 @@ public class CoralHandler extends AdvancedSubsystem {
 
   public Command setHomeAngleCommand() {
     Command homeAngle = Commands.parallel(
-      verticalWrist.setAngleCommand(Rotation2d.fromDegrees(82)),
-      horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
-    );
+      verticalWrist.setAngleCommand(Constants.CoralHandler.VERTICAL_HOME_ANGLE),
+      horizontalWrist.setAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE));
 
     homeAngle.addRequirements(this);
 
@@ -401,10 +384,9 @@ public class CoralHandler extends AdvancedSubsystem {
 
   public Command setIntakeAngleCommand() {
     Command intakeAngle = Commands.parallel(
-      verticalWrist.setAngleCommand(Rotation2d.fromDegrees(-30)),
-      horizontalWrist.setAngleCommand(Rotation2d.fromDegrees(92))
+      verticalWrist.setAngleCommand(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE),
+      horizontalWrist.setAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE)
     );
-
     intakeAngle.addRequirements(this);
 
     return intakeAngle;
