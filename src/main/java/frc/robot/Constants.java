@@ -17,6 +17,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -181,6 +182,27 @@ public final class Constants {
 
   // Class to access the coordinates of the coral on the field.
   public static final class CoralPlacement {
+    public static final Transform2d LEFT_CORAL_ROBOT_OFFSET_FROM_APRILTAG =  new Transform2d(
+                                                                          new Translation2d(Units.inchesToMeters(19.0), 
+                                                                                            Units.inchesToMeters(-20.0)), 
+                                                                          Rotation2d.fromDegrees(90));
+    public static final Transform2d RIGHT_CORAL_ROBOT_OFFSET_FROM_APRILTAG = new Transform2d(
+                                                                          new Translation2d(Units.inchesToMeters(19.0),
+                                                                                            Units.inchesToMeters(-7.0)),
+                                                                          Rotation2d.fromDegrees(90));
+
+    public static final Transform2d LEFT_CORAL_APRILTAG_OFFSET = new Transform2d(
+                                                                    new Translation2d(Units.inchesToMeters(-2.0), 
+                                                                                      Units.inchesToMeters(-6.5)),
+                                                                    Rotation2d.fromDegrees(0));
+
+    public static final Transform2d RIGHT_CORAL_APRILTAG_OFFSET = new Transform2d(
+                                                                    new Translation2d(Units.inchesToMeters(-2.0), 
+                                                                                      Units.inchesToMeters(6.5)),
+                                                                    Rotation2d.fromDegrees(0));
+
+    public static final int[] REEF_TAGS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+
     public final static ArrayList<Pose2d> coordinatesCoral = new ArrayList<>();
     static {
       // ordered in line from A-L
