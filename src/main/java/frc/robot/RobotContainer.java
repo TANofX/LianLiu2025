@@ -175,6 +175,7 @@ public class RobotContainer {
         reefTargeting.setTargetAprilTag();
         Pose2d targetPose = reefTargeting.getLeftCoralTargetPose();
         swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+        
       }
     ));
     driver.B().onTrue(Commands.runOnce(
