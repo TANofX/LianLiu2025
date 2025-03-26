@@ -183,12 +183,12 @@ public final class Constants {
   // Class to access the coordinates of the coral on the field.
   public static final class CoralPlacement {
     public static final Transform2d LEFT_CORAL_ROBOT_OFFSET_FROM_APRILTAG =  new Transform2d(
-                                                                          new Translation2d(Units.inchesToMeters(19.0), 
-                                                                                            Units.inchesToMeters(-20.0)), 
+                                                                          new Translation2d(Units.inchesToMeters(18.0), 
+                                                                                            Units.inchesToMeters(-19.0)), 
                                                                           Rotation2d.fromDegrees(90));
     public static final Transform2d RIGHT_CORAL_ROBOT_OFFSET_FROM_APRILTAG = new Transform2d(
-                                                                          new Translation2d(Units.inchesToMeters(19.0),
-                                                                                            Units.inchesToMeters(-7.0)),
+                                                                          new Translation2d(Units.inchesToMeters(18.0),
+                                                                                            Units.inchesToMeters(-6.0)),
                                                                           Rotation2d.fromDegrees(90));
 
     public static final Transform2d LEFT_CORAL_APRILTAG_OFFSET = new Transform2d(
@@ -345,7 +345,7 @@ public final class Constants {
     public static final Rotation2d VERTICAL_LEVEL1_ANGLE = Rotation2d.fromDegrees(0);
     public static final Rotation2d VERTICAL_LEVEL2_ANGLE = Rotation2d.fromDegrees(29);
     public static final Rotation2d VERTICAL_LEVEL3_ANGLE = Rotation2d.fromDegrees(35);
-    public static final Rotation2d VERTICAL_LEVEL4_ANGLE = Rotation2d.fromDegrees(41);
+    public static final Rotation2d VERTICAL_LEVEL4_ANGLE = Rotation2d.fromDegrees(44);
     public static final Rotation2d VERTICAL_AUTO_PREP_ANGLE = Rotation2d.fromDegrees(58.0);
   }
 

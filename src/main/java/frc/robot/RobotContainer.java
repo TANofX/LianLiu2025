@@ -113,7 +113,7 @@ public class RobotContainer {
     SmartDashboard.putData("CoralHandler/Set Angles to Zero", coralHandler.setToZeroAngleCommand());
     SmartDashboard.putData("CoralHandler/Run Motor Positive (Intake/Outtake Motor)", coralHandler.runOuttakeMotorCommand(0.75));
     SmartDashboard.putData("CoralHandler/Run Motor Negative (Intake/Outtake Motor)", coralHandler.runOuttakeMotorCommand(-0.75));
-
+    SmartDashboard.putData("CoralHandler/Sync Encoders", coralHandler.syncEncodersCommand());
     // Elevator SmartDashboard Values
     SmartDashboard.putData("Elevator/Calibrate Elevator", elevator.getCalibrationCommand());
     SmartDashboard.putData("Elevator/Check Elevator", elevator.getSystemCheckCommand());
@@ -170,15 +170,18 @@ public class RobotContainer {
       () -> {
         reefTargeting.setTargetAprilTag();
         Pose2d targetPose = reefTargeting.getLeftCoralTargetPose();
-        swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
-        
+        if (targetPose != null) {
+          swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+        }
       }
     ));
     driver.B().onTrue(Commands.runOnce(
       () -> {
         reefTargeting.setTargetAprilTag();
         Pose2d targetPose = reefTargeting.getRightCoralTargetPose();
-        swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+        if (targetPose != null) {
+          swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+        }
       }
     ));
 
@@ -277,7 +280,9 @@ public class RobotContainer {
       Commands.parallel(
         coralHandler.setHorizontalAngleCommand(loweringAngle),
         elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS)
+        //swerve.backUpCommand()
       )
+    
     );
   }
   

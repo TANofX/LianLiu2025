@@ -414,7 +414,12 @@ public class CoralHandler extends AdvancedSubsystem {
   public Command runVerticalMotorNegativeCommand() {
     return Commands.run(() -> {verticalWrist.runCoralWrist(-0.1);}, this).finallyDo(() -> verticalWrist.stopMotor());
   }
-
+public Command syncEncodersCommand() {
+  return Commands.runOnce(()-> {
+  verticalWrist.syncWristEncoder();
+  horizontalWrist.syncWristEncoder();
+  });
+}
   @Override
   protected Command systemCheckCommand() {
     return Commands.sequence(
