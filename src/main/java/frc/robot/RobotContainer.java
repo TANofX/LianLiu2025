@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -25,6 +27,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.ReefTargeting;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.ReefTargeting.BranchPosition;
 import frc.robot.util.RobotMechanism;
 
 public class RobotContainer {
@@ -168,17 +171,18 @@ public class RobotContainer {
     driver.LT().onTrue(climber.getPrepareCommand());
     driver.X().onTrue(Commands.runOnce(
       () -> {
-        reefTargeting.setTargetAprilTag();
-        Pose2d targetPose = reefTargeting.getLeftCoralTargetPose();
-        swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
-        
+        reefTargeting.setTargetAprilTag(BranchPosition.LEFT);
+        Optional<Pose2d> targetPose = reefTargeting.getRobotTargetPose2d();
+        if(targetPose.isPresent())
+          swerve.goToPoseCommand(targetPose.get(), targetPose.get().getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
       }
     ));
     driver.B().onTrue(Commands.runOnce(
       () -> {
-        reefTargeting.setTargetAprilTag();
-        Pose2d targetPose = reefTargeting.getRightCoralTargetPose();
-        swerve.goToPoseCommand(targetPose, targetPose.getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
+        reefTargeting.setTargetAprilTag(BranchPosition.RIGHT);
+        Optional<Pose2d> targetPose = reefTargeting.getRobotTargetPose2d();
+        if(targetPose.isPresent())
+          swerve.goToPoseCommand(targetPose.get(), targetPose.get().getRotation().plus(Rotation2d.fromDegrees(90.0))).schedule();
       }
     ));
 

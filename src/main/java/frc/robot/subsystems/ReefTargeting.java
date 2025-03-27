@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import edu.wpi.first.apriltag.AprilTag;
@@ -16,6 +17,13 @@ import frc.robot.Constants;
 public class ReefTargeting extends SubsystemBase {
   private Supplier<Pose2d> robotPoseSupplier;
   private AprilTag targetTag;
+  private BranchPosition targetPosition = BranchPosition.NONE;
+
+  public enum BranchPosition {
+    LEFT,
+    RIGHT,
+    NONE
+  }
 
   /** Creates a new ReefTargeting. */
   public ReefTargeting(Supplier<Pose2d> poseSupplier) {
@@ -27,12 +35,14 @@ public class ReefTargeting extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setTargetAprilTag() {
+  public void setTargetAprilTag(BranchPosition targetPosition) {
     targetTag = getNearestReefAprilTag();
+    this.targetPosition = targetPosition;
   }
 
   public void clearTargetAprilTag() {
     targetTag = null;
+    targetPosition = BranchPosition.NONE;
   }
 
   private AprilTag getNearestReefAprilTag() {
@@ -61,6 +71,7 @@ public class ReefTargeting extends SubsystemBase {
     return targetTag.pose.toPose2d().plus(transform);
   }
 
+  /*
   public Pose2d getLeftCoralTargetPose() {
     return adjustTargetAprilTag(Constants.CoralPlacement.LEFT_CORAL_ROBOT_OFFSET_FROM_APRILTAG);
   }
@@ -75,5 +86,26 @@ public class ReefTargeting extends SubsystemBase {
 
   public Pose2d getRightCoralBranchPose() {
     return adjustTargetAprilTag(Constants.CoralPlacement.RIGHT_CORAL_APRILTAG_OFFSET);
+  }
+  */
+
+  public Optional<Pose2d> getRobotTargetPose2d() {
+    if(targetPosition == BranchPosition.LEFT){
+      return Optional.ofNullable(adjustTargetAprilTag(Constants.CoralPlacement.LEFT_CORAL_ROBOT_OFFSET_FROM_APRILTAG));
+    }else if(targetPosition == BranchPosition.RIGHT){
+      return Optional.ofNullable(adjustTargetAprilTag(Constants.CoralPlacement.RIGHT_CORAL_ROBOT_OFFSET_FROM_APRILTAG));
+    }else{
+      return Optional.empty();
+    }
+  }
+
+  public Optional<Pose2d> getBranchTargetPose2d() {
+    if(targetPosition == BranchPosition.LEFT){
+      return Optional.ofNullable(adjustTargetAprilTag(Constants.CoralPlacement.LEFT_CORAL_APRILTAG_OFFSET));
+    }else if(targetPosition == BranchPosition.RIGHT){
+      return Optional.ofNullable(adjustTargetAprilTag(Constants.CoralPlacement.RIGHT_CORAL_APRILTAG_OFFSET));
+    }else{
+      return Optional.empty();
+    }
   }
 }
