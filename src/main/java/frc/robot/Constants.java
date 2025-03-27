@@ -341,7 +341,7 @@ public final class Constants {
     public static final Rotation2d HORIZONTAL_MAX_RIGHT_ANGLE = Rotation2d.fromDegrees(-80);
     public static final Rotation2d HORIZONTAL_MAX_LEFT_ANGLE = Rotation2d.fromDegrees(89);
     public static final Rotation2d VERTICAL_HOME_ANGLE = Rotation2d.fromDegrees(82);
-    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(-30);
+    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(-35);
     public static final Rotation2d VERTICAL_LEVEL1_ANGLE = Rotation2d.fromDegrees(0);
     public static final Rotation2d VERTICAL_LEVEL2_ANGLE = Rotation2d.fromDegrees(29);
     public static final Rotation2d VERTICAL_LEVEL3_ANGLE = Rotation2d.fromDegrees(35);
