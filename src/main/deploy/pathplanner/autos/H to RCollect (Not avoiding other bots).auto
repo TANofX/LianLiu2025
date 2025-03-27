@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RightStarttoJ"
+                  "pathName": "MiddleStarttoH"
                 }
               }
             ]
@@ -33,6 +33,18 @@
           "type": "named",
           "data": {
             "name": "Complete Place"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HToRCollectPart1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HtoRCollectPart2"
           }
         }
       ]

@@ -331,12 +331,12 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         return Commands.sequence(
                 Commands.runOnce(
                         () -> {
-                            setAngle(Rotation2d.fromDegrees(45));
+                            setAngle(Rotation2d.fromDegrees(10));
                         }, this),
                 Commands.waitSeconds(3.0),
                 Commands.runOnce(
                         () -> {
-                            if (Math.abs(getAngle().getDegrees() - Rotation2d.fromDegrees(45).getDegrees()) < 1) {
+                            if (Math.abs(getAngle().getDegrees() - Rotation2d.fromDegrees(10).getDegrees()) < 1) {
                                 addFault("[System Check] " + name
                                         + " Coral Motor did not get to target angle (45 degrees) using MaxMotionPositionControl",
                                         false, true);
@@ -344,12 +344,12 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
                         }, this),
                 Commands.runOnce(
                         () -> {
-                            setAngle(Rotation2d.fromDegrees(-45));
+                            setAngle(Rotation2d.fromDegrees(-10));
                         }, this),
                 Commands.waitSeconds(3.0),
                 Commands.runOnce(
                         () -> {
-                            if (Math.abs(getAngle().getDegrees() - Rotation2d.fromDegrees(-45).getDegrees()) < 1) {
+                            if (Math.abs(getAngle().getDegrees() - Rotation2d.fromDegrees(-10).getDegrees()) < 1) {
                                 addFault("[System Check] " + name
                                         + " Coral Motor did not get to target angle (-45 degrees) using MaxMotionPositionControl",
                                         false, true);

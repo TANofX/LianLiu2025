@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RightStarttoJ"
+                  "pathName": "MiddleStarttoH"
                 }
               }
             ]
@@ -33,6 +33,18 @@
           "type": "named",
           "data": {
             "name": "Complete Place"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HLongPathToRCollect"
           }
         }
       ]

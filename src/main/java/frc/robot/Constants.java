@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,6 +17,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -97,10 +100,10 @@ public final class Constants {
     public static final double STARTING_HEIGHT_METERS = MIN_HEIGHT_METERS
         + (MIN_HEIGHT_METERS + MAX_HEIGHT_METERS) / 2.0;
 
-    public static final double LEVEL1_HEIGHT = 1.25;
-    public static final double LEVEL2_HEIGHT = 0; // Set correct height
-    public static final double LEVEL3_HEIGHT = 0;
-    public static final double LEVEL4_HEIGHT = 0;
+    public static final double LEVEL1_HEIGHT = Units.inchesToMeters(0.5);
+    public static final double LEVEL2_HEIGHT = Units.inchesToMeters(33.72-24.0); // Set correct height
+    public static final double LEVEL3_HEIGHT = Units.inchesToMeters(51.59-24.0);
+    public static final double LEVEL4_HEIGHT = 1.455;
     public static final double MAX_ACCELERATION = 18000.0;
     public static final double MAX_VELOCITY = 12000.0;
   };
@@ -126,9 +129,9 @@ public final class Constants {
 
     public static final class PathFollowing {
       public static final PIDConstants TRANSLATION_CONSTANTS = 
-        new PIDConstants(2.0, 0.0, 0.2);
+        new PIDConstants(4.0, 0.0, 0.0);
       public static final PIDConstants ROTATION_CONSTANTS = 
-        new PIDConstants(2.0,0.0, 0.2);
+        new PIDConstants(8.0,0.0, 0.8);
     }
 
     public static final class FrontLeftModule {
@@ -179,7 +182,28 @@ public final class Constants {
 
   // Class to access the coordinates of the coral on the field.
   public static final class CoralPlacement {
-    public final static ArrayList<Translation2d> coordinatesCoral = new ArrayList<>();
+    public static final Transform2d LEFT_CORAL_ROBOT_OFFSET_FROM_APRILTAG =  new Transform2d(
+                                                                          new Translation2d(Units.inchesToMeters(19.0), 
+                                                                                            Units.inchesToMeters(-20.0)), 
+                                                                          Rotation2d.fromDegrees(90));
+    public static final Transform2d RIGHT_CORAL_ROBOT_OFFSET_FROM_APRILTAG = new Transform2d(
+                                                                          new Translation2d(Units.inchesToMeters(19.0),
+                                                                                            Units.inchesToMeters(-7.0)),
+                                                                          Rotation2d.fromDegrees(90));
+
+    public static final Transform2d LEFT_CORAL_APRILTAG_OFFSET = new Transform2d(
+                                                                    new Translation2d(Units.inchesToMeters(-2.0), 
+                                                                                      Units.inchesToMeters(-6.5)),
+                                                                    Rotation2d.fromDegrees(0));
+
+    public static final Transform2d RIGHT_CORAL_APRILTAG_OFFSET = new Transform2d(
+                                                                    new Translation2d(Units.inchesToMeters(-2.0), 
+                                                                                      Units.inchesToMeters(6.5)),
+                                                                    Rotation2d.fromDegrees(0));
+
+    public static final int[] REEF_TAGS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+
+    public final static ArrayList<Pose2d> coordinatesCoral = new ArrayList<>();
     static {
       // ordered in line from A-L
       // rotation degree part of Pos2D is the direction the robot has to face to be
@@ -243,8 +267,8 @@ public final class Constants {
     public static final double OUTTAKE_WHEEL_MASS = Units.lbsToKilograms(0.5);
     public static final double OUTTAKE_WHEEL_RADIUS = 0.02;
 
-    public static final double CORAL_INTAKE_SPEED = -0.3;
-    public static final double CORAL_OUTTAKE_SPEED = 1.0;
+    public static final double CORAL_INTAKE_SPEED = -0.25;
+    public static final double CORAL_OUTTAKE_SPEED = 0.75;
 
     public static final double OUTTAKE_MOTOR_GEARING = 1.0;
     public static final double HORIZONTAL_GEAR_RATIO = 720.0;
@@ -286,8 +310,8 @@ public final class Constants {
     public static final double VERTICAL_JKMETERS_SQUARED = 1.0 / 3.0 * CORAL_END_EFFECTOR_MASS
         * Math.pow(CORAL_END_EFFECTOR_LENGTH, 2.0);
 
-    public static final Rotation2d HORIZONTAL_MIN_ANGLE = Rotation2d.fromDegrees(-100);
-    public static final Rotation2d HORIZONTAL_MAX_ANGLE = Rotation2d.fromDegrees(100);
+    public static final Rotation2d HORIZONTAL_MIN_ANGLE = Rotation2d.fromDegrees(-80);
+    public static final Rotation2d HORIZONTAL_MAX_ANGLE = Rotation2d.fromDegrees(89);
     public static final Rotation2d HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE = Rotation2d.fromDegrees(85.6);
     public static final Rotation2d HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE = Rotation2d.fromDegrees(-85.6);
 
@@ -315,18 +339,15 @@ public final class Constants {
     public static final double HORIZONTAL_ANGLE_CHANGE_DEGREES_PER_SECOND = (HORIZONTAL_MOTOR_MAX_VELOCITY
         * HORIZONTAL_GEAR_RATIO) / 60;
 
-    public static final Rotation2d HORIZONTAL_INTAKE_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d HORIZONTAL_LEVEL_1_ANGLE_RIGHT = Rotation2d.fromDegrees(0);
-    public static final Rotation2d HORIZONTAL_LEVEL_1_ANGLE_LEFT = Rotation2d.fromDegrees(0);
-    public static final Rotation2d HORIZONTAL_LEVEL_2_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d HORIZONTAL_LEVEL_3_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d HORIZONTAL_LEVEL_4_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d VERTICAL_LEVEL_1_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d VERTICAL_LEVEL_2_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d VERTICAL_LEVEL_3_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d VERTICAL_LEVEL_4_ANGLE = Rotation2d.fromDegrees(0);
-
+    public static final Rotation2d HORIZONTAL_MAX_RIGHT_ANGLE = Rotation2d.fromDegrees(-80);
+    public static final Rotation2d HORIZONTAL_MAX_LEFT_ANGLE = Rotation2d.fromDegrees(89);
+    public static final Rotation2d VERTICAL_HOME_ANGLE = Rotation2d.fromDegrees(82);
+    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(-30);
+    public static final Rotation2d VERTICAL_LEVEL1_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d VERTICAL_LEVEL2_ANGLE = Rotation2d.fromDegrees(29);
+    public static final Rotation2d VERTICAL_LEVEL3_ANGLE = Rotation2d.fromDegrees(35);
+    public static final Rotation2d VERTICAL_LEVEL4_ANGLE = Rotation2d.fromDegrees(41);
+    public static final Rotation2d VERTICAL_AUTO_PREP_ANGLE = Rotation2d.fromDegrees(58.0);
   }
 
   public static final class Climber {

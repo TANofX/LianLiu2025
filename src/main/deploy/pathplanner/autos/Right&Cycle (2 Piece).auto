@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightStarttoA"
+            "pathName": "RightStarttoJ"
           }
         },
         {
@@ -33,37 +33,50 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "AtoCollect"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CollecttoK"
-                      }
-                    }
-                  ]
+                  "pathName": "JtoCollect"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Place L4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CollecttoK"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Level Prep"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "Complete Place"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Place L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Complete Place"
+                }
+              }
+            ]
           }
         }
       ]

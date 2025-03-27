@@ -28,11 +28,36 @@
           "data": {
             "name": "Complete Place"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HLongPathToLCollect"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HLongLCollectPart2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Working Autos",
+  "folder": null,
   "choreoAuto": false
 }

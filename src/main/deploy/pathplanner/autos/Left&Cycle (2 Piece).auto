@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftStartToE"
+            "pathName": "Short LeftStartToE"
           }
         },
         {
@@ -33,22 +33,28 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "EtoCollect"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CollectToD"
-                      }
-                    }
-                  ]
+                  "pathName": "EtoCollect"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CollectToD"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Level Prep"
                 }
               }
             ]
@@ -65,11 +71,30 @@
           "data": {
             "name": "Complete Place"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "DToCollect"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }
