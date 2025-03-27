@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import java.util.Arrays;
+import java.util.Optional;
 
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -11,7 +12,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants;
 import frc.robot.util.RobotMechanism;
 
 /** Add your docs here. */
@@ -22,7 +25,7 @@ public class AutoAimingTest {
 
         Pose2d robotPose = new Pose2d(3.95,0, r);
         RobotMechanism robotMechanism = new RobotMechanism(() -> robotPose);
-        AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler());
+        AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler(), () -> Optional.empty());
         
         Rotation2d hAngle = autoAimer.horizontalRotationToCoral();
 
@@ -36,7 +39,8 @@ public class AutoAimingTest {
 
     @Test
     public void testPosts() throws Exception {
-        for (Pose2d pose: Constants.CoralPlacement.coordinatesCoral) {
+        for (Translation2d trans: Constants.CoralPlacement.coordinatesCoral) {
+            Pose2d pose = new Pose2d(trans, new Rotation2d());
             AprilTag nearestTag = getNearestReefAprilTag(pose);
         
             Transform2d transform = new Transform2d(nearestTag.pose.toPose2d(), pose);

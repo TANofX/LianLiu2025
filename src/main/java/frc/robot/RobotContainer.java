@@ -53,8 +53,9 @@ public class RobotContainer {
   public static final Climber climber = new Climber(Constants.Climber.CLIMBER_MOTOR_ID, Constants.Climber.PCM_ID,
       Constants.Climber.FORWARD_SOLENOID_ID, Constants.Climber.REVERSE_SOLENOID_ID, Constants.Climber.ENCODER_ID);
   public static final LEDs LEDs = new LEDs(rightAlgaeHandler, coralHandler);
-  public static final AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler());
   public static final ReefTargeting reefTargeting = new ReefTargeting(() -> swerve.getPose());
+  public static final AutoAiming autoAimer = new AutoAiming(() -> robotMechanism.getFieldPositionOfCoralHandler(), () -> reefTargeting.getBranchTargetPose2d());
+
   
 
   public RobotContainer() {

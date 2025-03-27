@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,12 +25,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutoAiming extends SubsystemBase {
   /** Creates a new AutoAiming. */
   private final Supplier<Pose3d> coralHandlerSupplier;
+  private final Supplier<Optional<Pose2d>> reefPositionSupplier;
+ 
   private final StructPublisher<Rotation2d> publisher = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Rotation2d.struct).publish(); 
   private final StructPublisher<Translation2d> publisher2 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
   private final StructPublisher<Translation2d> publisher3 = NetworkTableInstance.getDefault().getStructTopic("AutoAiming/Horizontal", Translation2d.struct).publish();
   
-  public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier) {
+  public AutoAiming(Supplier<Pose3d> coralHandlerPoseSupplier, Supplier<Optional<Pose2d>> reefPositionSupplier) {
     this.coralHandlerSupplier = coralHandlerPoseSupplier;
+    this.reefPositionSupplier = reefPositionSupplier;
   }
 
 
@@ -52,7 +56,10 @@ public class AutoAiming extends SubsystemBase {
   
   public Rotation2d horizontalRotationToCoral (){
     Translation2d robotPose = coralHandlerSupplier.get().toPose2d().getTranslation();
-    Translation2d changeNeeded = chooseBranch(robotPose).minus(robotPose);
+    if(reefPositionSupplier.get().isEmpty()){
+      return null;
+    }
+    Translation2d changeNeeded = reefPositionSupplier.get().get().getTranslation().minus(robotPose);
     Rotation2d robotRotation = coralHandlerSupplier.get().getRotation().toRotation2d();
 
 //IN DEGREES NOT RADIANS!!!!

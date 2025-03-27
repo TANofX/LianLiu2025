@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.subsystem.AdvancedSubsystem;
 import frc.robot.Constants;
+import frc.robot.commands.AutoAimCoralHandler;
 
 /** Creates a new CoralHandler. */
 public class CoralHandler extends AdvancedSubsystem {
@@ -350,6 +351,7 @@ public class CoralHandler extends AdvancedSubsystem {
 
   public Command runCoralOuttakeCommand() {
     return Commands.sequence(
+        new AutoAimCoralHandler(),
         Commands.runOnce(
             () -> runOuttakeMotor(Constants.CoralHandler.CORAL_OUTTAKE_SPEED), this),
         Commands.waitSeconds(.5),

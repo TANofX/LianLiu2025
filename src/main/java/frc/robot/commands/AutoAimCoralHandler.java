@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -30,7 +31,7 @@ public class AutoAimCoralHandler extends Command {
     Rotation2d horizontalAngle = RobotContainer.autoAimer.horizontalRotationToCoral();
     SmartDashboard.putNumber("AutoAim/TargetAngle", horizontalAngle.getDegrees());
 
-    Rotation2d currentAngle = Rotation2d.fromDegrees(MathUtil.clamp(horizontalAngle.getDegrees(), -80.0, 83.0));
+    Rotation2d currentAngle = Rotation2d.fromDegrees(MathUtil.clamp(horizontalAngle.getDegrees(), Constants.CoralHandler.HORIZONTAL_MIN_ANGLE.getDegrees(), Constants.CoralHandler.HORIZONTAL_MAX_ANGLE.getDegrees()));
 
     // Set the horizontal angle of the CoralHandler subsystem in the RobotContainer
     RobotContainer.coralHandler.setHorizontalAngle(currentAngle);

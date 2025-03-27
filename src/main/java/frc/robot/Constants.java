@@ -203,7 +203,7 @@ public final class Constants {
 
     public static final int[] REEF_TAGS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
 
-    public final static ArrayList<Pose2d> coordinatesCoral = new ArrayList<>();
+    public final static ArrayList<Translation2d> coordinatesCoral = new ArrayList<>();
     static {
       // ordered in line from A-L
       // rotation degree part of Pos2D is the direction the robot has to face to be
