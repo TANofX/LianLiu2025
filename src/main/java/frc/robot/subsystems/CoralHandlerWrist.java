@@ -273,8 +273,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
      */
     public boolean isAtTargetAngle() {
         Rotation2d currentMotorAngle = Rotation2d.fromRotations(motor.getEncoder().getPosition());
-
-        return targetMotorAngle.equals(currentMotorAngle);
+        return currentMotorAngle.minus(targetMotorAngle).getDegrees() <= 0.005;
     }
 
     /**
