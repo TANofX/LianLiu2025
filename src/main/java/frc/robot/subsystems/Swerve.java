@@ -182,7 +182,7 @@ public final class Swerve extends AdvancedSubsystem {
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(poses);
 
     PathPlannerPath path = new PathPlannerPath(waypoints, 
-                                                new PathConstraints(4.0, 1.0, 2 * Math.PI, 4 * Math.PI),
+                                                new PathConstraints(4.0, 2.0, 2 * Math.PI, 4 * Math.PI),
                                                 new IdealStartingState(0.0, this.getPose().getRotation()), 
                                                 new GoalEndState(0.0, targetRotation));
 
@@ -501,7 +501,15 @@ public final class Swerve extends AdvancedSubsystem {
   public ChassisSpeeds getCurrentSpeeds() {
     return kinematics.toChassisSpeeds(getStates());
   }
+ public Command backUpCommand() {
+  return Commands.race(
+    Commands.run(()-> {
+      this.driveRobotRelative(new ChassisSpeeds(0.0 , -1.0, 0.0));
+    }),
+    Commands.waitSeconds(.30)
 
+  );
+ }
   @SuppressWarnings("removal")
   @Override
   protected Command systemCheckCommand() {
