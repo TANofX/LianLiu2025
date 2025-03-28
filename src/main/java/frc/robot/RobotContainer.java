@@ -166,6 +166,7 @@ public class RobotContainer {
     driver.RB().onTrue(rightAlgaeHandler.shootAlgaeCommand());
     driver.LB().onTrue(climbCommand());
     driver.LT().onTrue(climber.getPrepareCommand());
+    driver.A().onTrue(Commands.runOnce(()->{}, swerve));
     driver.X().onTrue(Commands.runOnce(
       () -> {
         reefTargeting.setTargetAprilTag();
