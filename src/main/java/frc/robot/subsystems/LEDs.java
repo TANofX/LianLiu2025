@@ -82,11 +82,11 @@ public class LEDs extends AdvancedSubsystem {
 
      private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen);
 
-     private final LEDPattern whitePattern = LEDPattern.solid(Color.kWhite);
+     private final LEDPattern whitePattern = LEDPattern.solid(Color.kBlue);
 
      // Intake wave
      private final LEDPattern greenWave = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kGreen).scrollAtAbsoluteSpeed(LED_VELOCITY.times(1), LED_SPACING);
-     private final LEDPattern whiteWave = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlack, Color.kWhite).scrollAtAbsoluteSpeed(LED_VELOCITY.times(1), LED_SPACING);
+     private final LEDPattern whiteWave = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlack, Color.kBlue).scrollAtAbsoluteSpeed(LED_VELOCITY.times(1), LED_SPACING);
 
      private final LEDPattern standby = LEDPattern.solid(Color.kRed);
 
