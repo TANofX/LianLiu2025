@@ -10,12 +10,16 @@ import java.util.function.Supplier;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ReefTargeting extends SubsystemBase {
   private Supplier<Pose2d> robotPoseSupplier;
   private AprilTag targetTag;
+  private final StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic(getName() + "targetPose", Pose2d.struct).publish();
 
   /** Creates a new ReefTargeting. */
   public ReefTargeting(Supplier<Pose2d> poseSupplier) {
@@ -29,6 +33,8 @@ public class ReefTargeting extends SubsystemBase {
 
   public void setTargetAprilTag() {
     targetTag = getNearestReefAprilTag();
+    SmartDashboard.putNumber(getName() + "/aprilTag", targetTag.ID);
+    
   }
 
   public void clearTargetAprilTag() {
@@ -58,7 +64,9 @@ public class ReefTargeting extends SubsystemBase {
       return null;
     }
 
-    return targetTag.pose.toPose2d().plus(transform);
+    Pose2d pose = targetTag.pose.toPose2d().plus(transform);
+    publisher.set(pose);
+    return pose;
   }
 
   public Pose2d getLeftCoralTargetPose() {

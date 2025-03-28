@@ -185,10 +185,9 @@ public final class Swerve extends AdvancedSubsystem {
                                                 new PathConstraints(4.0, 2.0, 2 * Math.PI, 4 * Math.PI),
                                                 new IdealStartingState(0.0, this.getPose().getRotation()), 
                                                 new GoalEndState(0.0, targetRotation));
+    path.preventFlipping = true;
 
     return AutoBuilder.followPath(path);
-//     return new FollowPathCommand(path, this::getPose, this::getCurrentSpeeds, this::driveRobotRelativeWithFF, new PPHolonomicDriveController(Constants.Swerve.PathFollowing.TRANSLATION_CONSTANTS,
-//     Constants.Swerve.PathFollowing.ROTATION_CONSTANTS), config, null, this);
  }
  
 
