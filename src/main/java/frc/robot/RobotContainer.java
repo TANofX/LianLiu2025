@@ -225,7 +225,8 @@ public class RobotContainer {
       coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE),
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
       coralHandler.determineDirectionCommand()
-    ).withTimeout(3.0);
+    ).withTimeout(3.0)
+    .finallyDo(()->System.out.println("Elevator Height (meters) at auto Intake end: " + elevator.getElevationMeters()));
   }
 
    public Command level1PositionCommand() {
