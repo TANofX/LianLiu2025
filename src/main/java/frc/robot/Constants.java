@@ -184,11 +184,11 @@ public final class Constants {
   public static final class CoralPlacement {
     public static final Transform2d LEFT_CORAL_ROBOT_OFFSET_FROM_APRILTAG =  new Transform2d(
                                                                           new Translation2d(Units.inchesToMeters(18.0), 
-                                                                                            Units.inchesToMeters(-19.0)), 
+                                                                                            Units.inchesToMeters(-20.0)),
                                                                           Rotation2d.fromDegrees(90));
     public static final Transform2d RIGHT_CORAL_ROBOT_OFFSET_FROM_APRILTAG = new Transform2d(
                                                                           new Translation2d(Units.inchesToMeters(18.0),
-                                                                                            Units.inchesToMeters(-6.0)),
+                                                                                            Units.inchesToMeters(-7.0)),
                                                                           Rotation2d.fromDegrees(90));
 
     public static final Transform2d LEFT_CORAL_APRILTAG_OFFSET = new Transform2d(
@@ -271,7 +271,7 @@ public final class Constants {
 
     public static final double OUTTAKE_MOTOR_GEARING = 1.0;
     public static final double HORIZONTAL_GEAR_RATIO = 720.0;
-    public static final double VERTICAL_GEAR_RATIO = 1440.0;
+    public static final double VERTICAL_GEAR_RATIO = 1350.0; //1440.0;
 
     public static final double OUTTAKE_JKMETERS_SQUARED = (.5 * OUTTAKE_WHEEL_MASS * Math.pow(OUTTAKE_WHEEL_RADIUS, 2));
     public static final double OUTTAKE_MOTOR_MIN_VELOCITY = 0.0;
@@ -311,8 +311,8 @@ public final class Constants {
 
     public static final Rotation2d HORIZONTAL_MIN_ANGLE = Rotation2d.fromDegrees(-80);
     public static final Rotation2d HORIZONTAL_MAX_ANGLE = Rotation2d.fromDegrees(89);
-    public static final Rotation2d HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE = Rotation2d.fromDegrees(85.6);
-    public static final Rotation2d HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE = Rotation2d.fromDegrees(-85.6);
+    public static final Rotation2d HORIZONTAL_SOFT_LIMIT_FORWARD_ANGLE = Rotation2d.fromDegrees(89);
+    public static final Rotation2d HORIZONTAL_SOFT_LIMIT_REVERSE_ANGLE = Rotation2d.fromDegrees(-80.0);
 
     public static final Rotation2d VERTICAL_MIN_ANGLE = Rotation2d.fromDegrees(-90);
     public static final Rotation2d VERTICAL_MAX_ANGLE = Rotation2d.fromDegrees(90);
@@ -341,7 +341,7 @@ public final class Constants {
     public static final Rotation2d HORIZONTAL_MAX_RIGHT_ANGLE = Rotation2d.fromDegrees(-80);
     public static final Rotation2d HORIZONTAL_MAX_LEFT_ANGLE = Rotation2d.fromDegrees(89);
     public static final Rotation2d VERTICAL_HOME_ANGLE = Rotation2d.fromDegrees(82);
-    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(-26.6);
+    public static final Rotation2d VERTICAL_INTAKE_ANGLE = Rotation2d.fromDegrees(-34.5);
     public static final Rotation2d VERTICAL_LEVEL1_ANGLE = Rotation2d.fromDegrees(0);
     public static final Rotation2d VERTICAL_LEVEL2_ANGLE = Rotation2d.fromDegrees(29);
     public static final Rotation2d VERTICAL_LEVEL3_ANGLE = Rotation2d.fromDegrees(35);

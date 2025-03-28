@@ -39,6 +39,18 @@ public class AutoAimingTest {
             System.out.println("Tag: " + nearestTag.ID +" Transform: " + transform);
         }
     }
+    @Test
+    public void testAutoAimPosition() {
+        for (AprilTag tag: Constants.apriltagLayout.getTags()) {
+            System.out.println("ID: " + tag.ID + " Pose: " + tag.pose.toString());
+        }
+
+        ReefTargeting rTest = new ReefTargeting(() ->  new Pose2d(13, 3, new Rotation2d()));
+
+        rTest.setTargetAprilTag();
+        System.out.println(rTest.getLeftCoralTargetPose());
+        System.out.println(rTest.getLeftCoralBranchPose());
+    }
 
     private AprilTag getNearestReefAprilTag(Pose2d robotPose) {
         double minDistance = Double.MAX_VALUE;

@@ -211,7 +211,7 @@ public class RobotContainer {
 
   public Command intakeCommand() {
     return Commands.parallel(
-      coralHandler.setVerticalAngleCommand(Rotation2d.fromDegrees(-35)),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE),
       coralHandler.runCoralIntakeCommand(),
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
       coralHandler.determineDirectionCommand()

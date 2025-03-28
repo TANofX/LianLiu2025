@@ -95,6 +95,6 @@
     }
   },
   "resetOdom": false,
-  "folder": null,
+  "folder": "Working Autos",
   "choreoAuto": false
 }

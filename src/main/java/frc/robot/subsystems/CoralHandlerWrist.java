@@ -99,7 +99,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         softLimitConfig.forwardSoftLimitEnabled(true);
         softLimitConfig.reverseSoftLimitEnabled(true);
         softLimitConfig.forwardSoftLimit(softLimitForwardAngle.getDegrees() / rotationDegreesPerRotation);
-        softLimitConfig.forwardSoftLimit(softLimitReverseAngle.getDegrees() / rotationDegreesPerRotation);
+        softLimitConfig.reverseSoftLimit(softLimitReverseAngle.getDegrees() / rotationDegreesPerRotation);
 
         // softLimitConfig.reverseSoftLimit(clampMin / rotationDegreesPerRotation);
         // softLimitConfig.forwardSoftLimit(clampMax / rotationDegreesPerRotation);
@@ -126,6 +126,7 @@ public final class CoralHandlerWrist extends AdvancedSubsystem {
         pidConfig.maxMotion.maxAcceleration(maxAcceleration, ClosedLoopSlot.kSlot1);
         pidConfig.maxMotion.maxVelocity(maxVelocity, ClosedLoopSlot.kSlot1);
         pidConfig.maxMotion.allowedClosedLoopError(allowedError, ClosedLoopSlot.kSlot1);
+        motorConfig.softLimit.apply(softLimitConfig);
         motorConfig.apply(pidConfig);
         motor.configure(motorConfig, SparkBase.ResetMode.kResetSafeParameters,
                 SparkBase.PersistMode.kNoPersistParameters);

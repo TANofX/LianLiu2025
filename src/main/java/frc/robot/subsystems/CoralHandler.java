@@ -382,19 +382,10 @@ public class CoralHandler extends AdvancedSubsystem {
     return homeAngle;
   }
 
-  public Command setIntakeAngleCommand() {
-    Command intakeAngle = Commands.parallel(
-      verticalWrist.setAngleCommand(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE),
-      horizontalWrist.setAngleCommand(Constants.CoralHandler.HORIZONTAL_MAX_LEFT_ANGLE)
-    );
-    intakeAngle.addRequirements(this);
-
-    return intakeAngle;
-  }
-
   public Command setVerticalAngleCommand(Rotation2d vTargetAngle) {
     return verticalWrist.setAngleCommand(vTargetAngle);
   }
+  
   public Command setHorizontalAngleCommand(Rotation2d vTargetAngle) {
     return horizontalWrist.setAngleCommand(vTargetAngle);
   }
