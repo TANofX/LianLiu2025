@@ -82,7 +82,8 @@ public class LEDs extends AdvancedSubsystem {
 
      private final LEDPattern greenPattern = LEDPattern.solid(Color.kGreen);
 
-     private final LEDPattern whitePattern = LEDPattern.solid(Color.kWhite);
+     //Previously white, hard to tell from intake so now blue
+     private final LEDPattern bluePattern = LEDPattern.solid(Color.kBlue);
 
      // Intake wave
      private final LEDPattern greenWave = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kGreen).scrollAtAbsoluteSpeed(LED_VELOCITY.times(1), LED_SPACING);
@@ -139,8 +140,8 @@ public class LEDs extends AdvancedSubsystem {
 
          // Signals for coral
          if (coralHandler.hasCoral()) {
-            whitePattern.applyTo(coralSegmentA);
-            whitePattern.applyTo(coralSegmentB);
+            bluePattern.applyTo(coralSegmentA);
+            bluePattern.applyTo(coralSegmentB);
             // System.out.println("LED acknowledge collected Coral");
         } else if (coralHandler.getIntaking() == 1) {
             whiteWave.applyTo(coralSegmentA);
