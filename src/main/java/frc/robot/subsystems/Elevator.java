@@ -265,7 +265,8 @@ public class Elevator extends AdvancedSubsystem {
                                 toHeightMeters(targetHeightMeters);
                             }, this),
                     Commands.waitUntil(() -> {
-                        return Math.abs(targetHeightMeters - getElevationMeters()) < 0.0025;
+                        double distance = Math.abs(targetHeightMeters - getElevationMeters());
+                        return distance < 0.0025 || elevatorMotor.getForwardLimitSwitch().isPressed();
                     }),
                     Commands.runOnce(
                             () -> {

@@ -127,7 +127,7 @@ public class RobotContainer {
   private void registerNamedCommands() {
     NamedCommands.registerCommand("Place L1", level1AutoPlaceCommand());
     NamedCommands.registerCommand("Place L4", level4AutoPlaceCommand());
-    NamedCommands.registerCommand("Collect", intakeCommand());
+    NamedCommands.registerCommand("Collect", autoIntakeCommand());
     NamedCommands.registerCommand("Complete Place", completePlaceCommand());
     NamedCommands.registerCommand("HoldCoral", coralHandler.holdCoralCommand());
     NamedCommands.registerCommand("Level Prep", levelPrepCommand());
@@ -217,7 +217,16 @@ public class RobotContainer {
       elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
       coralHandler.determineDirectionCommand()
     );
-  }   
+  }
+  
+  public Command autoIntakeCommand() {
+    return Commands.deadline(
+      coralHandler.runCoralIntakeCommand(),
+      coralHandler.setVerticalAngleCommand(Constants.CoralHandler.VERTICAL_INTAKE_ANGLE),
+      elevator.getElevatorHeightCommand(Constants.Elevator.MIN_HEIGHT_METERS),
+      coralHandler.determineDirectionCommand()
+    ).withTimeout(3.0);
+  }
 
    public Command level1PositionCommand() {
     return Commands.parallel(
